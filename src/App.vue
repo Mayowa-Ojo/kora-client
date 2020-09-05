@@ -1,32 +1,27 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+   <div id="app" class="pt-12">
+      <Navigation />
+      <main class="wrapper mx-auto">
+      <router-view />
+      </main>
+   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+// @ is an alias to /src
+import Navigation from "@/components/Navigation.vue";
 
-#nav {
-  padding: 30px;
+export default {
+   name: "App",
+   components: {
+      Navigation
+   }
 }
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+<style lang="scss" scoped>
+.wrapper {
+   padding-top: 30px;
+   width: 1002px;
 }
 </style>
