@@ -7,10 +7,12 @@ module.exports = {
                dark1: "#292E39",
                dark2: "#313742",
                dark3: "#3B414B",
-               light1: "#E0E6F0",
+               light1: "#9ADCFA",
                blue1: "#3498DB",
                blue2: "#2296F3",
-               red1: "#EB5757"
+               red1: "#EB5757",
+               green1: "#4AA774",
+               green2: "#7CE6F0"
             }
          },
          fontSize: {
@@ -20,6 +22,9 @@ module.exports = {
             "k-18": "1.13rem",
             "k-21": "1.31rem",
             "k-24": "1.5rem"
+         },
+         borderOpacity: {
+            "10": "0.1"
          }
       },
    },
