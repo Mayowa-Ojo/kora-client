@@ -10,7 +10,7 @@
          </div>
       </div>
       <quill-editor class="editor" v-model="content" :options="editorConfig['options']" @ready="onEditorReady($event)" ref="editor">
-         <div id="toolbar" class="toolbar h-10" slot="toolbar">
+         <div :id="'toolbar'+toolbarId" class="toolbar h-10" slot="toolbar">
             <div class="toolbar-inner w-full h-full relative" :y-position="toolbarPosition">
                <div class="toolbar-inner__top px-2 w-full h-10 flex justify-between items-center">
                   <div class="left-panel flex items-center">
@@ -68,7 +68,7 @@
 
                <div class="toolbar-inner__bottom px-2 w-full h-10 flex justify-between items-center">
                   <div class="left-panel">
-                     <button type="button" class="">
+                     <button type="button" class="" @click="toggleMentionsMenu">
                         <svg class="fill-current text-kora-light1" width="15" height="15" viewBox="0 0 15 15" fill="none">
                            <path d="M15 6.77419C15 2.65376 11.675 0 7.5 0C3.35504 0 0 3.35441 0 7.5C0 11.6449 3.35441 15 7.5 15C9.10058 15 10.6658 14.4835 11.9485 13.5387C12.1148 13.4161 12.1427 13.1781 12.0118 13.0182L11.5514 12.4558C11.4288 12.306 11.2112 12.2803 11.0546 12.3941C10.0266 13.1406 8.77736 13.5484 7.5 13.5484C4.16492 13.5484 1.45161 10.8351 1.45161 7.5C1.45161 4.16492 4.16492 1.45161 7.5 1.45161C10.8106 1.45161 13.5484 3.41794 13.5484 6.77419C13.5484 8.68264 12.2638 9.74667 11.0377 9.74667C10.4478 9.74667 10.4288 9.36502 10.5428 8.79517L11.4083 4.30252C11.4514 4.07867 11.2799 3.87097 11.052 3.87097H9.86725C9.7829 3.871 9.70119 3.9004 9.63615 3.95413C9.57112 4.00785 9.52683 4.08254 9.51088 4.16537C9.47755 4.33845 9.46065 4.41747 9.44193 4.58855C9.08135 3.99738 8.3569 3.64899 7.47009 3.64899C5.3048 3.64899 3.3871 5.53878 3.3871 8.27208C3.3871 10.1216 4.38136 11.3601 6.20504 11.3601C7.10634 11.3601 8.0602 10.851 8.6168 10.0827C8.74216 11.0155 9.47861 11.2322 10.4123 11.2322C13.4113 11.2322 15 9.30804 15 6.77419ZM6.71673 9.71825C5.85569 9.71825 5.34163 9.1298 5.34163 8.14415C5.34163 6.40482 6.538 5.31925 7.59798 5.31925C8.50887 5.31925 8.97311 5.97042 8.97311 6.87913C8.97311 8.29639 7.96978 9.71825 6.71673 9.71825Z" />
                         </svg>
@@ -106,7 +106,7 @@
          <div class="flex items-center">
             <button class="text-kora-gray1 text-k-13 font-medium px-3 py-1 rounded-full bg-kora-red1">Submit</button>
             <button class="text-kora-light1 text-k-13 font-medium px-3 py-1 rounded-full hover:bg-kora-dark3">Save Draft</button>
-            <p class="text-kora-light1 text-k-13 font-normal mx-2">Last saved: <span class="font-semibold">19m ago</span></p>
+            <p class="text-kora-light1 text-k-13 font-normal mx-2">Last saved: <span class="font-semibold">just now</span></p>
          </div>
          <span class="inline-block px-2 py-4 mr-1 rounded-full cursor-pointer hover:bg-kora-dark3">
             <svg class="fill-current text-kora-light1" width="20" height="6" viewBox="0 0 20 6" fill="none">
@@ -118,27 +118,37 @@
 </template>
 
 <script>
+import "quill-mention";
+
+import { styles } from "../constants/styles";
+import { suggestions } from "../constants/mentions";
 
 export default {
    name: "Editor",
-   data: function() {
-      return {
-         content: "",
-         toolbarPosition: "middle",
-         linkInput: ""
-      }
-   },
+   props: ["toolbarId"],
+   data: () => ({
+      content: "",
+      toolbarPosition: "middle",
+      linkInput: "",
+      isMentionsOpen: false
+   }),
    computed: {
       editorConfig: function() {
          return {
             options: {
                placeholder: "Write your answer...",
                modules: {
-                  toolbar: "#toolbar",
+                  toolbar: `#toolbar${this.toolbarId}`,
                   history: {
                      delay: 2000,
                      maxStack: 500,
                      userOnly: true
+                  },
+                  mention: {
+                     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+                     mentionDenotationChars: ["@"],
+                     source: this.handleEditorMention,
+                     showDenotationChar: false
                   }
                }
             }
@@ -155,41 +165,10 @@ export default {
          editor.$el.querySelector(".ql-link").innerText = "Add"
       },
       injectCSSStyles: function() {
-         const style = document.createElement("style");
-         document.head.appendChild(style);
+         const style_global = document.createElement("style");
 
-         style.sheet.insertRule(".ql-editor.ql-blank::before { color: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-editor.ql-blank::before { font-style: normal !important; }");
-         style.sheet.insertRule(".ql-editor { color: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-editor { padding: 16px !important; }");
-         style.sheet.insertRule(".ql-editor { min-height: 132px !important; }");
-         style.sheet.insertRule(".ql-snow a { color: wheat !important; }");
-         style.sheet.insertRule(".ql-snow .ql-editor pre.ql-syntax { color: #292E39 !important; }");
-         style.sheet.insertRule(".ql-snow .ql-editor pre.ql-syntax { background-color: wheat !important; }");
-         style.sheet.insertRule(".ql-container.ql-snow { border-top: 1px solid rgba(154, 220, 250, 0.1) !important; }");
-         style.sheet.insertRule(".ql-container.ql-snow { border-bottom: 1px solid rgba(154, 220, 250, 0.1) !important; }");
-         style.sheet.insertRule(".ql-container.ql-snow { border-left: none !important; }");
-         style.sheet.insertRule(".ql-container.ql-snow { border-right: none !important; }");
-         style.sheet.insertRule(".ql-container.ql-snow { background-color: #292E39 !important; }");
-         style.sheet.insertRule(".ql-snow .ql-stroke { stroke: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow .ql-fill { fill: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add { padding: .25rem .75rem; !important }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add { background: #313742 !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add { border-radius: 3px !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add { width: unset !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add:hover { background: #3B414B !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.add:hover { color: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button { border-radius: 3px !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button { padding: 2px 4px !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button { margin: 0 .1rem !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button { border: 2px solid #292E39 !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:focus { outline: none !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:hover { border: 2px solid rgba(154, 220, 250, 0.1) !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button.ql-active { border: 2px solid rgba(154, 220, 250, 0.1) !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:hover .ql-stroke { stroke: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:focus .ql-stroke { stroke: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:hover .ql-fill { fill: #9ADCFA !important; }");
-         style.sheet.insertRule(".ql-snow.ql-toolbar button:focus .ql-fill { fill: #9ADCFA !important; }");
+         style_global.innerHTML = styles;
+         document.head.appendChild(style_global);
       },
       toggleToolbarPosition: function(position) {
          const validPositions = ["top", "middle", "bottom"]
@@ -213,6 +192,34 @@ export default {
                console.warn("[WARNING]: You can only upload images")
             }
 
+         }
+      },
+      toggleMentionsMenu: function() {
+         if(!this.isMentionsOpen) {
+            this.getQuill.getModule("mention").openMenu("@");
+         } else {
+            this.getQuill.getModule("mention").escapeHandler();
+         }
+
+         this.isMentionsOpen = !this.isMentionsOpen;
+      },
+      handleEditorMention: function(searchTerm, renderList, mentionChar) {
+         let values;
+
+         if (mentionChar === "@") {
+            values = suggestions;
+         }
+
+         if (searchTerm.length === 0) {
+            renderList(values, searchTerm);
+         } else {
+            const matches = [];
+            for (let i = 0; i < values.length; i++)
+               if (
+               ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
+               )
+               matches.push(values[i]);
+            renderList(matches, searchTerm);
          }
       },
       handleTextLink: function(value) {
