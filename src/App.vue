@@ -1,5 +1,5 @@
 <template>
-   <div id="app" class="pt-12">
+   <div id="app" class="py-12">
       <Navigation />
       <main class="wrapper mx-auto">
       <router-view />
