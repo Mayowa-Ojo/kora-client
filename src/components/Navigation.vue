@@ -9,9 +9,11 @@
             <router-link :to="{path: '/'}" class="focus:bg-kora-dark1">
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
-                  <svg class="w-6 h-6 fill-current text-kora-light1" aria-hidden="true" focusable="false" data-prefix="far" data-icon="home" role="img" viewBox="0 0 576 512">
-                     <path fill="currentColor" d="M570.24 247.41L512 199.52V104a8 8 0 0 0-8-8h-32a8 8 0 0 0-7.95 7.88v56.22L323.87 45a56.06 56.06 0 0 0-71.74 0L5.76 247.41a16 16 0 0 0-2 22.54L14 282.25a16 16 0 0 0 22.53 2L64 261.69V448a32.09 32.09 0 0 0 32 32h128a32.09 32.09 0 0 0 32-32V344h64v104a32.09 32.09 0 0 0 32 32h128a32.07 32.07 0 0 0 32-31.76V261.67l27.53 22.62a16 16 0 0 0 22.53-2L572.29 270a16 16 0 0 0-2.05-22.59zM463.85 432H368V328a32.09 32.09 0 0 0-32-32h-96a32.09 32.09 0 0 0-32 32v104h-96V222.27L288 77.65l176 144.56z"></path>
-                  </svg>
+                  <Icon 
+                     :class="'w-6 h-6 fill-current text-kora-light1'" 
+                     :viewbox="getIcons['home'].viewbox" 
+                     :path="getIcons['home'].path" 
+                  />
                </span>
                <span class="text-k-14 font-medium text-kora-light1">Home</span>
             </div>
@@ -19,29 +21,115 @@
             <router-link :to="{path: '/answer'}" class="focus:bg-kora-dark1">
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
-                  <svg class="fill-current text-kora-light1 w-5 h-5" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                     <path d="M19.25 0H2.75C1.2332 0 0 1.2332 0 2.75V15.125C0 16.6418 1.2332 17.875 2.75 17.875H6.875V21.4844C6.875 21.7895 7.12422 22 7.39062 22C7.49375 22 7.60117 21.9699 7.6957 21.8969L13.0625 17.875H19.25C20.7668 17.875 22 16.6418 22 15.125V2.75C22 1.2332 20.7668 0 19.25 0ZM19.9375 15.125C19.9375 15.5031 19.6281 15.8125 19.25 15.8125H12.375L8.9375 18.3906V15.8125H2.75C2.37188 15.8125 2.0625 15.5031 2.0625 15.125V2.75C2.0625 2.37188 2.37188 2.0625 2.75 2.0625H19.25C19.6281 2.0625 19.9375 2.37188 19.9375 2.75V15.125ZM7.08555 10.45L6.8793 12.2891C6.85352 12.534 7.05977 12.7445 7.30898 12.7188L9.14805 12.5125L12.8219 8.83867L10.7594 6.77617L7.08555 10.45ZM13.9305 4.69648C13.6297 4.3957 13.1398 4.3957 12.8391 4.69648L11.623 5.9125L13.6855 7.975L14.9016 6.75898C15.2023 6.4582 15.2023 5.96836 14.9016 5.66758L13.9305 4.69648Z"/>
-                  </svg>
+                  <Icon 
+                     :class="'w-6 h-6 fill-current text-kora-light1'" 
+                     :viewbox="getIcons['commentAlt'].viewbox" 
+                     :path="getIcons['commentAlt'].path" 
+                  />
                </span>
                <span class="text-k-14 font-medium text-kora-light1">Answer</span>
             </div>
             </router-link>
-            <router-link :to="{path: '/'}" class="focus:bg-kora-dark1">
+
+            <Popover :slotRefs="$refs" :offset="8" :placement="'bottom'">
+               <template v-slot:trigger="slotProps">
+                  <button 
+                     class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer focus:outline-none" 
+                     ref="trigger"
+                     @click="slotProps.toggle($event)"
+                  >
+                     <span class="inline-block mr-1 pointer-events-none">
+                        <Icon 
+                           :class="'fill-current text-kora-light1'" 
+                           :viewbox="getIcons['userGroup'].viewbox" 
+                           :path="getIcons['userGroup'].path" 
+                           :width="getIcons['userGroup'].width" 
+                           :height="getIcons['userGroup'].height" 
+                        />
+                     </span>
+                     <span class="text-k-14 font-medium text-kora-light1 pointer-events-none">Spaces</span>
+                  </button>
+               </template>
+               <template v-slot:popover>
+                  <div class="popover">
+                     <div class="p-2 border-b border-kora-gray1 border-opacity-10">
+                     <router-link :to="{ path: '/spaces' }" class="px-3 py-1 inline-flex items-center rounded-full hover:bg-kora-dark3">
+                        <p class="mr-2 text-kora-light1 text-k-13 font-medium">See all spaces</p>
+                        <span class="inline-block">
+                           <Icon 
+                              :class="'fill-current text-kora-gray1 transform -rotate-90'" 
+                              :viewbox="getIcons['chevron'].viewbox" 
+                              :path="getIcons['chevron'].path" 
+                              :width="getIcons['chevron'].width" 
+                              :height="getIcons['chevron'].height" 
+                           />
+                        </span>
+                     </router-link>
+                     </div>
+                     <ul class="spaces-list">
+                        <li class="spaces-list__item px-4 py-2 flex items-center justify-between border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1">
+                           <div class="inline-flex items-center">
+                              <span class="inline-block mr-2 w-8 h-8 rounded-full relative">
+                                 <img class="rounded-full" src="https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_icon_purple.png-26-6ea9822273dc841e.png" alt="space icon">
+                                 <span class="notifier inline-block w-3 h-3 rounded-full border-2 border-kora-dark3 bg-kora-red1 absolute"></span>
+                              </span>
+                              <span>
+                                 <p class="text-kora-light1 text-k-13 font-bold">Communityy</p>
+                                 <span class="inline-flex items-center">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1'" 
+                                       :viewbox="getIcons['shield'].viewbox" 
+                                       :path="getIcons['shield'].path" 
+                                       :width="getIcons['shield'].width" 
+                                       :height="getIcons['shield'].height" 
+                                    />
+                                    <p class="ml-1 text-kora-light1 text-k-13 font-normal">Admin</p>
+                                 </span>
+                              </span>
+                           </div>
+                           <span class="inline-block mr-1">
+                              <Icon 
+                                 :class="'w-3 h-3 fill-current text-kora-gray1 transform -rotate-90'" 
+                                 :viewbox="getIcons['chevron'].viewbox" 
+                                 :path="getIcons['chevron'].path" 
+                              />
+                           </span>
+                        </li>
+                        <li 
+                           class="spaces-list__item px-4 py-2 flex items-center justify-between border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1"
+                           v-for="(space, idx) in getTempData.spaces"
+                           :key="idx"
+                        >
+                           <div class="inline-flex items-center">
+                              <span class="inline-block mr-2 w-8 h-8 rounded-full relative">
+                                 <img class="rounded-full" :src="space.img" alt="space icon">
+                                 <span class="notifier inline-block w-3 h-3 rounded-full border-2 border-kora-dark3 bg-kora-red1 absolute"></span>
+                              </span>
+                              <p class="text-kora-light1 text-k-13 font-bold">{{ space.name }}</p>
+                           </div>
+                           <span class="inline-block mr-1">
+                              <Icon 
+                                 :class="'w-3 h-3 fill-current text-kora-gray1 transform -rotate-90'" 
+                                 :viewbox="getIcons['chevron'].viewbox" 
+                                 :path="getIcons['chevron'].path" 
+                              />
+                           </span>
+                        </li>
+                     </ul>
+                  </div>
+               </template>
+            </Popover>
+
+            <router-link :to="{path: '/notifications'}" class="focus:bg-kora-dark1">
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
-                  <svg class="fill-current text-kora-light1" width="25" height="18" viewBox="0 0 25 18" fill="none">
-                     <path d="M21.7188 8.75H20.7812C20.1055 8.75 19.477 8.95586 18.9543 9.30781C19.4766 9.70391 19.9379 10.1742 20.2992 10.7227C20.4508 10.6664 20.6102 10.625 20.7812 10.625H21.7188C22.4937 10.625 23.125 11.2563 23.125 12.0312C23.125 12.5488 23.5449 12.9688 24.0625 12.9688C24.5801 12.9688 25 12.5488 25 12.0312C25 10.2223 23.5277 8.75 21.7188 8.75ZM21.25 7.5C22.9758 7.5 24.375 6.10078 24.375 4.375C24.375 2.64922 22.9758 1.25 21.25 1.25C19.5242 1.25 18.125 2.64922 18.125 4.375C18.125 6.10078 19.5242 7.5 21.25 7.5ZM21.25 3.125C21.9391 3.125 22.5 3.68594 22.5 4.375C22.5 5.06406 21.9391 5.625 21.25 5.625C20.5609 5.625 20 5.06406 20 4.375C20 3.68594 20.5609 3.125 21.25 3.125ZM6.0457 9.30781C5.52305 8.95586 4.89453 8.75 4.21875 8.75H3.28125C1.47227 8.75 0 10.2223 0 12.0312C0 12.5488 0.419922 12.9688 0.9375 12.9688C1.45508 12.9688 1.875 12.5488 1.875 12.0312C1.875 11.2563 2.50625 10.625 3.28125 10.625H4.21875C4.38945 10.625 4.54922 10.6664 4.70078 10.7227C5.06211 10.1742 5.52344 9.70391 6.0457 9.30781ZM3.75 7.5C5.47578 7.5 6.875 6.10078 6.875 4.375C6.875 2.64922 5.47578 1.25 3.75 1.25C2.02422 1.25 0.625 2.64922 0.625 4.375C0.625 6.10078 2.02422 7.5 3.75 7.5ZM3.75 3.125C4.43906 3.125 5 3.68594 5 4.375C5 5.06406 4.43906 5.625 3.75 5.625C3.06094 5.625 2.5 5.06406 2.5 4.375C2.5 3.68594 3.06094 3.125 3.75 3.125ZM14.2445 9.7375C13.6914 9.90547 13.1078 10 12.5 10C11.8922 10 11.3086 9.90547 10.7555 9.7375C8.91641 9.17891 6.83789 9.77031 5.76445 11.3648C5.28164 12.082 5 12.9457 5 13.875V15.625C5 16.6605 5.83945 17.5 6.875 17.5H18.125C19.1605 17.5 20 16.6605 20 15.625V13.875C20 12.9457 19.7184 12.082 19.2355 11.3652C18.1621 9.7707 16.0836 9.17891 14.2445 9.7375ZM18.125 15.625H6.875V13.875C6.875 12.4516 8.01406 11.2891 9.42891 11.2508C10.425 11.6652 11.4578 11.875 12.5 11.875C13.5418 11.875 14.5746 11.6652 15.5711 11.2508C16.9859 11.2891 18.125 12.4516 18.125 13.875V15.625ZM12.5 8.75C14.9164 8.75 16.875 6.79141 16.875 4.375V0L14.6875 1.09375L12.5 0L10.3125 1.09375L8.125 0V4.375C8.125 6.79141 10.0836 8.75 12.5 8.75ZM10 3.75H15V4.375C15 5.75352 13.8785 6.875 12.5 6.875C11.1215 6.875 10 5.75352 10 4.375V3.75Z"/>
-                  </svg>
-               </span>
-               <span class="text-k-14 font-medium text-kora-light1">Spaces</span>
-            </div>
-            </router-link>
-            <router-link :to="{path: '/'}" class="focus:bg-kora-dark1">
-            <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
-               <span class="inline-block mr-1">
-                  <svg class="fill-current text-kora-light1" width="18" height="21" viewBox="0 0 18 21" fill="none">
-                     <path d="M17.654 14.5562C16.8778 13.7221 15.4253 12.4674 15.4253 8.35712C15.4253 5.23525 13.2364 2.73615 10.2849 2.12303V1.28571C10.2849 0.575757 9.70955 0 9 0C8.29045 0 7.71509 0.575757 7.71509 1.28571V2.12303C4.76358 2.73615 2.57466 5.23525 2.57466 8.35712C2.57466 12.4674 1.12221 13.7221 0.345964 14.5562C0.104894 14.8154 -0.00198114 15.1252 2.77789e-05 15.4285C0.00444741 16.0874 0.521544 16.7142 1.28976 16.7142H16.7102C17.4785 16.7142 17.996 16.0874 18 15.4285C18.002 15.1252 17.8951 14.815 17.654 14.5562ZM2.71328 14.7857C3.56586 13.6619 4.498 11.7992 4.50242 8.38042C4.50242 8.37238 4.50001 8.36515 4.50001 8.35712C4.50001 5.87168 6.51456 3.85713 9 3.85713C11.4854 3.85713 13.5 5.87168 13.5 8.35712C13.5 8.36515 13.4976 8.37238 13.4976 8.38042C13.502 11.7996 14.4341 13.6623 15.2867 14.7857H2.71328ZM9 20.5714C10.4191 20.5714 11.5702 19.4203 11.5702 17.9999H6.42978C6.42978 19.4203 7.5809 20.5714 9 20.5714Z"/>
-                  </svg>
+                  <Icon 
+                     :class="'fill-current text-kora-light1'" 
+                     :viewbox="getIcons['alarm'].viewbox" 
+                     :path="getIcons['alarm'].path" 
+                     :width="getIcons['alarm'].width" 
+                     :height="getIcons['alarm'].height" 
+                  />
                </span>
                <span class="text-k-14 font-medium text-kora-light1">Notifications</span>
             </div>
@@ -51,17 +139,23 @@
          <div class="nav-end h-full flex">
             <div class="nav-item search-input h-full w-64 flex relative mr-4">
                <span class="inline-block absolute">
-                  <svg class="w-3 h-3" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                     <path d="M15.8898 14.6524L12.0963 10.8588C12.0244 10.787 11.9307 10.7495 11.8307 10.7495H11.4182C12.4025 9.60891 12.9994 8.1246 12.9994 6.49968C12.9994 2.90923 10.0901 0 6.49968 0C2.90923 0 0 2.90923 0 6.49968C0 10.0901 2.90923 12.9994 6.49968 12.9994C8.1246 12.9994 9.60891 12.4025 10.7495 11.4182V11.8307C10.7495 11.9307 10.7901 12.0244 10.8588 12.0963L14.6524 15.8898C14.7993 16.0367 15.0368 16.0367 15.1836 15.8898L15.8898 15.1836C16.0367 15.0368 16.0367 14.7993 15.8898 14.6524ZM6.49968 11.4994C3.73732 11.4994 1.49993 9.26205 1.49993 6.49968C1.49993 3.73732 3.73732 1.49993 6.49968 1.49993C9.26205 1.49993 11.4994 3.73732 11.4994 6.49968C11.4994 9.26205 9.26205 11.4994 6.49968 11.4994Z" fill="#9ADCFA"/>
-                  </svg>
+                  <Icon 
+                     :class="'w-3 h-3 fill-current text-kora-light1'" 
+                     :viewbox="getIcons['search'].viewbox" 
+                     :path="getIcons['search'].path" 
+                  />
                </span>
                <input class="w-full h-8 pl-8 text-kora-light1 text-k-13 font-normal bg-transparent rounded border-2 border-kora-light1 border-opacity-25 focus:border-kora-blue1 focus:outline-none" type="search" name="search" placeholder="Search Kora" autocomplete="off">
             </div>
             <div class="avatar h-full mr-4 flex items-center">
                <span class="inline-flex items-center justify-center w-6 h-6 bg-kora-blue1 rounded-full cursor-pointer">
-                  <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-                     <path d="M1.71429 6H2.07589C2.7375 7.51339 4.24286 8.57143 6 8.57143C7.75714 8.57143 9.2625 7.51339 9.92411 6H10.2857C10.5214 6 10.7143 5.80714 10.7143 5.57143V3C10.7143 2.76429 10.5214 2.57143 10.2857 2.57143H9.92411C9.2625 1.05804 7.75714 0 6 0C4.24286 0 2.7375 1.05804 2.07589 2.57143H1.71429C1.47857 2.57143 1.28571 2.76429 1.28571 3V5.57143C1.28571 5.80714 1.47857 6 1.71429 6ZM2.78571 3.64286C2.78571 3.05089 3.36161 2.57143 4.07143 2.57143H7.92857C8.63839 2.57143 9.21429 3.05089 9.21429 3.64286V4.28571C9.21429 5.70536 8.0625 6.85714 6.64286 6.85714H5.35714C3.9375 6.85714 2.78571 5.70536 2.78571 4.28571V3.64286ZM4.71429 5.57143L5.03571 4.60714L6 4.28571L5.03571 3.96429L4.71429 3L4.39286 3.96429L3.42857 4.28571L4.39286 4.60714L4.71429 5.57143ZM8.775 8.60893C7.97411 9.12589 7.02321 9.42857 6 9.42857C4.97679 9.42857 4.02589 9.12589 3.225 8.60893C1.41696 8.79911 0 10.3125 0 12.1714V12.4286C0 13.1384 0.575893 13.7143 1.28571 13.7143H3.42857V12C3.42857 11.5259 3.81161 11.1429 4.28571 11.1429H7.71429C8.18839 11.1429 8.57143 11.5259 8.57143 12V13.7143H10.7143C11.4241 13.7143 12 13.1384 12 12.4286V12.1714C12 10.3125 10.583 8.79911 8.775 8.60893ZM7.28571 12C7.05 12 6.85714 12.1929 6.85714 12.4286C6.85714 12.6643 7.05 12.8571 7.28571 12.8571C7.52143 12.8571 7.71429 12.6643 7.71429 12.4286C7.71429 12.1929 7.52143 12 7.28571 12ZM4.71429 12C4.47857 12 4.28571 12.1929 4.28571 12.4286V13.7143H5.14286V12.4286C5.14286 12.1929 4.95 12 4.71429 12Z" fill="#E0E6F0"/>
-                  </svg>
+                  <Icon 
+                     :class="'fill-current text-kora-light1'" 
+                     :viewbox="getIcons['user'].viewbox" 
+                     :path="getIcons['user'].path" 
+                     :width="getIcons['user'].width" 
+                     :height="getIcons['user'].height" 
+                  />
                </span>
             </div>
             <div class="ask-button h-full flex items-center">
@@ -73,8 +167,21 @@
 </template>
 
 <script>
+import Popover from "./Popover";
+import Icon from "./Icon";
+import { iconsMixin } from "../utils/mixins";
+import { spaces } from "../tmp/db";
+
 export default {
-   name: "Navigation"
+   name: "Navigation",
+   components: {
+      Popover,
+      Icon
+   },
+   mixins: [iconsMixin],
+   computed: {
+      getTempData: () => ({ spaces })
+   }
 }
 </script>
 
@@ -112,6 +219,26 @@ export default {
 input {
    &::placeholder {
       color: rgba(154, 220, 250, .5);
+   }
+}
+</style>
+
+<style lang="scss" scoped>
+// popover styles
+.popover {
+   // background: #3B414B;
+   max-height: calc(100vh - 82px);
+   width: max-content;
+   min-width: 320px;
+   min-height: 320px;
+   // overflow: auto;
+   .spaces-list {
+      &__item {
+         .notifier {
+            top: -3px;
+            left: -2px;
+         }
+      }
    }
 }
 </style>
