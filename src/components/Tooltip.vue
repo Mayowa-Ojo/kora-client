@@ -56,9 +56,6 @@ export default {
       },
       handleClickaway: function() {
          this.hide();
-      },
-      getSlotName: function() {
-         return Object.keys(this.slotRefs)[this.currentIndex];
       }
    },
    computed: {
@@ -88,35 +85,36 @@ $bg: #E0E6F0;
 #tooltip {
    border-radius: 4px;
    display: none;
-}
-#arrow,
-#arrow::before {
-   position: absolute;
-   width: 8px;
-   height: 8px;
-   z-index: -1;
-}
-#arrow::before {
-   content: '';
-   transform: rotate(45deg);
-   background: $bg;
-}
-   #tooltip[data-popper-placement^='top'] > #arrow {
-   bottom: -4px;
-}
+   &[data-popper-placement^='top'] > #arrow {
+      bottom: -4px;
+   }
 
-   #tooltip[data-popper-placement^='bottom'] > #arrow {
-   top: -4px;
-}
+   &[data-popper-placement^='bottom'] > #arrow {
+      top: -4px;
+   }
 
-   #tooltip[data-popper-placement^='left'] > #arrow {
-   right: -4px;
-}
+   &[data-popper-placement^='left'] > #arrow {
+      right: -4px;
+   }
 
-   #tooltip[data-popper-placement^='right'] > #arrow {
-   left: -4px;
+   &[data-popper-placement^='right'] > #arrow {
+      left: -4px;
+   }
+   &[data-show] {
+      display: block;
+   }
 }
-#tooltip[data-show] {
-   display: block;
+#arrow {
+   &, &::before {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      z-index: -1;
+   }
+   &::before {
+      content: '';
+      transform: rotate(45deg);
+      background: $bg;
+   }
 }
 </style>
