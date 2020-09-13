@@ -17,6 +17,7 @@ module.exports = {
             }
          },
          fontSize: {
+            "k-12": ".75rem",
             "k-13": ".81rem",
             "k-14": ".88rem",
             "k-15": ".94rem",
