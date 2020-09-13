@@ -31,11 +31,10 @@
             </div>
             </router-link>
 
-            <Popover :slotRefs="$refs" :offset="8" :placement="'bottom'">
+            <Popover :offset="8" :placement="'bottom'">
                <template v-slot:trigger="slotProps">
                   <button 
-                     class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer focus:outline-none" 
-                     ref="trigger"
+                     class="trigger nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer focus:outline-none" 
                      @click="slotProps.toggle($event)"
                   >
                      <span class="inline-block mr-1 pointer-events-none">
