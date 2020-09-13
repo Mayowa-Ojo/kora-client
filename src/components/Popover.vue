@@ -13,9 +13,6 @@
 import { createPopper } from "@popperjs/core";
 import { mixin as clickaway} from "vue-clickaway";
 
-// const showEvents = ["focus"];
-// const hideEvents = ["blur"];
-
 export default {
    name: "Popover",
    props: ["slotRefs", "offset", "placement"],
@@ -26,7 +23,7 @@ export default {
    mixins: [clickaway],
    methods: {
       create: function() {
-         const trigger = this.slotRefs.trigger;
+         const trigger = this.getTrigger;
          const popover = this.$refs["popover"];
 
          this.popper = createPopper(trigger, popover, {
@@ -47,16 +44,7 @@ export default {
             this.popper = null;
          }
       },
-      show: function() {
-         this.$refs['popover'].setAttribute("data-show", "");
-         this.create();
-      },
-      hide: function() {
-         this.$refs['popover'].removeAttribute("data-show");
-         this.destroy();
-      },
-      toggle: function(e) {
-         console.log(e.stopPropagation);
+      toggle: function() {
          if(this.isOpen) {
             this.isOpen = !this.isOpen;
             this.destroy();
@@ -70,16 +58,13 @@ export default {
          this.destroy();
       }
    },
+   computed: {
+       getTrigger: function() {
+         return this.$vnode.elm.querySelector(".trigger")
+      }
+   },
    mounted: function() {
-      this.create()
-
-      // showEvents.forEach(event => {
-      //    this.slotRefs.trigger.addEventListener(event, this.toggle);
-      // });
-
-      // hideEvents.forEach(event => {
-      //    this.slotRefs.trigger.addEventListener(event, this.toggle);
-      // });
+      this.create();
    }
 }
 </script>
@@ -88,38 +73,30 @@ export default {
 $bg: #313742;
 #popover {
    border-radius: 4px;
-   // visibility: hidden;
-   // display: none;
+   &[data-popper-placement^='top'] > #arrow {
+      bottom: -4px;
+   }
+   &[data-popper-placement^='bottom'] > #arrow {
+      top: -4px;
+   }
+   &[data-popper-placement^='left'] > #arrow {
+      left: -4px;
+   }
+   &[data-popper-placement^='right'] > #arrow {
+      right: -4px;
+   }
 }
-#arrow,
-#arrow::before {
-   position: absolute;
-   width: 8px;
-   height: 8px;
-   z-index: -1;
+#arrow {
+   &, &::before {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      z-index: -1;
+   }
+   &::before {
+      content: '';
+      transform: rotate(45deg);
+      background: $bg;
+   }
 }
-#arrow::before {
-   content: '';
-   transform: rotate(45deg);
-   background: $bg;
-}
-   #popover[data-popper-placement^='top'] > #arrow {
-   bottom: -4px;
-}
-
-   #popover[data-popper-placement^='bottom'] > #arrow {
-   top: -4px;
-}
-
-   #popover[data-popper-placement^='left'] > #arrow {
-   right: -4px;
-}
-
-   #popover[data-popper-placement^='right'] > #arrow {
-   left: -4px;
-}
-// #popover[data-show] {
-   // visibility: visible;
-   // display: block;
-// }
 </style>
