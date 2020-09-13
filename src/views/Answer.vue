@@ -11,7 +11,11 @@
          <div class="mb-4 border-light-25 rounded-sm">
             <div class="bg-kora-dark2 py-2 px-4 flex border-b border-kora-light1 border-opacity-10">
                <span class="inline-block p-1 bg-kora-red1 rounded-sm">
-                  <Icon :classes="'w-3 h-3 fill-current text-kora-gray1'" :viewbox="getIcons['star'].viewbox" :path="getIcons['star'].path" />
+                  <Icon 
+                     :class="'w-3 h-3 fill-current text-kora-gray1'" 
+                     :viewbox="getIcons['star'].viewbox" 
+                     :path="getIcons['star'].path" 
+                  />
                </span>
                <p class="ml-2 text-kora-light1 text-k-13 font-light hover:underline cursor-pointer">Questions For You</p>
             </div>
@@ -26,7 +30,7 @@
                   <p class="mx-1 text-kora-light1 text-k-13 font-medium">More</p>
                   <span class="p-1 mt-1 inline-block">
                      <Icon 
-                        :class="'fill-current text-kora-gray1'" 
+                        :class="'fill-current text-kora-light1'" 
                         :viewbox="getIcons['chevron'].viewbox" 
                         :path="getIcons['chevron'].path" 
                         :width="getIcons['chevron'].width" 

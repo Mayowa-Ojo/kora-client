@@ -139,7 +139,7 @@
             </div>
             <div class="flex justify-between">
                <div class="flex items-center">
-                  <Tooltip :offset="12" :placement="'left'" :text="'Upvote'" :currentIndex="i">
+                  <Tooltip :offset="12" :placement="'left'" :text="'Upvote'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center py-1 px-2 -ml-2 mr-2 hover:bg-kora-dark1 rounded-full cursor-pointer text-kora-light1 text-k-13 font-light">
                            <Icon 
@@ -151,7 +151,7 @@
                         </span>
                      </template>
                   </Tooltip>
-                  <Tooltip :offset="12" :placement="'top'" :text="'Share'" :currentIndex="i">
+                  <Tooltip :offset="12" :placement="'top'" :text="'Share'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center py-1 px-2 mr-2 hover:bg-kora-dark1 rounded-full cursor-pointer text-kora-light1 text-k-13 font-light">
                            <Icon 
@@ -163,7 +163,7 @@
                         </span>
                      </template>
                   </Tooltip>
-                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'right'" :text="'Comments'" :currentIndex="i">
+                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'right'" :text="'Comments'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center py-1 px-2 mr-2 hover:bg-kora-dark1 rounded-full cursor-pointer text-kora-light1 text-k-13 font-light" ref="trigger">
                            <Icon 
@@ -177,7 +177,7 @@
                   </Tooltip>
                </div>
                <div class="flex items-center">
-                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'left'" :text="'Upvoters'" :currentIndex="i">
+                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'left'" :text="'Upvoters'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center p-1 mr-2 rounded-full cursor-pointer bg-kora-red1" ref="trigger">
                            <Icon 
@@ -190,7 +190,7 @@
                         </span>
                      </template> -->
                   </Tooltip>
-                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'top'" :text="'More sharing options'" :currentIndex="i">
+                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'top'" :text="'More sharing options'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center p-2 mr-2 rounded-full cursor-pointer hover:bg-kora-dark1" ref="trigger">
                            <Icon 
@@ -201,7 +201,7 @@
                         </span>
                      </template>
                   </Tooltip>
-                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'right'" :text="'More'" :currentIndex="i">
+                  <Tooltip :slotRefs="$refs" :offset="12" :placement="'right'" :text="'More'">
                      <template v-slot:trigger>
                         <span class="trigger inline-flex items-center justify-center w-8 h-8 -mr-2 rounded-full cursor-pointer hover:bg-kora-dark1" ref="trigger">
                            <Icon 
