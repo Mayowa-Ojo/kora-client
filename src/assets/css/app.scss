@@ -12,6 +12,12 @@
 .dot-separator {
    @apply inline-block w-1 h-1 bg-kora-light1 rounded-full mx-2
 }
+.border-bottom {
+   @apply border-b border-kora-light1 border-opacity-10
+}
+.image-cover {
+   @apply w-full h-full object-cover
+}
 
 html {
    body {
