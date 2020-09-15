@@ -1,6 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
+import NotFound from '../views/NotFound.vue';
 
 Vue.use(VueRouter)
 
@@ -27,7 +28,17 @@ const routes = [
       path: '/spaces',
       name: 'Spaces',
       component: () => import(/* webpackChunkName: "spaces" */ '../views/Spaces.vue')
-   }
+   },
+   {
+      path: '/profile/:username',
+      name: 'UserProfile',
+      component: () => import(/* webpackChunkName: "spaces" */ '../views/UserProfile.vue')
+   },
+   {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound
+   },
 ]
 
 const router = new VueRouter({
