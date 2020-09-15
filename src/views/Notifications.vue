@@ -69,7 +69,7 @@
                <div class="h-full">
                   <span class="inline-flex items-center justify-center cursor-pointer w-8 h-8 rounded-full hover:bg-kora-dark2">
                      <Icon 
-                        :class="'fill-current text-kora-gray1'" 
+                        :class="'fill-current text-kora-light1'" 
                         :viewbox="getIcons['kebabMenu'].viewbox" 
                         :path="getIcons['kebabMenu'].path" 
                         :width="getIcons['kebabMenu'].width" 

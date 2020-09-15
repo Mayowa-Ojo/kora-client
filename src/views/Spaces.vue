@@ -158,6 +158,10 @@
             </div>
          </div>
 
+         <div class="mt-12 px-6 py-4 flex justify-center">
+            <ScrollEnd />
+         </div>
+
       </div>
 
       <aside class="h-full q-box--right">
@@ -187,6 +191,7 @@
 
 <script>
 import Icon from "../components/Icon";
+import ScrollEnd from "../components/ScrollEnd";
 import SpaceCard from "../components/SpaceCard";
 import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
 
@@ -194,7 +199,8 @@ export default {
    name: "Spaces",
    components: {
       Icon,
-      SpaceCard
+      SpaceCard,
+      ScrollEnd
    },
    mixins: [iconsMixin, dataMixin, shortidMixin]
 }
