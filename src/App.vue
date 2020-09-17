@@ -4,17 +4,20 @@
       <main class="wrapper mx-auto">
       <router-view />
       </main>
+      <ModalWrapper />
    </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Navigation from "@/components/Navigation.vue";
+import ModalWrapper from "@/components/ModalWrapper.vue";
 
 export default {
    name: "App",
    components: {
-      Navigation
+      Navigation,
+      ModalWrapper
    }
 }
 </script>
