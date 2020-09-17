@@ -2,8 +2,12 @@
    <div v-on-clickaway="handleClickaway">
       <slot name="trigger" :toggle="toggle"></slot>
 
-      <div id="popover" class="bg-kora-dark2 border border-kora-gray1 border-opacity-10" role="popover" ref="popover" v-show="isOpen">
-         <slot name="popover"></slot>
+      <div id="popover" class="bg-kora-dark2 border border-kora-gray1 border-opacity-10" role="popover" ref="popover" 
+         v-show="isOpen"
+      >  
+         <div id="popover-inner">
+            <slot name="popover"></slot>
+         </div>
          <div id="arrow" data-popper-arrow></div>
       </div>
    </div>
@@ -73,6 +77,20 @@ export default {
 $bg: #313742;
 #popover {
    border-radius: 4px;
+   &-inner {
+      overflow: auto;
+      &::-webkit-scrollbar {
+         width: 7px;
+      }
+      &::-webkit-scrollbar-thumb {
+         background: #3498DB;
+         border-radius: 20px;
+         border: 1px solid #313742;
+      }
+      &::-webkit-scrollbar-track {
+         background: #313742;
+      }
+   }
    &[data-popper-placement^='top'] > #arrow {
       bottom: -4px;
    }
@@ -80,10 +98,10 @@ $bg: #313742;
       top: -4px;
    }
    &[data-popper-placement^='left'] > #arrow {
-      left: -4px;
+      right: -4px;
    }
    &[data-popper-placement^='right'] > #arrow {
-      right: -4px;
+      left: -4px;
    }
 }
 #arrow {
