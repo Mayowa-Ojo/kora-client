@@ -10,8 +10,8 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "core-js": "^3.6.5",
-    "node-sass": "^4.14.1",
     "quill-mention": "^3.0.0",
+    "sass": "^1.26.10",
     "sass-loader": "^10.0.2",
     "shortid": "^2.2.15",
     "tailwindcss": "^1.7.6",
