@@ -2,8 +2,15 @@
    <div class="q-box flex">
       <main class="q-box--left">
          <div class="flex items-center">
-            <span class="inline-block w-32 h-32 rounded-full overflow-hidden border-light-25">
+            <span class="user-avatar inline-flex items-center justify-center w-32 h-32 rounded-full overflow-hidden border-light-25 relative">
                <img src="https://uifaces.co/our-content/donated/ukegoVAy.jpg" alt="user avatar">
+               <span class="inline-flex items-center justify-center w-10 h-10 bg-kora-dark2 rounded-full absolute cursor-pointer">
+                  <Icon 
+                     :class="'fill-current w-5 h-5 text-kora-light1'" 
+                     :viewbox="getIcons['pencil'].viewbox" 
+                     :path="getIcons['pencil'].path" 
+                  />
+               </span>
             </span>
             <span class="inline-flex flex-col ml-4">
                <p class="text-kora-light1 text-k-24 font-bold">Alan Mellor</p>
@@ -12,7 +19,7 @@
          </div>
 
          <div class="mt-2">
-            <p class="text-kora-light1 text-k-15 font-normal">I’m a working software developer, who runs a blog about coding <span class="text-kora-blue1">Home | View from the Code Face</span></p>
+            <p class="text-kora-light1 text-k-15 font-normal">I’m a working software developer, who runs a blog about coding <span class="text-kora-blue1 cursor-pointer hover:underline">Home | View from the Code Face</span></p>
          </div>
 
          <div class="flex justify-between -ml-3">
@@ -63,9 +70,9 @@
                <template v-slot:popover>
                   <div class="popover">
                      <ul>
-                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark3">Mute Alan Mellor</li>
-                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark3">Block</li>
-                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark3">Report</li>
+                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Mute Alan Mellor</li>
+                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Block</li>
+                        <li class="text-kora-light1 text-k-13 font-normal py-2 px-4 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Report</li>
                      </ul>
                   </div>
                </template>
@@ -93,16 +100,54 @@
             </div>
             <div class="border-b border-kora-light1 border-opacity-10 flex justify-between items-center py-2">
                <p class="text-kora-light1 text-k-15 font-medium">Profile</p>
-               <span class="text-kora-light1 text-k-15 font-medium inline-flex items-center py-1 px-3 rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
-                  Most Recent
-                  <Icon 
-                     :class="'fill-current text-kora-light1 ml-2'" 
-                     :viewbox="getIcons['chevron'].viewbox" 
-                     :path="getIcons['chevron'].path" 
-                     :width="getIcons['chevron'].width" 
-                     :height="getIcons['chevron'].height" 
-                  />
-               </span>
+               <Popover :offset="8" :placement="'left'">
+                  <template v-slot:trigger="slotProps">
+                     <span 
+                        class="trigger text-kora-light1 text-k-15 font-medium inline-flex items-center py-1 px-3 rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
+                        @click="slotProps.toggle($event)"
+                     >
+                        Most Recent
+                        <Icon 
+                           :class="'fill-current text-kora-light1 ml-2'" 
+                           :viewbox="getIcons['chevron'].viewbox" 
+                           :path="getIcons['chevron'].path" 
+                           :width="getIcons['chevron'].width" 
+                           :height="getIcons['chevron'].height" 
+                        />
+                     </span>
+                  </template>
+
+                  <template v-slot:popover>
+                     <div class="popover">
+                        <ul class="">
+                           <li class="px-4 py-2 text-kora-light1 text-k-13 font-normal flex items-center justify-between cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                              Most Recent
+                              <span class="ml-3">
+                                 <Icon 
+                                    :class="'fill-current text-kora-green1'" 
+                                    :viewbox="getIcons['check'].viewbox" 
+                                    :path="getIcons['check'].path" 
+                                    :width="getIcons['check'].width" 
+                                    :height="getIcons['check'].height" 
+                                 />
+                              </span>
+                           </li>
+                           <li class="px-4 py-2 text-kora-light1 text-k-13 font-normal flex items-center justify-between cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                              All-Time Views
+                              <span class="ml-3 opacity-0">
+                                 <Icon 
+                                    :class="'fill-current text-kora-green1'" 
+                                    :viewbox="getIcons['check'].viewbox" 
+                                    :path="getIcons['check'].path" 
+                                    :width="getIcons['check'].width" 
+                                    :height="getIcons['check'].height" 
+                                 />
+                              </span>
+                           </li>
+                        </ul>
+                     </div>
+                  </template>
+               </Popover>
             </div>
 
             <div class="profile-feed">
@@ -185,8 +230,19 @@
             </div>
          </div>
 
-         <div class="py-3 border-bottom">
+         <div class="py-3 border-bottom flex justify-between items-center">
             <p class="text-kora-light1 text-k-15 font-medium">Spaces</p>
+            <!-- NOTE: requires admin role -->
+            <span 
+               class="inline-flex items-center justify-center w-8 h-8 border-light-25 rounded-full cursor-pointer hover:bg-kora-dark3"
+               @click="toggleModal('AddSpaceModal')"
+            >
+               <Icon 
+                  :class="'w-4 h-4 fill-current text-kora-light1'" 
+                  :viewbox="getIcons['plusLight'].viewbox" 
+                  :path="getIcons['plusLight'].path" 
+               />
+            </span>
          </div>
 
          <div class="pt-2 pb-4">
@@ -271,8 +327,19 @@
             </div>
          </div>
 
-         <div class="py-3 border-bottom">
+         <div class="py-3 border-bottom flex items-center justify-between">
             <p class="text-kora-light1 text-k-15 font-medium">Knows About</p>
+            <!-- NOTE: requires admin role -->
+            <span 
+               class="inline-flex w-8 h-8 items-center justify-center border-light-25 rounded-full cursor-pointer hover:bg-kora-dark3"
+               @click="toggleModal('AddTopicModal')"
+            >
+               <Icon 
+                  :class="'w-4 h-4 fill-current text-kora-light1'" 
+                  :viewbox="getIcons['pencil'].viewbox" 
+                  :path="getIcons['pencil'].path" 
+               />
+            </span>
          </div>
 
          <div class="pt-2 pb-4">
@@ -355,7 +422,7 @@ import Icon from "../components/Icon";
 import Popover from "../components/Popover";
 import AnswerPreview from "../components/AnswerPreview";
 import SharedPost from "../components/SharedPost";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, modalMixin } from "../utils/mixins";
 
 export default {
    name: "UserProfile",
@@ -365,7 +432,7 @@ export default {
       AnswerPreview,
       SharedPost
    },
-   mixins: [iconsMixin]
+   mixins: [iconsMixin, modalMixin]
 }
 
 </script>
@@ -374,6 +441,19 @@ export default {
 .q-box {
    &--left {
       width: 602px;
+      .user-avatar {
+         span {
+            visibility: hidden;
+         }
+         &:hover {
+            img {
+               opacity: 50%;
+            }
+            span {
+               visibility: visible;
+            }
+         }
+      }
    }
    &--right {
       width: 314px;
