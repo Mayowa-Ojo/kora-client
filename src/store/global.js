@@ -14,9 +14,22 @@ export const mutations = {
 }
 export const actions = {
    [ACTIONS.TOGGLE_MODAL] ({ commit }, payload) {
+      const validModals = [
+         "AddQuestionModal",
+         "AddTopicModal",
+         "AddSpaceModal",
+         "SharePostModal",
+      ];
+
       commit(MUTATIONS.SET_MODAL_ACTIVE);
 
       if(payload) {
+         if(!validModals.includes(payload.component)) {
+            console.warn(`[WARNING]: component with name ${payload.component} is not a valid modal component`);
+   
+            return;
+         }
+
          commit(MUTATIONS.SET_MODAL_COMPONENT, payload);
       }
    }
