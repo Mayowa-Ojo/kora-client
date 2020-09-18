@@ -50,7 +50,7 @@
                   </button>
                </template>
                <template v-slot:popover>
-                  <div class="popover">
+                  <div class="popover popover-spaces">
                      <div class="p-2 border-b border-kora-gray1 border-opacity-10">
                      <router-link :to="{ path: '/spaces' }" class="px-3 py-1 inline-flex items-center rounded-full hover:bg-kora-dark3">
                         <p class="mr-2 text-kora-light1 text-k-13 font-medium">See all spaces</p>
@@ -147,18 +147,156 @@
                <input class="w-full h-8 pl-8 text-kora-light1 text-k-13 font-normal bg-transparent rounded border-2 border-kora-light1 border-opacity-25 focus:border-kora-blue1 focus:outline-none" type="search" name="search" placeholder="Search Kora" autocomplete="off">
             </div>
             <div class="avatar h-full mr-4 flex items-center">
-               <span class="inline-flex items-center justify-center w-6 h-6 bg-kora-blue1 rounded-full cursor-pointer">
-                  <Icon 
-                     :class="'fill-current text-kora-light1'" 
-                     :viewbox="getIcons['user'].viewbox" 
-                     :path="getIcons['user'].path" 
-                     :width="getIcons['user'].width" 
-                     :height="getIcons['user'].height" 
-                  />
-               </span>
+               <Popover :offset="16" :placement="'bottom'">
+                  <template v-slot:trigger="slotProps">
+                     <span 
+                        class="trigger inline-flex items-center justify-center w-6 h-6 bg-kora-blue1 rounded-full cursor-pointer"
+                        @click="slotProps.toggle($event)"
+                     >
+                        <Icon 
+                           :class="'fill-current text-kora-light1'" 
+                           :viewbox="getIcons['user'].viewbox" 
+                           :path="getIcons['user'].path" 
+                           :width="getIcons['user'].width" 
+                           :height="getIcons['user'].height" 
+                        />
+                     </span>
+                  </template>
+                  <template v-slot:popover>
+                     <div class="popover popover-avatar">
+                        <div class="pb-2 border-b border-kora-light1 border-opacity-10">
+                           <div class="px-4 pt-4">
+                              <span class="inline-block w-10 h-10 overflow-hidden rounded-full cursor-pointer hover:opacity-75">
+                                 <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="user avatar">
+                              </span>
+                           </div>
+                           <router-link :to="{ path: '/profile/unorthodev' }">
+                           <div class="mt-1 px-4 py-2 flex justify-between items-center cursor-pointer">
+                              <p class="text-kora-light1 text-k-18 font-bold">Mayowa Ojo</p>
+                              <span>
+                                 <Icon 
+                                    :class="'w-3 h-3 transform -rotate-90 fill-current text-kora-light1'" 
+                                    :viewbox="getIcons['chevron'].viewbox" 
+                                    :path="getIcons['chevron'].path" 
+                                 />
+                              </span>
+                           </div>
+                           </router-link>
+                        </div>
+
+                        <div class="py-2 border-b border-kora-light1 border-opacity-10">
+                           <ul>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['message'].viewbox" 
+                                       :path="getIcons['message'].path" 
+                                       :width="getIcons['message'].width" 
+                                       :height="getIcons['message'].height" 
+                                    />
+                                    Messages
+                                 </span>
+                                 <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-kora-red1 text-kora-dark2 text-k-12 font-medium">2</span>
+                              </li>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['speaker'].viewbox" 
+                                       :path="getIcons['speaker'].path" 
+                                       :width="getIcons['speaker'].width" 
+                                       :height="getIcons['speaker'].height" 
+                                    />
+                                    CreateAd
+                                 </span>
+                              </li>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['chart'].viewbox" 
+                                       :path="getIcons['chart'].path" 
+                                       :width="getIcons['chart'].width" 
+                                       :height="getIcons['chart'].height" 
+                                    />
+                                    Stats
+                                 </span>
+                              </li>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['books'].viewbox" 
+                                       :path="getIcons['books'].path" 
+                                       :width="getIcons['books'].width" 
+                                       :height="getIcons['books'].height" 
+                                    />
+                                    Your Content
+                                 </span>
+                              </li>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['bookmark'].viewbox" 
+                                       :path="getIcons['bookmark'].path" 
+                                       :width="getIcons['bookmark'].width" 
+                                       :height="getIcons['bookmark'].height" 
+                                    />
+                                    Bookmarks
+                                 </span>
+                              </li>
+                              <li class="px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-kora-dark3">
+                                 <span class="text-kora-light1 text-k-14 font-medium">
+                                    <Icon 
+                                       :class="'fill-current text-kora-light1 mr-2 inline-block'" 
+                                       :viewbox="getIcons['draft'].viewbox" 
+                                       :path="getIcons['draft'].path" 
+                                       :width="getIcons['draft'].width" 
+                                       :height="getIcons['draft'].height" 
+                                    />
+                                    Drafts
+                                 </span>
+                                 <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-kora-light1 text-kora-dark2 text-k-12 font-medium">5</span>
+                              </li>
+                           </ul>
+                        </div>
+
+                        <div class="py-2 border-bottom">
+                           <ul>
+                              <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Settings</li>
+                              <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Languages</li>
+                              <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Help</li>
+                              <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Logout</li>
+                           </ul>
+                        </div>
+
+                        <div class="px-4 py-2 flex flex-wrap items-center bg-kora-dark1">
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">About</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Careers</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Terms</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Privacy</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Acceptable Use</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Businesses</p>
+                           <span class="dot-separator"></span>
+                           <p class="text-k-12 text-kora-light1 font-normal text-opacity-50 hover:underline cursor-pointer">Your Ad Choices</p>
+                        </div>
+                     </div>
+                  </template>
+               </Popover>
             </div>
             <div class="ask-button h-full flex items-center">
-               <button class="w-full px-4 py-1 bg-kora-red1 rounded-full font-medium text-k-13 text-kora-dark1 focus:border-opacity-75 hover:bg-opacity-75" type="button">Ask Question</button>
+               <button 
+                  class="w-full px-4 py-1 bg-kora-red1 rounded-full font-medium text-k-13 text-kora-dark1 focus:border-opacity-75 hover:bg-opacity-75" type="button"
+                  @click="toggleModal('AddQuestionModal')"
+               >Add Question
+               </button>
             </div>
          </div>
       </div>
@@ -168,7 +306,7 @@
 <script>
 import Popover from "./Popover";
 import Icon from "./Icon";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, modalMixin } from "../utils/mixins";
 import { spaces } from "../tmp/db";
 
 export default {
@@ -177,7 +315,7 @@ export default {
       Popover,
       Icon
    },
-   mixins: [iconsMixin],
+   mixins: [iconsMixin, modalMixin],
    computed: {
       getTempData: () => ({ spaces })
    }
@@ -225,19 +363,25 @@ input {
 <style lang="scss" scoped>
 // popover styles
 .popover {
-   // background: #3B414B;
    max-height: calc(100vh - 82px);
    width: max-content;
-   min-width: 320px;
-   min-height: 320px;
-   // overflow: auto;
-   .spaces-list {
-      &__item {
-         .notifier {
-            top: -3px;
-            left: -2px;
+   &-spaces {
+      min-width: 320px;
+      min-height: 320px;
+      // overflow: auto;
+      .spaces-list {
+         &__item {
+            .notifier {
+               top: -3px;
+               left: -2px;
+            }
          }
       }
+   }
+   &-avatar {
+      min-width: 260px;
+      max-width: 260px;
+      min-height: 260px;
    }
 }
 </style>
