@@ -55,21 +55,21 @@
             </p>
          </div>
 
-         <PostMeta />
+         <PostActions />
       </div>
    </div>
 </template>
 
 <script>
 import Icon from "../components/Icon";
-import PostMeta from "./PostMeta";
+import PostActions from "./PostActions";
 import { iconsMixin } from "../utils/mixins";
 
 export default {
    name: "SharedPost",
    components: {
       Icon,
-      PostMeta
+      PostActions
    },
    mixins: [iconsMixin]
 }
