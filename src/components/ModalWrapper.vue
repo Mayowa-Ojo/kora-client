@@ -18,6 +18,8 @@
 import { Portal, setSelector } from "@linusborg/vue-simple-portal";
 import AddQuestionModal from "./AddQuestionModal";
 import AddTopicModal from "./AddTopicModal";
+import AddSpaceModal from "./AddSpaceModal";
+import SharePostModal from "./SharePostModal";
 import { ACTIONS } from '../constants/store';
 
 setSelector("modal-target");
@@ -27,7 +29,9 @@ export default {
    components: {
       Portal,
       AddQuestionModal,
-      AddTopicModal
+      AddTopicModal,
+      AddSpaceModal,
+      SharePostModal
    },
    methods: {
       handleCloseModal: function() {
