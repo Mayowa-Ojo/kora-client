@@ -1,6 +1,9 @@
 <template>
    <div class="px-4 pt-2 pb-1 border-b border-kora-light1 border-opacity-10">
-      <div class="mb-2 flex justify-between items-center">
+      <div 
+         class="mb-2 flex justify-between items-center"
+         v-if="options.metaTop"
+      >
          <div class="flex items-center">
             <p class="text-kora-light1 text-k-13 font-light">Question added</p>
             <span class="dot-separator"></span>
@@ -68,14 +71,23 @@
             <div class="px-3 py-2 flex items-center cursor-pointer rounded-full hover:bg-kora-dark2">
                <span class="inline-block">
                   <Icon 
+                     v-if="options.userAction == 'pass'"
                      :class="'fill-current text-kora-light1'" 
                      :viewbox="getIcons['commentSlash'].viewbox" 
                      :path="getIcons['commentSlash'].path" 
                      :width="getIcons['commentSlash'].width" 
                      :height="getIcons['commentSlash'].height" 
                   />
+                  <Icon 
+                     v-else
+                     :class="'fill-current text-kora-light1'" 
+                     :viewbox="getIcons['userChat'].viewbox" 
+                     :path="getIcons['userChat'].path" 
+                     :width="getIcons['userChat'].width" 
+                     :height="getIcons['userChat'].height" 
+                  />
                </span>
-               <p class="ml-2 text-k-13 text-kora-light1 font-light">Pass</p>
+               <p class="ml-2 text-k-13 text-kora-light1 font-light capitalize">{{ options.userAction }}</p>
             </div>
          </div>
 
@@ -133,6 +145,7 @@ export default {
       Tooltip,
       Icon
    },
+   props: ["options"],
    data: () => ({
       editorActive: false
    }),
