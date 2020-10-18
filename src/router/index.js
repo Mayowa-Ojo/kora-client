@@ -26,7 +26,6 @@ const routes = [
          title: `${APP_NAME} - Write Answers`
       }
    },
-   
    {
       path: '/notifications',
       name: 'Notifications',
@@ -35,7 +34,6 @@ const routes = [
          title: `${APP_NAME} - Notifications`
       }
    },
-   
    {
       path: '/spaces',
       name: 'Spaces',
@@ -44,7 +42,14 @@ const routes = [
          title: `${APP_NAME} - Spaces`
       }
    },
-   
+   {
+      path: '/k/:spacename',
+      name: 'Space',
+      component: () => import(/* webpackChunkName: "spaces" */ '../views/Space.vue'),
+      meta: {
+         title: `${APP_NAME} - Space`
+      }
+   },
    {
       path: '/profile/:username',
       name: 'UserProfile',
@@ -53,7 +58,6 @@ const routes = [
          title: `${APP_NAME} - Mayowa Ojo`
       }
    },
-   
    {
       path: '*',
       name: 'NotFound',
