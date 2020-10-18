@@ -154,8 +154,9 @@
                <AnswerPreview 
                   v-for="i in 5"
                   :key="i"
+                  :options="{ borderBottom: true }"
                />
-               <SharedPost />
+               <SharedPost :options="{ followIcon: true, borderBottom: true }"/>
             </div>
          </div>
       </main>
