@@ -23,6 +23,7 @@
             <QuestionPreview 
                v-for="i in 10"
                :key="i"
+               :options="{ metaTop: true, userAction:'pass' }"
             />
 
             <div class="h-8 py-1 flex justify-center items-center">
