@@ -281,23 +281,10 @@
             </div>
          </div>
 
-         <div class="suggested-questions mb-2 border-light-25 rounded">
-            <div class="header p-4 flex items-center border-b border-kora-light1 border-opacity-10">
-               <Tooltip :offset="12" :placement="'top'" :text="'Hide'">
-                  <template v-slot:trigger>
-                     <span class="trigger inline-flex items-center justify-center w-6 h-6 rounded-sm bg-kora-red1">
-                        <Icon 
-                           :class="'fill-current inline-block text-kora-dark2 w-4 h-4'" 
-                           :viewbox="getIcons['lightbulb'].viewbox" 
-                           :path="getIcons['lightbulb'].path" 
-                        />
-                     </span>
-                  </template>
-               </Tooltip>
-               <p class="ml-2 text-k-13 font-normal text-kora-light1">Questions for you</p>
-            </div>
-            <QuestionPreview />
-            <QuestionPreview />
+         <div>
+            <SuggestedQuestions 
+               :options="{ heading: 'questions from this space', metaTop: true, userAction: 'pass'}"
+            />
          </div>
       </div>
 
@@ -390,7 +377,7 @@
 <script>
 import Icon from "../components/Icon";
 import Tooltip from "../components/Tooltip";
-import QuestionPreview from "../components/QuestionPreview";
+import SuggestedQuestions from "../components/SuggestedQuestions";
 import { spaces, topics } from "../tmp/db";
 import { shortidMixin, iconsMixin, modalMixin } from "../utils/mixins";
 
@@ -399,7 +386,7 @@ export default {
    components: {
       Tooltip,
       Icon,
-      QuestionPreview
+      SuggestedQuestions
    },
    mixins: [shortidMixin, iconsMixin, modalMixin],
    computed: {
