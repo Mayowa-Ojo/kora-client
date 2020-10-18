@@ -1,5 +1,8 @@
 <template>
-   <div class="profile-feed--item pt-4 pb-2 border-bottom">
+   <div 
+      class="profile-feed--item pt-4 pb-2"
+      :class="{ 'border-bottom': options.borderBottom }"
+   >
       <div>
          <div class="mb-2 flex justify-between items-center">
             <div class="flex items-center">
@@ -28,9 +31,12 @@
                   </p>
                </span>
             </div>
-            <span class="inline-flex items-center justify-center w-8 h-8 bg-kora-blue1 rounded-full cursor-pointer hover:opacity-75">
+            <span 
+               class="inline-flex items-center justify-center w-8 h-8 bg-kora-gray1 rounded-full cursor-pointer hover:opacity-75"
+               :class="[!options.followIcon ? 'invisible' : 'visible']"
+            >
                <Icon 
-                  :class="'fill-current text-kora-gray1'" 
+                  :class="'fill-current text-kora-dark2'" 
                   :viewbox="getIcons['follow'].viewbox" 
                   :path="getIcons['follow'].path" 
                   :width="getIcons['follow'].width" 
@@ -71,6 +77,7 @@ export default {
       Icon,
       PostActions
    },
+   props: ["options"],
    mixins: [iconsMixin]
 }
 
