@@ -1,7 +1,7 @@
 <template>
-   <div id="app" class="py-12">
-      <Navigation />
-      <main class="wrapper mx-auto">
+   <div id="app" :class="{'py-12': currentRoute != 'Authentication'}">
+      <Navigation v-if="currentRoute != 'Authentication'"/>
+      <main class="wrapper mx-auto" ref="q-container">
       <router-view />
       </main>
       <ModalWrapper />
@@ -18,12 +18,27 @@ export default {
    components: {
       Navigation,
       ModalWrapper
+   },
+   computed: {
+      currentRoute: function() {
+         return this.$route.name
+      }
+   },
+   watch: {
+      currentRoute: function(newVal) {
+         if(newVal == 'Authentication') {
+            this.$refs['q-container'].classList.remove('wrapper')
+            return
+         }
+
+         this.$refs['q-container'].classList.add('wrapper')
+      }
    }
 }
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.wrapper{
    padding-top: 30px;
    width: 1002px;
 }
