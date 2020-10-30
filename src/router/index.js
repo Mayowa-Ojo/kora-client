@@ -59,6 +59,14 @@ const routes = [
       }
    },
    {
+      path: '/auth',
+      name: 'Authentication',
+      component: () => import(/* webpackChunkName: "spaces" */ '../views/Authentication.vue'),
+      meta: {
+         title: `${APP_NAME} - Welcome`
+      }
+   },
+   {
       path: '*',
       name: 'NotFound',
       component: NotFound,
