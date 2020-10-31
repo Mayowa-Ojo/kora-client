@@ -43,7 +43,8 @@
                      <div class="flex items-center">
                         <p class="text-k-15 text-kora-light1 font-medium">I'm not a robot</p>
                         <Icon 
-                           :class="'w-4 h-4 ml-2 fill-current text-kora-green1'" 
+                           class="w-4 h-4 ml-2 fill-current text-kora-green1 opacity-0"
+                           :class="[captcha.passed ? 'captcha-check' : '']" 
                            :viewbox="getIcons['checkCircle'].viewbox" 
                            :path="getIcons['checkCircle'].path" 
                         />
@@ -237,6 +238,10 @@ export default {
                animation-fill-mode: forwards;
             }
          }
+         .captcha-check {
+            animation: check .5s ease-in-out;
+            animation-fill-mode: forwards;
+         }
       }
    }
 }
@@ -246,6 +251,19 @@ export default {
    }
    100% {
       width: 100%;
+   }
+}
+@keyframes check {
+   0% {
+      opacity: 0;
+      transform: scale(0);
+   }
+   50% {
+      transform: scale(1.5);
+   }
+   100% {
+      opacity: 1;
+      transform: scale(1);
    }
 }
 </style>
