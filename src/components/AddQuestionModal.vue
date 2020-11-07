@@ -137,17 +137,22 @@
                      </Popover>
                </div>
 
-               <div class="mt-4 pb-2 border-b border-kora-light1 border-opacity-10 hover:border-opacity-50">
+               <div class="mt-4 pb-2 border-b border-kora-light1 border-opacity-10 hover:border-opacity-50 relative">
                   <textarea 
                      class="w-full text-kora-light1 text-k-18 font-normal bg-transparent focus:outline-none" 
                      name="question" 
                      rows="1"
+                     maxlength="250"
                      placeholder='Start your question with "What", "Why", "How", etc.'
                      autocomplete="chrome-off"
                      v-model="question"
-                     ref="textarea"
+                     ref="textarea-question"
                   >
                   </textarea>
+                  <span 
+                     class="absolute text-opacity-75 text-k-13 font-normal bottom-0 right-0"
+                     :class="[question.length < 225 ? 'text-kora-light1' : 'text-red-400']"
+                  >{{250 - question.length}}</span>
                </div>
                <div class="pt-2 flex items-center">
                   <span class="inline-block mr-2">
@@ -164,6 +169,7 @@
                      class="text-kora-light1 text-k-13 font-normal appearance-none bg-transparent w-full focus:outline-none" 
                      type="text" 
                      placeholder="Optional: include a link that gives context"
+                     v-model="contextLink"
                   >
                </div>
             </div>
@@ -258,18 +264,22 @@
                </Popover>
             </div>
 
-            <div class="input-wrapper mt-8 pb-2 flex items-center">
+            <div class="input-wrapper mt-8 pb-2 flex items-center relative">
                <textarea 
                   class="w-full text-kora-light1 text-k-15 font-normal bg-transparent focus:outline-none" 
-                  name="question" 
+                  name="shareComment" 
                   rows="1"
+                  maxlength="250"
                   placeholder='Say something about this...'
                   autocomplete="chrome-off"
-                  v-model="question"
-                  ref="textarea"
+                  v-model="shareComment"
+                  ref="textarea-share"
                >
                </textarea>
-               <span class="text-kora-light1 text-k-13 font-normal text-opacity-50">250</span>
+               <span 
+                  class="text-opacity-75 text-k-13 font-normal absolute bottom-0 right-0"
+                  :class="[shareComment.length < 225 ? 'text-kora-light1' : 'text-red-400']"
+               >{{250 - shareComment.length}}</span>
             </div>
 
             <div class="input-wrapper mt-2 p-2 border-light-25 rounded flex items-center">
@@ -286,7 +296,7 @@
                   class="text-kora-light1 text-k-15 font-normal bg-transparent focus:outline-none appearance-none" 
                   type="text" 
                   placeholder="Enter a link"
-                  v-bind="shareComment"
+                  v-model="shareLink"
                >
             </div>
          </div>
@@ -298,7 +308,10 @@
                class="mr-2 py-1 px-3 rounded-full text-kora-light1 text-k-14 font-medium bg-kora-dark2 hover:bg-kora-dark3"
                @click="$emit('close-modal')"
             >Cancel</button>
-            <button class="mr-2 py-1 px-4 rounded-full text-kora-dark2 text-k-14 font-medium bg-kora-red1">
+            <button 
+               class="mr-2 py-1 px-4 rounded-full text-kora-dark2 text-k-14 font-medium bg-kora-red1"
+               @click="handleSubmit"
+            >
                {{currentTab == 'question' ? 'Add Question' : 'Share Link'}}
             </button>
          </div>
@@ -310,6 +323,7 @@
 import Icon from "./Icon";
 import Popover from "./Popover";
 import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
+import { ACTIONS } from '../constants/store';
 
 export default {
    name: "AddQuestionModal",
@@ -320,7 +334,9 @@ export default {
    mixins: [iconsMixin, dataMixin, shortidMixin],
    data: () => ({
       question: "",
+      contextLink: "",
       shareComment: "",
+      shareLink: "",
       currentTab: "question",
       viewership: "public"
    }),
@@ -330,11 +346,35 @@ export default {
       },
       selectViewership: function(option) {
          this.viewership = option
+      },
+      handleSubmit: async function() {
+         if(this.currentTab == "question") {
+            const payload = {
+               title: this.question,
+               contextLink: this.contextLink,
+               postType: "question",
+            }
+
+            await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
+
+            if(this.$store.state.status == "error") {
+               return;
+            }
+
+            // FIX: ideally, we should redirect to the question page
+            // this.$router.push("/");
+         }
       }
    },
    watch: {
       question: function() {
-         const textarea = this.$refs['textarea'];
+         const textarea = this.$refs['textarea-question'];
+
+         textarea.style.height = `27px`;
+         textarea.style.height = `${textarea.scrollHeight}px`;
+      },
+      shareComment: function() {
+         const textarea = this.$refs['textarea-share'];
 
          textarea.style.height = `27px`;
          textarea.style.height = `${textarea.scrollHeight}px`;
