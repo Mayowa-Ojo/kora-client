@@ -22,9 +22,9 @@
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
                   <Icon 
-                     :class="'w-6 h-6 fill-current text-kora-light1'" 
-                     :viewbox="getIcons['commentAlt'].viewbox" 
-                     :path="getIcons['commentAlt'].path" 
+                     :class="'w-5 h-5 fill-current text-kora-light1'" 
+                     :viewbox="getIcons['pencilBrackets'].viewbox" 
+                     :path="getIcons['pencilBrackets'].path" 
                   />
                </span>
                <span class="text-k-14 font-medium text-kora-light1">Answer</span>
@@ -95,10 +95,11 @@
                            </span>
                         </li>
                         <li 
-                           class="spaces-list__item px-4 py-2 flex items-center justify-between border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1"
+                           class="spaces-list__item  border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1"
                            v-for="(space, idx) in getTempData.spaces"
                            :key="idx"
                         >
+                           <router-link class="px-4 py-2 flex items-center justify-between" :to="{ path: '/k/communityy' }" >
                            <div class="inline-flex items-center">
                               <span class="inline-block mr-2 w-8 h-8 rounded-full relative">
                                  <img class="rounded-full" :src="space.img" alt="space icon">
@@ -113,6 +114,7 @@
                                  :path="getIcons['chevron'].path" 
                               />
                            </span>
+                           </router-link>
                         </li>
                      </ul>
                   </div>
@@ -268,7 +270,10 @@
                               <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Settings</li>
                               <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Languages</li>
                               <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Help</li>
-                              <li class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3">Logout</li>
+                              <li 
+                                 class="px-4 py-1 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark3"
+                                 @click="handleUserLogout"
+                              >Logout</li>
                            </ul>
                         </div>
 
@@ -308,6 +313,7 @@ import Popover from "./Popover";
 import Icon from "./Icon";
 import { iconsMixin, modalMixin } from "../utils/mixins";
 import { spaces } from "../tmp/db";
+import { ACTIONS } from '../constants/store';
 
 export default {
    name: "Navigation",
@@ -318,6 +324,12 @@ export default {
    mixins: [iconsMixin, modalMixin],
    computed: {
       getTempData: () => ({ spaces })
+   },
+   methods: {
+      handleUserLogout: function() {
+         this.$store.dispatch(ACTIONS.USER_LOGOUT);
+         this.$router.push("/k");
+      }
    }
 }
 </script>
