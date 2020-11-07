@@ -44,7 +44,7 @@ export default {
 .comment-input {
    border-radius: 25px;
    textarea {
-      height: 26px;
+      height: 22px;
       min-height: 22px;
       overflow: hidden;
       overflow-wrap: break-word;
