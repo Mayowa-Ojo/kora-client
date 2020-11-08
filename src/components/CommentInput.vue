@@ -1,5 +1,5 @@
 <template>
-   <div class="w-full flex items-center px-4 py-2 border-light-25 rounded bg-kora-dark2">
+   <div class="w-full flex items-center">
       <div class="w-10 h-10 rounded-full overflow-hidden">
          <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="profile image">
       </div>
