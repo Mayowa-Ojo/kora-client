@@ -3,8 +3,11 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import NotFound from '@/views/NotFound.vue';
 import { APP_NAME } from "@/constants/common";
+import LocalStorage from '../utils/localstorage';
 
 Vue.use(VueRouter)
+
+const ls = new LocalStorage();
 
 const routes = [
    {
@@ -17,11 +20,11 @@ const routes = [
    },
    {
       path: '/answer',
-      name: 'Answer',
+      name: 'Questions',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "answer" */ '../views/Answer.vue'),
+      component: () => import(/* webpackChunkName: "questions" */ '../views/Questions.vue'),
       meta: {
          title: `${APP_NAME} - Write Answers`
       }
@@ -45,7 +48,7 @@ const routes = [
    {
       path: '/k/:spacename',
       name: 'Space',
-      component: () => import(/* webpackChunkName: "spaces" */ '../views/Space.vue'),
+      component: () => import(/* webpackChunkName: "space" */ '../views/Space.vue'),
       meta: {
          title: `${APP_NAME} - Space`
       }
@@ -53,15 +56,31 @@ const routes = [
    {
       path: '/profile/:username',
       name: 'UserProfile',
-      component: () => import(/* webpackChunkName: "spaces" */ '../views/UserProfile.vue'),
+      component: () => import(/* webpackChunkName: "user_profile" */ '../views/UserProfile.vue'),
       meta: {
          title: `${APP_NAME} - Mayowa Ojo`
       }
    },
    {
-      path: '/auth',
+      path: '/question/:slug',
+      name: 'Question',
+      component: () => import(/* webpackChunkName: "question" */ '../views/Question.vue'),
+      meta: {
+         title: `${APP_NAME} - Question`
+      }
+   },
+   {
+      path: '/answer/:slug',
+      name: 'Answer',
+      component: () => import(/* webpackChunkName: "answer" */ '../views/Answer.vue'),
+      meta: {
+         title: `${APP_NAME} - Answer`
+      }
+   },
+   {
+      path: '/k',
       name: 'Authentication',
-      component: () => import(/* webpackChunkName: "spaces" */ '../views/Authentication.vue'),
+      component: () => import(/* webpackChunkName: "authentication" */ '../views/Authentication.vue'),
       meta: {
          title: `${APP_NAME} - Welcome`
       }
@@ -91,6 +110,23 @@ router.beforeEach((to, _from, next) => {
    }
 
    next();
-})
+});
+
+router.beforeEach((to, _from, next) => {
+   // NOTE: implement proper check for valid token with server
+   const { token } = ls.get("user") || {};
+
+   if(!token && to.name !== "Authentication") {
+      next("/k");
+      return;
+   }
+
+   if(token && to.name === "Authentication") {
+      next("/");
+      return;
+   }
+
+   next();
+});
 
 export default router
