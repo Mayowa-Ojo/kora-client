@@ -15,55 +15,115 @@
                   <div class="pb-2 border-b border-kora-light1 border-opacity-25">
                      <p class="text-k-15 font-medium text-kora-light1">Sign Up</p>
                   </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">First Name</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="text" placeholder="Your firstname">
+                  <Toast 
+                     :isActive="signUp.isToastActive"
+                     v-on:toggle="toggleToastActive('signUp', {})"
+                     :options="getToastOptions('signUp')"
+                  />
+                  <validation-observer v-slot="{ failed, untouched, handleSubmit: validateBeforeSubmit }">
+                  <form class="form" action autocomplete="off" @submit.prevent="validateBeforeSubmit(handleUserSignup)">
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1">First Name</label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal rounded-sm focus:outline-none"
+                              :class="[failed ? 'bg-pink-200 text-kora-dark2' : !passed ? 'bg-transparent text-kora-light1' : 'bg-green-300 text-kora-dark2']"
+                              v-model="signUp.firstname"
+                              type="text" placeholder="Your firstname"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1">Last Name</label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal rounded-sm focus:outline-none"
+                              :class="[failed ? 'bg-pink-200 text-kora-dark2' : !passed ? 'bg-transparent text-kora-light1' : 'bg-green-300 text-kora-dark2']"
+                              v-model="signUp.lastname"
+                              type="text" placeholder="Your lastname"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required|email" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1">Email</label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal rounded-sm focus:outline-none"
+                              :class="[failed ? 'bg-pink-200 text-kora-dark2' : !passed ? 'bg-transparent text-kora-light1' : 'bg-green-300 text-kora-dark2']"
+                              v-model="signUp.email"
+                              type="email" placeholder="Your email"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required|min:6" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1 inline-flex items-center">Password
+                           <Tooltip :offset="4" :placement="'top'" :text="'8 character minimum'">
+                              <template v-slot:trigger>
+                                 <span class="trigger inline-flex justify-center items-center w-8 h-8 rounded-full">
+                                    <Icon 
+                                       :class="'w-4 h-4 stroke-current text-kora-light1 opacity-75'"
+                                       :viewbox="getIcons['info'].viewbox" 
+                                       :path="getIcons['info'].path" 
+                                    />
+                                 </span>
+                              </template>
+                           </Tooltip>
+                        </label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal bg-transparent text-kora-light1 rounded-sm focus:outline-none"
+                              v-model="signUp.password"
+                              type="password" placeholder="Your password"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <div class="mt-4">
+                        <div class="flex items-center">
+                           <p class="text-k-15 text-kora-light1 font-medium">I'm not a robot</p>
+                           <Icon 
+                              class="w-4 h-4 ml-2 fill-current text-kora-green1 opacity-0"
+                              :class="[captcha.passed ? 'captcha-check' : '']" 
+                              :viewbox="getIcons['checkCircle'].viewbox" 
+                              :path="getIcons['checkCircle'].path" 
+                           />
+                        </div>
+                        <button 
+                           class="captcha w-full py-2 mt-2 rounded-full border-2 border-kora-blue1 text-k-18 text-kora-gray1 font-bold uppercase relative z-10 overflow-hidden focus:outline-none"
+                           :disabled="captcha.passed"
+                           @mousedown="runVerification"
+                           @mouseup="cancelVerification"
+                           ref="captcha-btn"
+                        >click & hold</button>
                      </div>
-                  </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">Last Name</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="text" placeholder="Your lastname">
+                     <div class="flex justify-between mt-4">
+                        <button 
+                           class="text-k-14 font-medium text-kora-light1 hover:underline"
+                           @click="toggleSocialAuth"
+                        >Cancel</button>
+                        <button 
+                           class="py-1 px-4 bg-kora-blue1 bg-opacity-75 text-kora-gray1 text-k-14 font-medium rounded-full"
+                           :class="{ 'cursor-default': failed || untouched, 'hover:bg-opacity-100': !failed && !untouched}"
+                           :disabled="failed || untouched"
+                        >Sign Up</button>
                      </div>
-                  </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">Email</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="email" placeholder="Your email">
-                     </div>
-                  </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">Password</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="text" placeholder="Your password">
-                     </div>
-                  </div>
-                  <div class="mt-4">
-                     <div class="flex items-center">
-                        <p class="text-k-15 text-kora-light1 font-medium">I'm not a robot</p>
-                        <Icon 
-                           class="w-4 h-4 ml-2 fill-current text-kora-green1 opacity-0"
-                           :class="[captcha.passed ? 'captcha-check' : '']" 
-                           :viewbox="getIcons['checkCircle'].viewbox" 
-                           :path="getIcons['checkCircle'].path" 
-                        />
-                     </div>
-                     <button 
-                        class="captcha w-full py-2 mt-2 rounded-full border-2 border-kora-blue1 text-k-18 text-kora-light1 font-bold uppercase relative z-10 overflow-hidden focus:outline-none"
-                        :disabled="captcha.passed"
-                        @mousedown="runVerification"
-                        @mouseup="cancelVerification"
-                        ref="captcha-btn"
-                     >click & hold</button>
-                  </div>
-                  <div class="flex justify-between mt-4">
-                     <button 
-                        class="text-k-14 font-medium text-kora-light1 hover:underline"
-                        @click="toggleSocialAuth"
-                     >Cancel</button>
-                     <button class="py-1 px-4 bg-kora-blue1 text-kora-gray1 text-k-14 font-medium rounded-full">Sign Up</button>
-                  </div>
+                  </form>
+                  </validation-observer>
                   <div class="mt-4">
                      <p class="text-k-13 font-normal text-kora-light1">By continuing you indicate that you agree to Kora’s <span class="underline">Terms of Service</span> and <span class="underline">Privacy Policy</span>.</p>
                   </div>
@@ -93,10 +153,10 @@
                      <button 
                         class="text-k-13 font-normal text-kora-light1 rounded-full w-full py-1 px-2 mt-2 hover:bg-kora-dark2"
                         @click="toggleSocialAuth"
-                     >Sign Up with email</button>
+                     >Sign up with email</button>
                   </div>
                   <div class="mt-2">
-                     <p class="text-k-13 font-normal text-kora-light1">By continuing you indicate that you agree to Kora’s <span class="underline">Terms of Service</span> and <span class="underline">Privacy Policy</span>.</p>
+                     <p class="text-k-13 font-normal text-kora-light1">By continuing you indicate that you agree to Kora’s <span class="underline cursor-pointer">Terms of Service</span> and <span class="underline cursor-pointer">Privacy Policy</span>.</p>
                   </div>
                </div>
 
@@ -104,28 +164,66 @@
                   <div class="pb-2 border-b border-kora-light1 border-opacity-25">
                      <p class="text-k-15 font-medium text-kora-light1">Login</p>
                   </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">Email</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="email" placeholder="Your email">
+                  <Toast 
+                     :isActive="login.isToastActive"
+                     v-on:toggle="toggleToastActive('login', {})"
+                     :options="getToastOptions('login')"
+                  />
+                  <validation-observer v-slot="{ failed, untouched, handleSubmit: validateBeforeSubmit }">
+                  <form class="form" action autocomplete="off" @submit.prevent="validateBeforeSubmit(handleUserLogin)">
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required|email" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1">Email</label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal rounded-sm focus:outline-none"
+                              :class="[failed ? 'bg-pink-200 text-kora-dark2' : !passed ? 'bg-transparent text-kora-light1' : 'bg-green-300 text-kora-dark2']"
+                              v-model="login.email"
+                              type="email" placeholder="Your email"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <validation-provider class="block relative mt-4" mode="eager" rules="required" v-slot="{ errors, failed, passed }">
+                        <label class="text-k-15 font-medium text-kora-light1">Password</label>
+                        <div 
+                           class="form-input p-2 mt-1 rounded-sm border border-opacity-25 hover:border-kora-blue1"
+                           :class="[failed ? 'border-red-400' : !passed ? 'border-kora-light1' : 'border-green-500']"
+                        >
+                           <input 
+                              class="appearance-none pl-1 w-full text-k-15 font-normal bg-transparent text-kora-light1 rounded-sm focus:outline-none"
+                              v-model="login.password"
+                              type="password" placeholder="Your password"
+                           >
+                        </div>
+                        <FormValidation :validations="errors" />
+                     </validation-provider>
+                     <div class="flex justify-between mt-4">
+                        <button class="text-k-13 font-normal text-kora-light1 hover:underline">Forgot password?</button>
+                        <button 
+                           class="py-1 px-4 bg-kora-blue1 bg-opacity-75 text-kora-gray1 text-k-14 font-medium rounded-full"
+                           :class="{ 'cursor-default': failed || untouched, 'hover:bg-opacity-100': !failed && !untouched}"
+                           :disabled="failed || untouched"
+                        >Login</button>
                      </div>
-                  </div>
-                  <div class="mt-4">
-                     <label class="text-k-15 font-medium text-kora-light1">Password</label>
-                     <div class="form-input p-2 mt-1 rounded-sm border border-kora-light1 border-opacity-25 hover:border-kora-blue1">
-                        <input class="appearance-none w-full bg-transparent text-k-15 font-normal text-kora-light1 focus:outline-none" type="password" placeholder="Your password">
-                     </div>
-                  </div>
-                  <div class="flex justify-between mt-4">
-                     <button class="text-k-13 font-normal text-kora-light1 hover:underline">Forgot password?</button>
-                     <button class="py-1 px-4 bg-kora-blue1 text-kora-gray1 text-k-14 font-medium rounded-full">Login</button>
-                  </div>
+                  </form>
+                  </validation-observer>
                </div>
             </div>
 
             <div class="q-box--footer">
                <div class="py-4 border-t border-kora-light1 border-opacity-25">
-                  <p class="text-k-13 font-normal text-kora-blue1 text-center"><span class="text-kora-light1">New:</span> Arabic, Hebrew, Polish, Gujarati, Kannada, Malayalam <span class="text-kora-light1">and</span> Telugu</p>
+                  <p class="text-k-13 font-normal text-kora-light1 text-center">New: 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Arabic</span>, 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Hebrew</span>, 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Polish</span>, 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Gujarati</span>, 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Kannada</span>, 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Malayalam</span> and 
+                     <span class="text-kora-blue1 cursor-pointer hover:underline">Telugu</span>
+                  </p>
                </div>
                <div class="flex items-center justify-center bg-kora-dark2 py-4 border-t border-kora-light1 border-opacity-25">
                   <span class="text-k-13 text-kora-light1 font-normal cursor-pointer hover:underline">About</span>
@@ -158,16 +256,57 @@
 </template>
 
 <script>
-import Icon from "../components/Icon"
+import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
+import { required, email, min } from "vee-validate/dist/rules";
+
+import Icon from "../components/Icon";
+import FormValidation from "../components/FormValidation";
+import Tooltip from "../components/Tooltip";
+import Toast from "../components/Toast";
+import { ACTIONS } from '../constants/store';
 import { iconsMixin } from "../utils/mixins";
+
+extend("required", {
+   ...required,
+   message: "This field is required"
+});
+extend("email", {
+   ...email,
+   message: "Please enter a valid email"
+});
+extend("min", {
+   ...min,
+   message: "At least 8 characters"
+});
 
 export default {
    name: "Authentication",
    components: {
-      Icon
+      Icon,
+      ValidationProvider,
+      ValidationObserver,
+      FormValidation,
+      Tooltip,
+      Toast
    },
    mixins: [iconsMixin],
    data: () => ({
+      signUp: {
+         firstname: "",
+         lastname: "",
+         email: "",
+         password: "",
+         isToastActive: false,
+         toastContent: "",
+         toastType: ""
+      },
+      login: {
+         email: "",
+         password: "",
+         isToastActive: false,
+         toastContent: "",
+         toastType: ""
+      },
       showSocialAuth: true,
       captcha: {
          timerId: 0,
@@ -178,6 +317,14 @@ export default {
    methods: {
       toggleSocialAuth: function() {
          this.showSocialAuth = !this.showSocialAuth
+
+         this.signUp = {
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            isToastActive: false
+         }
       },
       runVerification: function() {
          this.$refs['captcha-btn'].classList.add("fill");
@@ -192,6 +339,71 @@ export default {
             this.$refs['captcha-btn'].classList.remove("fill");
             clearTimeout(this.captcha.timerId);
          }
+      },
+      handleUserLogin: async function() {
+         const payload = {
+            email: this.login.email,
+            password: this.login.password
+         }
+         await this.$store.dispatch(ACTIONS.USER_LOGIN, payload);
+
+         if(this.$store.state.status === "error") {
+            this.toggleToastActive("login", {
+               content: "The email/password provided is invalid. Retry or Sign Up for Kora.",
+               type: "error"
+            });
+            return;
+         }
+
+         this.$router.push("/");
+      },
+      handleUserSignup: async function() {
+         const payload = {
+            firstname: this.signUp.firstname,
+            lastname: this.signUp.lastname,
+            email: this.signUp.email,
+            password: this.signUp.password
+         }
+
+         if(!this.captcha.passed) {
+            this.toggleToastActive("signUp", {
+               content: "Please verify that you're not a robot.",
+               type: "error"
+            });
+            return;
+         }
+
+         await this.$store.dispatch(ACTIONS.USER_SIGNUP, payload);
+
+         if(this.$store.state.status === "error") {
+            this.toggleToastActive("signUp", {
+               content: "The email provided is taken. Try again",
+               type: "error"
+            });
+            return;
+         }
+
+         this.$router.push("/");
+      },
+      toggleToastActive: function(target, {content="", type=""}) {
+         if(!["login", "signUp"].includes(target)) return;
+
+         this[target].isToastActive = !this[target].isToastActive;
+
+         if(content == "" && type == "") {
+            return;
+         }
+
+         this[target].toastContent = content;
+         this[target].toastType = type;
+      }
+   },
+   computed: {
+      getToastOptions: function() {
+         return (target) => ({
+            content: this[target].toastContent,
+            type: this[target].toastType
+         })
       }
    }
 }
