@@ -2,7 +2,8 @@ import { MUTATIONS, ACTIONS } from "../constants/store";
 
 export const state = {
    modalComponent: "AddTopicModal",
-   isActive: false
+   isActive: false,
+   status: "",
 }
 export const mutations = {
    [MUTATIONS.SET_MODAL_COMPONENT] (state, payload) {
@@ -10,6 +11,12 @@ export const mutations = {
    },
    [MUTATIONS.SET_MODAL_ACTIVE] (state) {
       state.isActive = !state.isActive;
+   },
+   [MUTATIONS.SET_STATUS]: function(state, type) {
+      const isValidStatusType = ["error", "loading", "done"].includes(type)
+      if(!isValidStatusType) return;
+
+      state.status = type;
    }
 }
 export const actions = {
