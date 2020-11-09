@@ -25,7 +25,7 @@
                />
                Follow
             </button>
-            <span class="inline-flex items-center justify-center -mt-1 ml-3 w-8 h-8 rounded-full cursor-pointer hover:bg-kora-dark2">
+            <span class="inline-flex items-center justify-center -mt-1 ml-3 w-8 h-8 rounded-full cursor-pointer hover:bg-kora-dark3">
                <Icon 
                   :class="'fill-current inline-block text-kora-red1'" 
                   :viewbox="getIcons['x'].viewbox" 
@@ -36,7 +36,7 @@
             </span>
          </div>
       </div>
-      <div class="flex items-center justify-center h-10 border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark2">
+      <div class="flex items-center justify-center h-10 border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark3">
          <p class="text-k-14 font-normal text-kora-light1 capitalize">view more spaces</p>
          <Icon 
             :class="'fill-current inline-block text-kora-light1 w-3 h-3 ml-2 transform -rotate-90'" 
