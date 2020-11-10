@@ -41,6 +41,7 @@ export const styles = `
    color: #9ADCFA !important;
    padding: 16px !important;
    min-height: 132px !important;
+   line-height: 2 !important;
 }
 .ql-snow a { 
    color: wheat !important; 
