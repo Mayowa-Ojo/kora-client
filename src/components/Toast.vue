@@ -1,30 +1,19 @@
 <template>
    <transition name="toast">
    <div 
-      class="w-full px-2 mx-auto rounded bg-pink-200 flex items-center"
-      v-if="isActive"
+      class="toast-wrapper w-full h-10 px-2 mx-auto flex items-center justify-center relative"
+      :class="{'bg-green-300': getType == 'success', 'bg-orange-300': getType == 'warning', 'bg-red-300': getType == 'error'}"
+      v-if="isOpen"
    >
-      <div class="items-center justify-center rounded-full h-full py-1">
+      <span class="ml-3 absolute left-0">
          <Icon 
-            :class="'w-5 h-5 stroke-current text-red-400'"
-            :viewbox="getIcons['caution'].viewbox" 
-            :path="getIcons['caution'].path" 
+            :class="'w-5 h-5 stroke-current text-kora-dark2'"
+            :viewbox="getIcons[getType == 'success' ? 'checkAlt' : getType == 'warning' ? 'caution' : 'danger'].viewbox" 
+            :path="getIcons[getType == 'success' ? 'checkAlt' : getType == 'warning' ? 'caution' : 'danger'].path" 
          />
-      </div>
+      </span>
       <div class="py-1 ml-3">
-         <p class="text-k-13 font-normal text-kora-red1">{{ options.content }}</p>
-      </div>
-      <div class="ml-2 h-full self-start">
-         <span 
-            class="inline-flex items-center justify-center rounded-full h-6 w-6  hover:bg-red-300 cursor-pointer"
-            @click="$emit('toggle')"
-         >
-            <Icon 
-               :class="'w-2 h-2 fill-current text-red-400'"
-               :viewbox="getIcons['x'].viewbox" 
-               :path="getIcons['x'].path" 
-            />
-         </span>
+         <p class="text-k-15 font-medium text-kora-dark2">{{ getContent }}</p>
       </div>
    </div>
    </transition>
@@ -33,17 +22,37 @@
 <script>
 import Icon from "./Icon";
 import { iconsMixin } from "../utils/mixins";
+import { MUTATIONS } from '../constants/store';
 
 export default {
    name: "Toast",
    components: {
       Icon
    },
-   props: ["options", "isActive"], // type - ["error", "warning", "success", "info"]
    mixins: [iconsMixin],
-   data: () => ({
-      isOpen: false
-   })
+   computed: {
+      isOpen: function() {
+         return this.$store.state.toast.isActive;
+      },
+      getContent: function() {
+         return this.$store.state.toast.content
+      },
+      getType: function() {
+         return this.$store.state.toast.type
+      }
+   },
+   methods: {
+      toggleIsOpen: function() {
+         this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE)
+      }
+   },
+   watch: {
+      isOpen: function(newVal) {
+         if(newVal) {
+            setTimeout(this.toggleIsOpen.bind(this), 5000);
+         }
+      }
+   }
 }
 
 </script>
