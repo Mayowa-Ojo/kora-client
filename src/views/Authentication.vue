@@ -15,10 +15,10 @@
                   <div class="pb-2 border-b border-kora-light1 border-opacity-25">
                      <p class="text-k-15 font-medium text-kora-light1">Sign Up</p>
                   </div>
-                  <Toast 
-                     :isActive="signUp.isToastActive"
-                     v-on:toggle="toggleToastActive('signUp', {})"
-                     :options="getToastOptions('signUp')"
+                  <Alert 
+                     :isActive="signUp.isAlertActive"
+                     v-on:toggle="toggleAlertActive('signUp', {})"
+                     :options="getAlertOptions('signUp')"
                   />
                   <validation-observer v-slot="{ failed, untouched, handleSubmit: validateBeforeSubmit }">
                   <form class="form" action autocomplete="off" @submit.prevent="validateBeforeSubmit(handleUserSignup)">
@@ -164,10 +164,10 @@
                   <div class="pb-2 border-b border-kora-light1 border-opacity-25">
                      <p class="text-k-15 font-medium text-kora-light1">Login</p>
                   </div>
-                  <Toast 
-                     :isActive="login.isToastActive"
-                     v-on:toggle="toggleToastActive('login', {})"
-                     :options="getToastOptions('login')"
+                  <Alert 
+                     :isActive="login.isAlertActive"
+                     v-on:toggle="toggleAlertActive('login', {})"
+                     :options="getAlertOptions('login')"
                   />
                   <validation-observer v-slot="{ failed, untouched, handleSubmit: validateBeforeSubmit }">
                   <form class="form" action autocomplete="off" @submit.prevent="validateBeforeSubmit(handleUserLogin)">
@@ -262,7 +262,7 @@ import { required, email, min } from "vee-validate/dist/rules";
 import Icon from "../components/Icon";
 import FormValidation from "../components/FormValidation";
 import Tooltip from "../components/Tooltip";
-import Toast from "../components/Toast";
+import Alert from "../components/Alert";
 import { ACTIONS } from '../constants/store';
 import { iconsMixin } from "../utils/mixins";
 
@@ -287,7 +287,7 @@ export default {
       ValidationObserver,
       FormValidation,
       Tooltip,
-      Toast
+      Alert
    },
    mixins: [iconsMixin],
    data: () => ({
@@ -296,16 +296,16 @@ export default {
          lastname: "",
          email: "",
          password: "",
-         isToastActive: false,
-         toastContent: "",
-         toastType: ""
+         isAlertActive: false,
+         alertContent: "",
+         alertType: ""
       },
       login: {
          email: "",
          password: "",
-         isToastActive: false,
-         toastContent: "",
-         toastType: ""
+         isAlertActive: false,
+         alertContent: "",
+         alertType: ""
       },
       showSocialAuth: true,
       captcha: {
@@ -323,7 +323,7 @@ export default {
             lastname: "",
             email: "",
             password: "",
-            isToastActive: false
+            isAlertActive: false
          }
       },
       runVerification: function() {
@@ -348,7 +348,7 @@ export default {
          await this.$store.dispatch(ACTIONS.USER_LOGIN, payload);
 
          if(this.$store.state.status === "error") {
-            this.toggleToastActive("login", {
+            this.toggleAlertActive("login", {
                content: "The email/password provided is invalid. Retry or Sign Up for Kora.",
                type: "error"
             });
@@ -366,7 +366,7 @@ export default {
          }
 
          if(!this.captcha.passed) {
-            this.toggleToastActive("signUp", {
+            this.toggleAlertActive("signUp", {
                content: "Please verify that you're not a robot.",
                type: "error"
             });
@@ -376,7 +376,7 @@ export default {
          await this.$store.dispatch(ACTIONS.USER_SIGNUP, payload);
 
          if(this.$store.state.status === "error") {
-            this.toggleToastActive("signUp", {
+            this.toggleAlertActive("signUp", {
                content: "The email provided is taken. Try again",
                type: "error"
             });
@@ -385,24 +385,24 @@ export default {
 
          this.$router.push("/");
       },
-      toggleToastActive: function(target, {content="", type=""}) {
+      toggleAlertActive: function(target, {content="", type=""}) {
          if(!["login", "signUp"].includes(target)) return;
 
-         this[target].isToastActive = !this[target].isToastActive;
+         this[target].isAlertActive = !this[target].isAlertActive;
 
          if(content == "" && type == "") {
             return;
          }
 
-         this[target].toastContent = content;
-         this[target].toastType = type;
+         this[target].alertContent = content;
+         this[target].alertType = type;
       }
    },
    computed: {
-      getToastOptions: function() {
+      getAlertOptions: function() {
          return (target) => ({
-            content: this[target].toastContent,
-            type: this[target].toastType
+            content: this[target].alertContent,
+            type: this[target].alertType
          })
       }
    }
