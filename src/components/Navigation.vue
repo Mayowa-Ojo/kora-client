@@ -305,12 +305,16 @@
             </div>
          </div>
       </div>
+      <div>
+         <Toast />
+      </div>
    </div>
 </template>
 
 <script>
 import Popover from "./Popover";
 import Icon from "./Icon";
+import Toast from "./Toast";
 import { iconsMixin, modalMixin } from "../utils/mixins";
 import { spaces } from "../tmp/db";
 import { ACTIONS } from '../constants/store';
@@ -319,7 +323,8 @@ export default {
    name: "Navigation",
    components: {
       Popover,
-      Icon
+      Icon,
+      Toast
    },
    mixins: [iconsMixin, modalMixin],
    computed: {
