@@ -12,6 +12,7 @@
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "lowdb": "^1.0.0",
+    "nanoid": "^3.1.20",
     "quill-mention": "^3.0.0",
     "sass": "^1.26.10",
     "sass-loader": "^10.0.2",
