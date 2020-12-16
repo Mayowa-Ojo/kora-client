@@ -132,19 +132,37 @@
       </quill-editor>
       <div class="editor-footer flex justify-between items-center bg-kora-dark2 p-2">
          <div class="flex items-center">
-            <button class="text-kora-gray1 text-k-13 font-medium px-3 py-1 rounded-full bg-kora-red1">Submit</button>
-            <button class="text-kora-light1 text-k-13 font-medium px-3 py-1 rounded-full hover:bg-kora-dark3">Save Draft</button>
+            <button 
+               class="text-kora-gray1 text-k-13 font-medium px-3 py-1 rounded-full bg-kora-red1"
+               @click="handleSubmit"
+            >Submit</button>
+            <button
+               class="text-kora-light1 text-k-13 font-medium px-3 py-1 rounded-full hover:bg-kora-dark3"
+               @click="handleSaveToDraft"
+            >Save Draft</button>
             <p class="text-kora-light1 text-k-13 font-normal mx-2">Last saved: <span class="font-semibold">just now</span></p>
          </div>
-         <span class="inline-flex justify-center items-center w-8 h-8 mr-1 rounded-full cursor-pointer hover:bg-kora-dark3">
-            <Icon 
-               :class="'fill-current text-kora-light1'" 
-               :viewbox="getIcons['kebabMenu'].viewbox" 
-               :path="getIcons['kebabMenu'].path" 
-               :width="getIcons['kebabMenu'].width" 
-               :height="getIcons['kebabMenu'].height" 
-            />
-         </span>
+         <Popover :offset="8" :placement="'top'">
+            <template v-slot:trigger="slotProps">
+               <span 
+                  class="trigger inline-flex justify-center items-center w-8 h-8 mr-1 rounded-full cursor-pointer hover:bg-kora-dark3"
+                  @click="slotProps.toggle($event)"
+               >
+                  <Icon 
+                     :class="'fill-current text-kora-light1'" 
+                     :viewbox="getIcons['kebabMenu'].viewbox" 
+                     :path="getIcons['kebabMenu'].path" 
+                     :width="getIcons['kebabMenu'].width" 
+                     :height="getIcons['kebabMenu'].height" 
+                  />
+               </span>
+            </template>
+            <template v-slot:popover>
+               <div class="">
+                  <p class="text-k-13 font-normal text-kora-light1 w-max-content px-4 py-2 cursor-pointer hover:bg-kora-dark3">Attach Disclaimer</p>
+               </div>
+            </template>
+         </Popover>
       </div>
    </div>
 </template>
@@ -153,22 +171,31 @@
 import "quill-mention";
 
 import Icon from "./Icon";
+import Popover from "./Popover";
 import { iconsMixin } from "../utils/mixins";
 import { styles } from "../constants/styles";
 import { suggestions } from "../constants/mentions";
+import { ACTIONS, MUTATIONS } from '../constants/store';
+import apiRoutes from '../constants/apiRoutes';
+import LocalStorage from "../utils/localstorage";
+import { createDraft, findDraft, updateDraft } from "../services/lowdb";
+
+const ls = new LocalStorage;
 
 export default {
    name: "Editor",
-   props: ["toolbarId"],
+   props: ["toolbarId", "postTitle", "postId"],
    components: {
-      Icon
+      Icon,
+      Popover
    },
    mixins: [iconsMixin],
    data: () => ({
       content: "",
       toolbarPosition: "middle",
       linkInput: "",
-      isMentionsOpen: false
+      isMentionsOpen: false,
+      saveTimeoutId: null
    }),
    computed: {
       editorConfig: function() {
@@ -220,16 +247,32 @@ export default {
          fileInput.setAttribute("type", "file");
          fileInput.click();
 
-         fileInput.onchange = () => { // Listen for image upload
+         fileInput.onchange = async () => { // Listen for image upload
             const file = fileInput.files[0];
+            const MAX_SIZE = 5 * 1024 * 1024;
 
-            if (/^image\//.test(file.type)) {
-               // handle server request
-               console.log("saved to server")
-            } else {
-               console.warn("[WARNING]: You can only upload images")
+            if(!/^image\//.test(file.type)) {
+               this.$store.commit(MUTATIONS.SET_TOAST_META, { content: "Your can only upload images", type: "warning" });
+               this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+               return;
             }
 
+            if(file.size > MAX_SIZE) {
+               this.$store.commit(MUTATIONS.SET_TOAST_META, { content: "Max file size is 5mb", type: "warning" });
+               this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+               return;
+            }
+
+            const payload = {
+               file
+            }
+
+            const res = await this.$store.dispatch(ACTIONS.UPLOAD_IMAGE, payload);
+            const range = this.getQuill.getSelection();
+
+            this.getQuill.insertEmbed(range.index, "image", res.data.url);
          }
       },
       toggleMentionsMenu: function() {
@@ -281,11 +324,72 @@ export default {
             this.handleImageUpload();
          });
          quill.getModule("toolbar").addHandler("link", this.handleTextLink);
+      },
+      handleSubmit: async function() {
+         if(this.content === "") {
+            this.$store.commit(MUTATIONS.SET_TOAST_META, { content: "Your answer cannot be blank", type: "warning" });
+            this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+            return;
+         }
+
+         const questionId = "5fa240556cbe51f678659960";
+         const title = "Why was generics not considered a priority in Go 1.0?";
+         const limit = 302;
+         const contentTruncated = this.getQuill.getText(0, limit).split("\n").join(" ");
+
+         const payload = {
+            data: {
+               title,
+               content: this.content,
+               contentTruncated,
+               postType: "answer"
+            },
+            endpoint: apiRoutes.post.create(`?questionId=${questionId}`)
+         }
+
+         await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
+      },
+      loadDraft: function() {
+         const draft = findDraft({ postId: this.postId });
+
+         if(!draft) {
+            console.warn("[WARNING] --lowdb: no draft found, creating new entry...");
+
+            createDraft({
+               postId: this.postId,
+               content: "",
+            });
+
+            return;
+         }
+
+         this.content = draft.content;
+      },
+      handleSaveToDraft: function(_, __, source) {
+         if(source == "user") {
+            if(this.saveTimeoutId) {
+               clearTimeout(this.saveTimeoutId);
+            }
+
+            this.saveTimeoutId = setTimeout(function() {
+               console.log("[INFO]: change from user");
+               // save to datastore
+               const user = ls.get("user");
+
+               if(!user) return;
+
+               updateDraft({ postId: this.postId }, { content: this.content });
+            }.bind(this), 3000);
+         }
       }
    },
    mounted: function() {
       this.overrideEditorStyles();
       this.injectCSSStyles();
+
+      this.getQuill.on("text-change", this.handleSaveToDraft);
+
+      this.loadDraft();
    }
 }
 </script>
