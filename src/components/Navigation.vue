@@ -6,28 +6,42 @@
          </div>
 
          <div class="nav-center h-full flex">
-            <router-link :to="{path: '/'}" class="focus:bg-kora-dark1">
+            <router-link
+               :to="{path: '/'}"
+               class="focus:bg-kora-dark1"
+               :class="{'border-b-2 border-kora-red1': $route.path == '/'}"
+            >
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
                   <Icon 
-                     :class="'w-6 h-6 fill-current text-kora-light1'" 
+                     :class="[$route.path == '/' ? 'w-6 h-6 fill-current text-kora-red1' : 'w-6 h-6 fill-current text-kora-light1' ]" 
                      :viewbox="getIcons['home'].viewbox" 
                      :path="getIcons['home'].path" 
                   />
                </span>
-               <span class="text-k-14 font-medium text-kora-light1">Home</span>
+               <span 
+                  class="text-k-14 font-medium text-kora-light1"
+                  :class="[$route.path == '/' ? 'text-kora-red1' : 'text-kora-light1']"
+               >Home</span>
             </div>
             </router-link>
-            <router-link :to="{path: '/answer'}" class="focus:bg-kora-dark1">
+            <router-link 
+               :to="{path: '/answer'}"
+               class="focus:bg-kora-dark1"
+               :class="{'border-b-2 border-kora-red1': $route.path == '/answer'}"
+            >
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
                   <Icon 
-                     :class="'w-5 h-5 fill-current text-kora-light1'" 
+                     :class="[$route.path == '/answer' ? 'w-6 h-6 fill-current text-kora-red1' : 'w-6 h-6 fill-current text-kora-light1' ]" 
                      :viewbox="getIcons['pencilBrackets'].viewbox" 
                      :path="getIcons['pencilBrackets'].path" 
                   />
                </span>
-               <span class="text-k-14 font-medium text-kora-light1">Answer</span>
+               <span 
+                  class="text-k-14 font-medium"
+                  :class="[$route.path == '/answer' ? 'text-kora-red1' : 'text-kora-light1']"
+               >Answer</span>
             </div>
             </router-link>
 
@@ -35,18 +49,22 @@
                <template v-slot:trigger="slotProps">
                   <button 
                      class="trigger nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer focus:outline-none" 
+                     :class="{'border-b-2 border-kora-red1': $route.path == '/spaces'}"
                      @click="slotProps.toggle($event)"
                   >
                      <span class="inline-block mr-1 pointer-events-none">
                         <Icon 
-                           :class="'fill-current text-kora-light1'" 
+                           :class="[$route.path == '/spaces' ? 'w-6 h-6 fill-current text-kora-red1' : 'w-6 h-6 fill-current text-kora-light1' ]" 
                            :viewbox="getIcons['userGroup'].viewbox" 
                            :path="getIcons['userGroup'].path" 
                            :width="getIcons['userGroup'].width" 
                            :height="getIcons['userGroup'].height" 
                         />
                      </span>
-                     <span class="text-k-14 font-medium text-kora-light1 pointer-events-none">Spaces</span>
+                     <span 
+                        class="text-k-14 font-medium text-kora-light1 pointer-events-none"
+                        :class="[$route.path == '/spaces' ? 'text-kora-red1' : 'text-kora-light1']"
+                     >Spaces</span>
                   </button>
                </template>
                <template v-slot:popover>
@@ -121,18 +139,25 @@
                </template>
             </Popover>
 
-            <router-link :to="{path: '/notifications'}" class="focus:bg-kora-dark1">
+            <router-link 
+               :to="{path: '/notifications'}"
+               class="focus:bg-kora-dark1"
+               :class="{'border-b-2 border-kora-red1': $route.path == '/notifications'}"
+            >
             <div class="nav-item h-full flex px-4 hover:bg-kora-dark1 focus:bg-kora-dark1 cursor-pointer">
                <span class="inline-block mr-1">
                   <Icon 
-                     :class="'fill-current text-kora-light1'" 
+                     :class="[$route.path == '/notifications' ? 'w-6 h-6 fill-current text-kora-red1' : 'w-6 h-6 fill-current text-kora-light1' ]" 
                      :viewbox="getIcons['alarm'].viewbox" 
                      :path="getIcons['alarm'].path" 
                      :width="getIcons['alarm'].width" 
                      :height="getIcons['alarm'].height" 
                   />
                </span>
-               <span class="text-k-14 font-medium text-kora-light1">Notifications</span>
+               <span 
+                  class="text-k-14 font-medium"
+                  :class="[$route.path == '/notifications' ? 'text-kora-red1' : 'text-kora-light1']"
+               >Notifications</span>
             </div>
             </router-link>
          </div>
