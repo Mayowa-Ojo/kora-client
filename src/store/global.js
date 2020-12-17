@@ -3,13 +3,18 @@ import { MUTATIONS, ACTIONS } from "../constants/store";
 export const state = {
    modalComponent: "AddTopicModal",
    isActive: false,
-   status: "",
+   status: "idle",
+   toast: {
+      isActive: false,
+      content: "",
+      type: ""
+   }
 }
 export const mutations = {
-   [MUTATIONS.SET_MODAL_COMPONENT] (state, payload) {
+   [MUTATIONS.SET_MODAL_COMPONENT]: function (state, payload) {
       state.modalComponent = payload.component;
    },
-   [MUTATIONS.SET_MODAL_ACTIVE] (state) {
+   [MUTATIONS.SET_MODAL_ACTIVE]: function (state) {
       state.isActive = !state.isActive;
    },
    [MUTATIONS.SET_STATUS]: function(state, type) {
@@ -17,10 +22,17 @@ export const mutations = {
       if(!isValidStatusType) return;
 
       state.status = type;
+   },
+   [MUTATIONS.SET_TOAST_ACTIVE]: function(state) {
+      state.toast.isActive = !state.toast.isActive;
+   },
+   [MUTATIONS.SET_TOAST_META]: function(state, payload) {
+      state.toast.content = payload.content;
+      state.toast.type = payload.type;
    }
 }
 export const actions = {
-   [ACTIONS.TOGGLE_MODAL] ({ commit }, payload) {
+   [ACTIONS.TOGGLE_MODAL]: function ({ commit }, payload) {
       const validModals = [
          "AddQuestionModal",
          "AddTopicModal",
