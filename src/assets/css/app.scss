@@ -28,17 +28,17 @@ html {
          outline: none;
       }
 
-      &::-webkit-scrollbar {
-         width: 12px;
-      }
-      &::-webkit-scrollbar-thumb {
-         background: #3498DB;
-         border-radius: 20px;
-         border: 3px solid #313742;
-      }
-      &::-webkit-scrollbar-track {
-         background: #313742;
-      }
+      // &::-webkit-scrollbar {
+      //    width: 12px;
+      // }
+      // &::-webkit-scrollbar-thumb {
+      //    background: #3498DB;
+      //    border-radius: 20px;
+      //    border: 3px solid #313742;
+      // }
+      // &::-webkit-scrollbar-track {
+      //    background: #313742;
+      // }
 
       // override default autocomplete form input styles [in webkit browsers]
       // input:-webkit-autofill {
