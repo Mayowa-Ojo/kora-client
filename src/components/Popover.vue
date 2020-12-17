@@ -2,7 +2,7 @@
    <div v-on-clickaway="handleClickaway">
       <slot name="trigger" :toggle="toggle"></slot>
 
-      <div id="popover" class="bg-kora-dark2 border border-kora-gray1 border-opacity-10" role="popover" ref="popover" 
+      <div id="popover" class="bg-kora-dark2 border border-kora-gray1 border-opacity-10 z-10" role="popover" ref="popover" 
          v-show="isOpen"
       >  
          <div id="popover-inner">
