@@ -6,21 +6,20 @@ const ls = new LocalStorage();
 
 export default {
    state: {
-      user: {
-         isAuthenticated: false
-      }
+      isAuthenticated: false,
+      profile: null,
+      token: null
    },
    mutations: {
       [MUTATIONS.AUTHENTICATE_USER]: function(state, { user, token }) {
-         state.user.email = user.email;
-         state.user.id = user.id;
-         state.user.token = token;
          state.isAuthenticated = true;
+         state.profile = { ...user };
+         state.token = token;
       },
       [MUTATIONS.REVOKE_USER]: function(state) {
-         state.user = {
-            isAuthenticated: false
-         }
+         state.isAuthenticated = false;
+         state.profile = null;
+         state.token = null;
       }
    },
    actions: {
@@ -33,7 +32,7 @@ export default {
                data: payload
             }
 
-            const { data: response } = await httpRequest("/auth/login", options);
+            const response = await httpRequest("/auth/login", options);
 
             if(!response.ok) {
                //TODO: implememt proper error handling [i.e UI should indicate errors state]
@@ -65,7 +64,7 @@ export default {
                data: payload
             }
 
-            const { data: response } = await httpRequest("/auth/signup", options);
+            const response = await httpRequest("/auth/signup", options);
 
             if(!response.ok) {
                //TODO: implememt proper error handling [i.e UI should indicate errors state]
@@ -109,5 +108,7 @@ export default {
          commit(MUTATIONS.AUTHENTICATE_USER, { user, token: user.token });
       }
    },
-   getters: {}
+   getters: {
+      userProfile: (state) => state.profile
+   }
 }
