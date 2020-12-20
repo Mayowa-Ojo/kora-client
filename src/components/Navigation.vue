@@ -177,16 +177,10 @@
                <Popover :offset="16" :placement="'bottom'">
                   <template v-slot:trigger="slotProps">
                      <span 
-                        class="trigger inline-flex items-center justify-center w-6 h-6 bg-kora-blue1 rounded-full cursor-pointer"
+                        class="trigger flex items-center justify-center w-6 h-6 bg-kora-blue1 rounded-full cursor-pointer overflow-hidden"
                         @click="slotProps.toggle($event)"
                      >
-                        <Icon 
-                           :class="'fill-current text-kora-light1'" 
-                           :viewbox="getIcons['user'].viewbox" 
-                           :path="getIcons['user'].path" 
-                           :width="getIcons['user'].width" 
-                           :height="getIcons['user'].height" 
-                        />
+                        <img :src="userProfile.avatar" alt="user avatar">
                      </span>
                   </template>
                   <template v-slot:popover>
@@ -194,12 +188,12 @@
                         <div class="pb-2 border-b border-kora-light1 border-opacity-10">
                            <div class="px-4 pt-4">
                               <span class="inline-block w-10 h-10 overflow-hidden rounded-full cursor-pointer hover:opacity-75">
-                                 <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="user avatar">
+                                 <img :src="userProfile.avatar" alt="user avatar">
                               </span>
                            </div>
-                           <router-link :to="{ path: '/profile/unorthodev' }">
+                           <router-link :to="{ path: `/profile/${userProfile.username}` }">
                            <div class="mt-1 px-4 py-2 flex justify-between items-center cursor-pointer">
-                              <p class="text-kora-light1 text-k-18 font-bold">Mayowa Ojo</p>
+                              <p class="text-kora-light1 text-k-18 font-bold">{{userProfile.firstname}} {{userProfile.lastname}}</p>
                               <span>
                                  <Icon 
                                     :class="'w-3 h-3 transform -rotate-90 fill-current text-kora-light1'" 
@@ -337,6 +331,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import Popover from "./Popover";
 import Icon from "./Icon";
 import Toast from "./Toast";
@@ -353,7 +349,10 @@ export default {
    },
    mixins: [iconsMixin, modalMixin],
    computed: {
-      getTempData: () => ({ spaces })
+      getTempData: () => ({ spaces }),
+      ...mapGetters([
+         "userProfile"
+      ])
    },
    methods: {
       handleUserLogout: function() {
