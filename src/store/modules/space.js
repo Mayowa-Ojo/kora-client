@@ -47,6 +47,20 @@ export default {
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
+      },
+      [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/spaces/slug?q=${payload.slug}`, {
+            method: "GET"
+         });
+
+         commit(MUTATIONS.SET_CURRENT_SPACE, {
+            space: response.data
+         });
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
       }
    },
    getters: {}

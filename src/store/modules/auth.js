@@ -1,6 +1,7 @@
 import { MUTATIONS, ACTIONS } from "../../constants/store";
 import httpRequest from "../../services/http";
 import LocalStorage from "../../utils/localstorage";
+import router from "../../router";
 
 const ls = new LocalStorage();
 
@@ -100,12 +101,24 @@ export default {
             commit(MUTATIONS.SET_STATUS, "error");
          }
       },
-      [ACTIONS.RE_AUTHENTICATE]: function({ commit }) {
+      [ACTIONS.RE_AUTHENTICATE]: async function({ commit, dispatch }) {
          const user = ls.get("user");
 
-         if(!user) return;
+         if(!user) {
+            console.warn("[WARNING]: No auth token found.");
 
-         commit(MUTATIONS.AUTHENTICATE_USER, { user, token: user.token });
+            router.push("/k");
+            return;
+         }
+
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await dispatch(ACTIONS.FETCH_CURRENT_USER, {
+            id: user.id
+         });
+         
+         commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data, token: user.token });
+         commit(MUTATIONS.SET_STATUS, "done");
       }
    },
    getters: {
