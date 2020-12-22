@@ -12,6 +12,7 @@
 // @ is an alias to /src
 import Navigation from "@/components/Navigation.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
+import { ACTIONS } from "./constants/store";
 
 export default {
    name: "App",
@@ -21,7 +22,10 @@ export default {
    },
    computed: {
       currentRoute: function() {
-         return this.$route.name
+         return this.$route.name;
+      },
+      status: function() {
+         return this.$store.state.status;
       }
    },
    watch: {
@@ -32,7 +36,20 @@ export default {
          }
 
          this.$refs['q-container'].classList.add('wrapper')
+      },
+      status: function(newVal) {
+         if(newVal === "loading") {
+            this.$store.dispatch(ACTIONS.TOGGLE_MODAL, {
+               component: "LoadingModal"
+            });
+
+            return;
+         }
+         this.$store.dispatch(ACTIONS.TOGGLE_MODAL);
       }
+   },
+   created: async function() {
+      await this.$store.dispatch(ACTIONS.RE_AUTHENTICATE);
    }
 }
 </script>
