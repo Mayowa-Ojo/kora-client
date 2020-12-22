@@ -38,6 +38,7 @@ export const actions = {
          "AddTopicModal",
          "AddSpaceModal",
          "SharePostModal",
+         "LoadingModal"
       ];
 
       commit(MUTATIONS.SET_MODAL_ACTIVE);
@@ -59,5 +60,6 @@ export const getters = {
    },
    modalActive() {
       return state.isActive;
-   }
+   },
+   isLoading: (state) => state.status === "loading"
 }
