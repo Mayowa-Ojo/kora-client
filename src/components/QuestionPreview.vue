@@ -1,7 +1,7 @@
 <template>
    <div class="px-4 pt-2 pb-1 border-b border-kora-light1 border-opacity-10">
       <div 
-         class="mb-2 flex justify-between items-center"
+         class="flex justify-between items-center"
          v-if="options.metaTop"
       >
          <div class="flex items-center">
@@ -23,11 +23,11 @@
             </template>
          </Tooltip>
       </div>
-      <div>
-         <p class="text-kora-light1 text-k-15 font-medium cursor-pointer hover:underline">How can two backend developers work on a single project?</p>
+      <div class="">
+         <p class="text-kora-light1 text-k-15 font-medium cursor-pointer hover:underline">{{question.title}}</p>
       </div>
       <div class="mt-2 flex items-center">
-         <p class="text-kora-light1 text-k-13 font-medium cursor-pointer hover:underline">2 answers</p>
+         <p class="text-kora-light1 text-k-13 font-medium cursor-pointer hover:underline">{{question.answers.length}} answers</p>
          <span class="dot-separator"></span>
          <p class="text-kora-light1 text-k-13 font-light">Last followed October 30, 2018</p>
       </div>
@@ -127,7 +127,12 @@
             </Tooltip>
          </div>
       </div>
-      <Editor v-show="editorActive" :toolbarId="generateId()"/>
+      <Editor
+         v-if="editorActive"
+         :toolbarId="generateId()"
+         :postId="question.id"
+         :postTitle="question.title"
+      />
    </div>
 </template>
 
@@ -145,7 +150,7 @@ export default {
       Tooltip,
       Icon
    },
-   props: ["options"],
+   props: ["options", "question"],
    data: () => ({
       editorActive: false
    }),
