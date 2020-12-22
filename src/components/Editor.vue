@@ -176,7 +176,6 @@ import { iconsMixin } from "../utils/mixins";
 import { styles } from "../constants/styles";
 import { suggestions } from "../constants/mentions";
 import { ACTIONS, MUTATIONS } from '../constants/store';
-import apiRoutes from '../constants/apiRoutes';
 import LocalStorage from "../utils/localstorage";
 import { createDraft, findDraft, updateDraft } from "../services/lowdb";
 
@@ -259,7 +258,7 @@ export default {
             }
 
             if(file.size > MAX_SIZE) {
-               this.$store.commit(MUTATIONS.SET_TOAST_META, { content: "Max file size is 5mb", type: "warning" });
+               this.$store.commit(MUTATIONS.SET_TOAST_META, { content: "Maximum file size is 5mb", type: "warning" });
                this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
 
                return;
@@ -332,19 +331,18 @@ export default {
             return;
          }
 
-         const questionId = "5fa240556cbe51f678659960";
-         const title = "Why was generics not considered a priority in Go 1.0?";
          const limit = 302;
          const contentTruncated = this.getQuill.getText(0, limit).split("\n").join(" ");
 
          const payload = {
             data: {
-               title,
+               title: this.postTitle,
                content: this.content,
                contentTruncated,
-               postType: "answer"
+               postType: "answer",
+               contextLink: ""
             },
-            endpoint: apiRoutes.post.create(`?questionId=${questionId}`)
+            endpoint: `/posts?questionId=${this.postId}`
          }
 
          await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
