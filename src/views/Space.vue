@@ -3,18 +3,18 @@
       <main class="q-box--left">
          <div class="space-info border-light-25 bg-kora-dark2">
             <div class="space-cover">
-               <img class="image-cover" src="https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_banner_blue.png-26-4eaf49a49fb008b5.png" alt="space cover image">
+               <img class="image-cover" :src="currentSpace('coverPhoto')" alt="space cover image">
             </div>
             <div class="px-4">
                <span class="inline-block w-20 h-20 -mt-10 rounded-full overflow-hidden relative cursor-pointer">
-                  <img class="image-cover" src="https://qph.fs.quoracdn.net/main-thumb-ti-1122-100-ookytsozqmggkanzqpqojaagnefubsff.jpeg" alt="space icon image">
+                  <img class="image-cover" :src="currentSpace('icon')" alt="space icon image">
                   <span class="inline-block w-full h-full bg-transparent absolute inset-0 hover:bg-kora-dark2 hover:bg-opacity-50 "></span>
                </span>
             </div>
             <div class="px-4">
-               <p class="text-k-21 font-bold text-kora-light1 cursor-pointer hover:underline">Code</p>
-               <p class="text-k-15 font-normal text-kora-light1 text-opacity-75">q/code</p>
-               <p class="text-k-13 font-normal text-kora-light1 mt-1">Novice or Advanced, we have advice. Start programming or optimize your code!</p>
+               <p class="text-k-21 font-bold text-kora-light1 cursor-pointer hover:underline">{{currentSpace('name')}}</p>
+               <p class="text-k-13 font-normal text-kora-light1 text-opacity-75">{{`space/${currentSpace('slug')}`}}</p>
+               <p class="text-k-13 font-normal text-kora-light1 mt-2">{{currentSpace('about')}}</p>
             </div>
             <div class="mt-1 flex justify-between">
                <div class="flex px-1">
@@ -87,9 +87,9 @@
          <div class="new-post p-4 mt-2 bg-kora-dark2 border-light-25 rounded-sm">
             <div class="flex items-center">
                <span class="inline-block w-5 h-5 rounded-full overflow-hidden">
-                  <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="user avatar image">
+                  <img :src="userProfile('avatar')" alt="user avatar image">
                </span>
-               <p class="text-k-14 font-light text-kora-light1 ml-2">Siraj Penkujta</p>
+               <p class="text-k-13 font-light text-kora-light1 ml-2">{{userProfile('firstname')}} {{userProfile('lastname')}}</p>
             </div>
             <div>
                <p class="text-k-18 font-bold text-kora-light1 mt-2">Say something...</p>
@@ -235,6 +235,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import Icon from "../components/Icon";
 import Tooltip from "../components/Tooltip";
 import Popover from "../components/Popover";
@@ -242,6 +244,7 @@ import AnswerPreview from "../components/AnswerPreview";
 import SharedPost from "../components/SharedPost";
 import SuggestedQuestions from "../components/SuggestedQuestions";
 import { iconsMixin } from "../utils/mixins";
+import { ACTIONS } from '../constants/store';
 
 export default {
    name: "Space",
@@ -253,7 +256,20 @@ export default {
       SharedPost,
       SuggestedQuestions
    },
-   mixins: [iconsMixin]
+   mixins: [iconsMixin],
+   computed: {
+      ...mapState({
+         currentSpace: (state) => (key) => state.space.currentSpace?.[key],
+         userProfile: (state) => (key) => state.auth.profile?.[key]
+      })
+   },
+   created: async function() {
+      const { slug } = this.$route.params;
+
+      await this.$store.dispatch(ACTIONS.FETCH_CURRENT_SPACE, {
+         slug
+      });
+   }
 }
 
 </script>
