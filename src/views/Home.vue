@@ -380,6 +380,7 @@ import Tooltip from "../components/Tooltip";
 import SuggestedQuestions from "../components/SuggestedQuestions";
 import { spaces, topics } from "../tmp/db";
 import { shortidMixin, iconsMixin, modalMixin } from "../utils/mixins";
+import { ACTIONS } from "../constants/store";
 
 export default {
    name: "Home",
@@ -396,6 +397,11 @@ export default {
             topics
          }
       }
+   },
+   created: async function() {
+      await this.$store.dispatch(ACTIONS.FETCH_USER_FEED);
+      await this.$store.dispatch(ACTIONS.FETCH_SUGGESTED_QUESTIONS);
+      await this.$store.dispatch(ACTIONS.FETCH_SUGGESTED_SPACES);
    }
 };
 </script>
