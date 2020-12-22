@@ -20,6 +20,7 @@ import AddQuestionModal from "./AddQuestionModal";
 import AddTopicModal from "./AddTopicModal";
 import AddSpaceModal from "./AddSpaceModal";
 import SharePostModal from "./SharePostModal";
+import LoadingModal from "./LoadingModal";
 import { ACTIONS } from '../constants/store';
 
 setSelector("modal-target");
@@ -31,7 +32,8 @@ export default {
       AddQuestionModal,
       AddTopicModal,
       AddSpaceModal,
-      SharePostModal
+      SharePostModal,
+      LoadingModal
    },
    methods: {
       handleCloseModal: function() {
