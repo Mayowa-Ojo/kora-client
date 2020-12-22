@@ -21,7 +21,7 @@
                   </template>
                </Tooltip>
             </div>
-            <h1 class="text-k-21 font-bold text-kora-light1 mt-2">Would I like being a UX designer?</h1>
+            <h1 class="text-k-21 font-bold text-kora-light1 mt-2">{{question('title')}}</h1>
             <ActionBar :target="'questionPage'" />
             <div class="pb-2 mt-1 border-b border-kora-light1 border-opacity-10">
                <div class="px-4 py-2 bg-kora-dark2 border-light-25 rounded">
@@ -30,7 +30,11 @@
             </div>
          </header>
 
-         <div class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10">
+         <div v-if="question('answers').length < 1">
+         <div 
+            class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
+            v-if="userProfile('id') !== question('author').id"
+         >
             <span class="block w-10 h-10 rounded-full overflow-hidden">
                <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="profile image">
             </span>
@@ -46,7 +50,10 @@
             </button>
          </div>
 
-         <div class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10">
+         <div 
+            class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
+            v-if="userProfile('id') === question('author').id"
+         >
             <div class="flex items-center">
                <span class="inline-flex w-6 h-6 rounded-full overflow-hidden">
                   <img src="https://uifaces.co/our-content/donated/ukegoVAy.jpg" alt="profile image">
@@ -58,7 +65,7 @@
                   <img src="https://uifaces.co/our-content/donated/KtCFjlD4.jpg" alt="profile image">
                </span>
             </div>
-            <p class="text-k-15 font-medium text-kora-light1 mt-2">Mayowa, want an answer to this question?</p>
+            <p class="text-k-15 font-medium text-kora-light1 mt-2">{{question('author').firstname}}, want an answer to this question?</p>
             <p class="text-k-13 font-normal text-kora-light1">Requests help you get answers to your question</p>
             <button class="mt-3 py-1 px-5 rounded-full bg-kora-dark2 border-light-25 inline-flex items-center text-k-14 font-medium text-kora-blue1 hover:bg-kora-dark3">
                <Icon 
@@ -80,7 +87,9 @@
             </span>
             <p class="text-k-15 font-bold text-kora-light1 mt-4 capitalize">no answers yet</p>
          </div>
+         </div>
 
+         <div v-else>
          <div class="py-3 border-b border-kora-light1 border-opacity-10">
             <p class="text-k-15 font-medium text-kora-light1">3 answers</p>
          </div>
@@ -95,6 +104,7 @@
             <AnswerPreview 
                :options="{ borderBottom: true, followIcon: true, downvoteIcon: true, title: false }"
             />
+         </div>
          </div>
 
          <div class="related-spaces rounded">
@@ -140,6 +150,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "../components/Icon";
 import Tooltip from "../components/Tooltip";
 import CommentInput from "../components/CommentInput";
@@ -147,6 +159,7 @@ import AnswerPreview from "../components/AnswerPreview";
 import SuggestedSpaces from "../components/SuggestedSpaces";
 import ActionBar from "../components/ActionBar";
 import { iconsMixin } from "../utils/mixins";
+import { ACTIONS } from "../constants/store";
 
 export default {
    name: "Question",
@@ -158,7 +171,20 @@ export default {
       SuggestedSpaces,
       ActionBar
    },
-   mixins: [iconsMixin]
+   mixins: [iconsMixin],
+   computed: {
+      ...mapState({
+         question: (state) => (key) => state.post.question?.[key],
+         userProfile: (state) => (key) => state.auth.profile?.[key]
+      })
+   },
+   created: async function() {
+      const { slug } = this.$route.params;
+
+      await this.$store.dispatch(ACTIONS.FETCH_QUESTION, {
+         slug
+      });
+   }
 }
 
 </script>
