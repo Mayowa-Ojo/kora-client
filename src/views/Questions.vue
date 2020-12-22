@@ -20,10 +20,12 @@
                <p class="ml-2 text-kora-light1 text-k-13 font-light hover:underline cursor-pointer">Questions For You</p>
             </div>
 
+            <div v-if="questions.length > 0">
             <QuestionPreview 
-               v-for="i in 10"
-               :key="i"
-               :options="{ metaTop: true, userAction:'pass' }"
+               v-for="(question, idx) in questions"
+               :key="idx"
+               :question="question"
+               :options="{ metaTop: true, userAction: 'pass' }"
             />
 
             <div class="h-8 py-1 flex justify-center items-center">
@@ -39,6 +41,21 @@
                      />
                   </span>
                </span>
+            </div>
+            </div>
+
+            <div
+               class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
+               v-else
+            >
+               <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
+                  <Icon 
+                     :class="'fill-current text-kora-light1 w-6 h-6'" 
+                     :viewbox="getIcons['pencil'].viewbox" 
+                     :path="getIcons['pencil'].path" 
+                  />
+               </span>
+               <p class="text-k-15 font-bold text-kora-light1 mt-4 capitalize">no questions yet</p>
             </div>
          </div>
 
@@ -66,6 +83,8 @@ import QuestionPreview from "../components/QuestionPreview";
 import ScrollEnd from "../components/ScrollEnd"
 import Icon from "../components/Icon";
 import { iconsMixin } from "../utils/mixins";
+import { ACTIONS } from "../constants/store";
+import { mapState } from 'vuex';
 
 export default {
    name: "Questions",
@@ -74,7 +93,15 @@ export default {
       ScrollEnd,
       Icon
    },
-   mixins: [iconsMixin]
+   mixins: [iconsMixin],
+   computed: {
+      ...mapState({
+         questions: (state) => state.post.questions
+      })
+   },
+   created: async function() {
+      await this.$store.dispatch(ACTIONS.FETCH_QUESTIONS);
+   }
 };
 </script>
 
