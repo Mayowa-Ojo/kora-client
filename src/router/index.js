@@ -46,7 +46,7 @@ const routes = [
       }
    },
    {
-      path: '/k/:spacename',
+      path: '/space/:slug',
       name: 'Space',
       component: () => import(/* webpackChunkName: "space" */ '../views/Space.vue'),
       meta: {
@@ -70,7 +70,7 @@ const routes = [
       }
    },
    {
-      path: '/answer/:slug',
+      path: '/:slug/answer/:username',
       name: 'Answer',
       component: () => import(/* webpackChunkName: "answer" */ '../views/Answer.vue'),
       meta: {
