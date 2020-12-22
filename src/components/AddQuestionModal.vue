@@ -350,19 +350,24 @@ export default {
       handleSubmit: async function() {
          if(this.currentTab == "question") {
             const payload = {
-               title: this.question,
-               contextLink: this.contextLink,
-               postType: "question",
+               data: {
+                  title: this.question,
+                  contextLink: this.contextLink,
+                  postType: "question",
+               },
+               endpoint: "/posts"
             }
 
-            await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
+            const response = await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
+
+            this.$store.dispatch(ACTIONS.TOGGLE_MODAL);
 
             if(this.$store.state.status == "error") {
+               // handle error message
                return;
             }
 
-            // FIX: ideally, we should redirect to the question page
-            // this.$router.push("/");
+            this.$router.push(`/question/${response.data.slug}`);
          }
       }
    },
