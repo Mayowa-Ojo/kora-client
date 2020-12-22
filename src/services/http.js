@@ -1,5 +1,7 @@
 import axios from "axios";
 import { injectAuthHeader } from "../utils/auth";
+import store from "../store";
+import { MUTATIONS } from "../constants/store";
 
 // Request interceptor - add authorization header to every request
 axios.interceptors.request.use((config) => {
@@ -28,12 +30,19 @@ export default async function httpRequest(endpoint, { method, ...options }) {
          ...options
       });
 
-      return response;
+      return response.data;
    } catch(err) {
+      store.commit(MUTATIONS.SET_STATUS, "error");
+      store.commit(MUTATIONS.SET_TOAST_META, { 
+         content: "Oops! something went wrong. Please try again",
+         type: "error"
+      });
+      store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+
       if(err.response) {
-         console.log(`Error: ${JSON.stringify(err.response.data)}`);
-         throw new Error(err);
+         console.error(`Error: --http: ${JSON.stringify(err.response.data)}`);
+         return;
       }
-      throw new Error(err);
+      console.error(`Error --http: \n ${err}`);
    }
 }
