@@ -30,7 +30,7 @@ export default {
       }
    },
    actions: {
-      [ACTIONS.CREATE_POST]: async function({ commit }, payload) {
+      [ACTIONS.CREATE_POST]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const options = {
@@ -40,12 +40,16 @@ export default {
 
          const response = await httpRequest(payload.endpoint, options);
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;
       },
-      [ACTIONS.CREATE_COMMENT]: async function({ commit }, payload) {
+      [ACTIONS.CREATE_COMMENT]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const options = {
@@ -55,37 +59,53 @@ export default {
 
          const response = await httpRequest("/comments", options);
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;
       },
-      [ACTIONS.FETCH_USER_FEED]: async function({ commit }) {
+      [ACTIONS.FETCH_USER_FEED]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest("/posts/feed", {
             method: "GET"
          });
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_SUGGESTED_QUESTIONS]: async function({ commit }) {
+      [ACTIONS.FETCH_SUGGESTED_QUESTIONS]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest("/posts/suggested-questions", {
             method: "GET"
          });
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_QUESTIONS]: async function({ commit }) {
+      [ACTIONS.FETCH_QUESTIONS]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest("/posts/questions", {
             method: "GET"
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
 
          commit(MUTATIONS.SET_QUESTIONS, {
             questions: response.data
@@ -94,12 +114,16 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_QUESTION]: async function({ commit }, payload) {
+      [ACTIONS.FETCH_QUESTION]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/posts/slug?q=${payload.slug}`, {
+         const response = await httpRequest(`/posts/slug?slug=${payload.slug}`, {
             method: "GET"
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
 
          commit(MUTATIONS.SET_QUESTION, {
             question: response.data
@@ -108,12 +132,16 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_ANSWER]: async function({ commit }, payload) {
+      [ACTIONS.FETCH_ANSWER]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest(`/posts/slug?slug=${payload.slug}&username=${payload.username}`, {
             method: "GET"
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
 
          commit(MUTATIONS.SET_ANSWER, {
             answer: response.data
@@ -122,7 +150,7 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_POST_COMMENTS]: async function({ commit }, payload) {
+      [ACTIONS.FETCH_POST_COMMENTS]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const endpoint = payload.postId ? `/comments?postId=${payload.postId}` : `/comments?slug=${payload.slug}`
@@ -130,6 +158,10 @@ export default {
          const response = await httpRequest(endpoint, {
             method: "GET"
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
 
          commit(MUTATIONS.SET_COMMENTS, {
             comments: response.data
