@@ -46,11 +46,8 @@
          </div>
          <div class="mb-2">
             <p class="text-kora-light1 text-k-15 font-bold cursor-pointer hover:underline" v-if="options.title">How do I learn object-oriented programming?</p>
-            <div class="content">
-               <p class="text-kora-light1 text-k-15 font-normal cursor-pointer">
-                  Engineers have a low opinion of everyone. Marketing is just a bunch of buzzwords, sales is a bunch of back slappers and HR is full of robots. Accounting is alright - at least they can do math. Also, managers really are pretty bad on average. There's no good way to try management without becoming a ma
-               </p>
-               <span class="text-kora-blue1 text-k-15 font-normal cursor-pointer hover:underline">... (more)</span>
+            <div class="content" v-html="getTruncatedContent">
+               <!-- truncated content is injected here -->
             </div>
          </div>
          <div class="flex items-center">
@@ -87,30 +84,22 @@ export default {
       ActionBar,
       CommentInput
    },
-   props: ["options"],
+   props: ["options", "answer"],
    mixins: [iconsMixin, modalMixin],
    data: () => ({
       truncateContent: true
-   })
+   }),
+   computed: {
+      getTruncatedContent: function() {
+         return `
+            <p class="text-kora-light1 text-k-15 font-normal cursor-pointer">${this.answer.contentTruncated}... <span class="text-kora-blue1 hover:underline">(more)</span></p>
+         `;
+      }
+   }
 }
 
 </script>
 
 <style lang="scss" scoped>
-.content {
-   display: -webkit-box;
-   overflow: hidden;
-   text-overflow: ellipsis;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 3;
-   position: relative;
-   span {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      line-height: 1.4rem;
-      background: #292E39;
-      padding-left: 2px;
-   }
-}
+
 </style>
