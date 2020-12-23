@@ -2,7 +2,11 @@
    <div>
    <div class="flex items-center justify-between mt-2" v-if="target == 'questionPage'">
       <div class="-ml-2 flex items-center">
-         <button type="button" class="text-k-14 text-kora-light1 font-normal px-3 py-2 rounded-full inline-flex items-center hover:bg-kora-dark2">
+         <button
+            type="button"
+            class="text-k-14 text-kora-light1 font-normal px-3 py-2 rounded-full inline-flex items-center hover:bg-kora-dark2"
+            @click="$emit('toggle-editor')"
+         >
             <Icon 
                :class="'fill-current text-kora-light1 w-4 h-4 mr-2'" 
                :viewbox="getIcons['pencilBrackets'].viewbox" 
@@ -32,7 +36,10 @@
       <div class="-mr-1 flex items-center">
          <Tooltip :offset="8" :placement="'top'" :text="'Add comment'">
             <template v-slot:trigger>
-               <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2">
+               <span
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2"
+                  @click="$emit('toggle-comment-input')"
+               >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4'" 
                      :viewbox="getIcons['commentDots'].viewbox" 
