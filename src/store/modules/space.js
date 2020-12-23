@@ -13,7 +13,7 @@ export default {
       }
    },
    actions: {
-      [ACTIONS.CREATE_SPACE]: async function({ commit }, payload) {
+      [ACTIONS.CREATE_SPACE]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const options = {
@@ -23,39 +23,80 @@ export default {
 
          const response = await httpRequest("/spaces", options);
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;
       },
-      [ACTIONS.FETCH_SUGGESTED_SPACES]: async function({ commit }) {
+      [ACTIONS.FETCH_SUGGESTED_SPACES]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest("/spaces/suggestions", {
             method: "GET"
          });
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_SPACES]: async function({ commit }) {
+      [ACTIONS.FETCH_SPACES]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest("/spaces", {
             method: "GET"
          });
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit }, payload) {
+      [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest(`/spaces/slug?q=${payload.slug}`, {
             method: "GET"
          });
 
+         // fetch posts for space
+         const spacePostsResponse = await httpRequest(`/spaces/${response.data.id}/posts?postType=all`, {
+            method: "GET"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         response.data.posts = spacePostsResponse.data;
+
          commit(MUTATIONS.SET_CURRENT_SPACE, {
+            space: response.data
+         });
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
+      [ACTIONS.FETCH_SPACE_POSTS]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/spaces/posts?q=${payload.postType}`, {
+            method: "GET"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.UPDATE_CURRENT_SPACE, {
             space: response.data
          });
 
