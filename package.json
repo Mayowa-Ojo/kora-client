@@ -16,7 +16,6 @@
     "quill-mention": "^3.0.0",
     "sass": "^1.26.10",
     "sass-loader": "^10.0.2",
-    "shortid": "^2.2.15",
     "tailwindcss": "^1.7.6",
     "vee-validate": "^3.4.3",
     "vue": "^2.6.11",
