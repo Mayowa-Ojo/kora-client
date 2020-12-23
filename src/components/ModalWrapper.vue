@@ -19,6 +19,7 @@ import { Portal, setSelector } from "@linusborg/vue-simple-portal";
 import AddQuestionModal from "./AddQuestionModal";
 import AddTopicModal from "./AddTopicModal";
 import AddSpaceModal from "./AddSpaceModal";
+import AddPostModal from "./AddPostModal";
 import SharePostModal from "./SharePostModal";
 import LoadingModal from "./LoadingModal";
 import { ACTIONS } from '../constants/store';
@@ -32,6 +33,7 @@ export default {
       AddQuestionModal,
       AddTopicModal,
       AddSpaceModal,
+      AddPostModal,
       SharePostModal,
       LoadingModal
    },
