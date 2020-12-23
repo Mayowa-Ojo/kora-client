@@ -10,8 +10,12 @@
          </span>
          <p class="ml-2 text-k-13 font-normal text-kora-light1 cursor-pointer capitalize hover:underline">{{ options.heading }}</p>
       </div>
-      <QuestionPreview :options="{ metaTop: options.metaTop, userAction: options.userAction }" />
-      <QuestionPreview :options="{ metaTop: options.metaTop, userAction: options.userAction }" />
+      <QuestionPreview
+         :options="{ metaTop: options.metaTop, userAction: options.userAction }"
+         v-for="(question, idx) in questions"
+         :key="idx"
+         :question="question"
+      />
       <div class="flex items-center justify-center h-10 cursor-pointer hover:bg-kora-dark2">
          <p class="text-k-14 font-normal text-kora-light1 capitalize">view all</p>
          <Icon 
@@ -34,7 +38,7 @@ export default {
       QuestionPreview,
       Icon
    },
-   props: ["options"],
+   props: ["options", "questions"],
    mixins: [iconsMixin]
 }
 
