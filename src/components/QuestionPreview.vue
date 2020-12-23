@@ -140,8 +140,7 @@
 import Editor from "../components/Editor";
 import Tooltip from "../components/Tooltip";
 import Icon from "../components/Icon";
-import { generateUniqueId } from "../utils/common";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, shortidMixin } from "../utils/mixins";
 
 export default {
    name: "QuestionPreview",
@@ -154,12 +153,11 @@ export default {
    data: () => ({
       editorActive: false
    }),
-   mixins: [iconsMixin],
+   mixins: [iconsMixin, shortidMixin],
    methods: {
       toggleEditor: function() {
          this.editorActive = !this.editorActive;
       },
-      generateId: () => generateUniqueId(),
    }
 }
 </script>
