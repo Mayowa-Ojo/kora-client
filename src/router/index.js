@@ -70,6 +70,14 @@ const routes = [
       }
    },
    {
+      path: '/question/:space/:slug',
+      // name: 'Question',
+      component: () => import(/* webpackChunkName: "question" */ '../views/Question.vue'),
+      meta: {
+         title: `${APP_NAME} - Question`
+      }
+   },
+   {
       path: '/:slug/answer/:username',
       name: 'Answer',
       component: () => import(/* webpackChunkName: "answer" */ '../views/Answer.vue'),
