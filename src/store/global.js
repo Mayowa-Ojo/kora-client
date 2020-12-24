@@ -37,6 +37,7 @@ export const actions = {
          "AddQuestionModal",
          "AddTopicModal",
          "AddSpaceModal",
+         "AddPostModal",
          "SharePostModal",
          "LoadingModal"
       ];
