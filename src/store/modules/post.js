@@ -125,9 +125,19 @@ export default {
             return;
          }
 
+         const answersRespone = await httpRequest(`/posts/${response.data.id}/answers`, {
+            method: "GET"
+         });
+
          commit(MUTATIONS.SET_QUESTION, {
             question: response.data
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         response.data.answers = answersRespone.data;
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
