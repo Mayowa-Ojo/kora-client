@@ -177,7 +177,7 @@ export default {
 
          const payload = {
             data: {
-               question: this.question,
+               title: this.question,
                contextLink: this.contextLink,
                postType: "question"
             },
