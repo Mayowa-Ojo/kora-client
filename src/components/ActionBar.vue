@@ -42,8 +42,8 @@
                >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4'" 
-                     :viewbox="getIcons['commentDots'].viewbox" 
-                     :path="getIcons['commentDots'].path" 
+                     :viewbox="getIcons['comment'].viewbox" 
+                     :path="getIcons['comment'].path" 
                   />
                </span>
             </template>
@@ -52,47 +52,115 @@
             <template v-slot:trigger>
                <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2">
                   <Icon 
-                     :class="'fill-current text-kora-light1 w-4 h-4 transform rotate-180'" 
-                     :viewbox="getIcons['upvoteAlt'].viewbox" 
-                     :path="getIcons['upvoteAlt'].path" 
+                     :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
+                     :viewbox="getIcons['upvoteAlt2'].viewbox" 
+                     :path="getIcons['upvoteAlt2'].path" 
                   />
                </span>
             </template>
          </Tooltip>
-         <Tooltip :offset="8" :placement="'top'" :text="'Sharing options'">
-            <template v-slot:trigger>
-               <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2">
+         <Popover :offset="8" :placement="'bottom'">
+            <template v-slot:trigger="slotProps">
+               <span
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2"
+                  @click="slotProps.toggle($event)"
+               >
                   <Icon 
-                     :class="'fill-current text-kora-light1 w-4 h-4'" 
-                     :viewbox="getIcons['shareAlt'].viewbox" 
-                     :path="getIcons['shareAlt'].path" 
+                     style="transform: scaleX(-1);"
+                     :class="'fill-current text-kora-light1 w-4 h-4'"
+                     :viewbox="getIcons['replyAlt'].viewbox" 
+                     :path="getIcons['replyAlt'].path" 
                   />
                </span>
             </template>
-         </Tooltip>
-         <span class="rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2">
-            <Icon 
-               :class="'fill-current text-kora-light1 w-5 h-5'" 
-               :viewbox="getIcons['kebabMenu'].viewbox" 
-               :path="getIcons['kebabMenu'].path" 
-            />
-         </span>
+
+            <template v-slot:popover>
+               <div class="popover">
+                  <ul>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 flex items-center cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                        <Icon 
+                           :class="'w-4 h-4 mr-2'" 
+                           :viewbox="getIcons['facebook'].viewbox" 
+                           :path="getIcons['facebook'].path" 
+                        />
+                        Facebook
+                     </li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 flex items-center cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                        <Icon 
+                           :class="'w-4 h-4 mr-2'" 
+                           :viewbox="getIcons['twitter'].viewbox" 
+                           :path="getIcons['twitter'].path" 
+                        />
+                        Twitter
+                     </li>
+                     <li 
+                        class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50"
+                        @click="copyToClipboard"
+                     >Copy Link</li>
+                  </ul>
+               </div>
+            </template>
+         </Popover>
+         <Popover :offset="8" :placement="'bottom'">
+            <template v-slot:trigger="slotProps">
+               <span
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2"
+                  @click="slotProps.toggle($event)"
+               >
+                  <Icon 
+                     :class="'fill-current text-kora-light1 w-5 h-5'" 
+                     :viewbox="getIcons['kebabMenu'].viewbox" 
+                     :path="getIcons['kebabMenu'].path" 
+                  />
+               </span>
+            </template>
+
+            <template v-slot:popover>
+               <div class="popover">
+                  <ul>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Answer Anonymously</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Answer Later</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Follow Privately</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Notify About Edits</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Edit Topics</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Edit Question and Source</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Downvote Question</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Merge Questions</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">View Stats and Log</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Report</li>
+                  </ul>
+               </div>
+            </template>
+         </Popover>
       </div>
    </div>
-   <div class="flex items-center justify-between -ml-2" v-else-if="target == 'post'">
+   <div class="flex items-center justify-between mt-1" v-else-if="target == 'post'">
       <div class="flex items-center">
+         <span class="py-1 px-2 mr-2 bg-kora-dark3 bg-opacity-50 inline-flex items-center cursor-pointer rounded-full">
          <Tooltip :offset="8" :placement="'top'" :text="'Upvote'">
             <template v-slot:trigger>
-               <span class="trigger mr-2 text-kora-light1 text-k-13 font-light py-1 px-2 inline-flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+               <span class="trigger ml-2 pr-2 text-kora-light1 text-k-13 font-light inline-flex items-center border-r border-kora-light1 border-opacity-25">
                   <Icon 
-                     :class="'w-4 h-4 mr-1 fill-current text-kora-blue1'" 
-                     :viewbox="getIcons['upvoteAlt'].viewbox" 
-                     :path="getIcons['upvoteAlt'].path" 
+                     :class="'w-4 h-4 mr-1 stroke-current text-kora-blue1'" 
+                     :viewbox="getIcons['upvoteAlt2'].viewbox" 
+                     :path="getIcons['upvoteAlt2'].path" 
                   />
                   103
                </span>
             </template>
          </Tooltip>
+         <Tooltip :offset="8" :placement="'top'" :text="'Downvote'" v-if="options.downvoteIcon">
+            <template v-slot:trigger>
+               <span class="trigger ml-2 mr-2 mt-1 inline-flex">
+                  <Icon 
+                     :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
+                     :viewbox="getIcons['upvoteAlt2'].viewbox" 
+                     :path="getIcons['upvoteAlt2'].path" 
+                  />
+               </span>
+            </template>
+         </Tooltip>
+         </span>
          <Tooltip :offset="8" :placement="'top'" :text="'Share'">
             <template v-slot:trigger>
                <span 
@@ -108,11 +176,14 @@
                </span>
             </template>
          </Tooltip>
-         <Tooltip :offset="8" :placement="'top'" :text="'Comment'">
+         <Tooltip :offset="8" :placement="'top'" :text="'Comments'">
             <template v-slot:trigger>
-               <span class="trigger mr-2 text-kora-light1 text-k-13 font-light py-1 px-2 inline-flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+               <span 
+                  class="trigger bg-kora-dark3 bg-opacity-50 mr-2 text-kora-light1 text-k-13 font-light py-1 px-2 inline-flex items-center rounded-full cursor-pointer"
+                  @click="$emit('toggle-comments')"
+               >
                   <Icon 
-                     :class="'w-5 h-5 mr-1 stroke-current text-kora-light1'" 
+                     :class="'w-4 h-4 mr-1 stroke-current text-kora-light1'" 
                      :viewbox="getIcons['comment'].viewbox" 
                      :path="getIcons['comment'].path" 
                   />
@@ -122,31 +193,55 @@
          </Tooltip>
       </div>
       <div class="flex items-center">
-         <Tooltip :offset="8" :placement="'top'" :text="'Downvote'" v-if="options.downvoteIcon">
-            <template v-slot:trigger>
-               <span class="trigger rounded-full w-8 h-8 mr-2 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+         <Popover :offset="8" :placement="'bottom'">
+            <template v-slot:trigger="slotProps">
+               <span
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2"
+                  @click="slotProps.toggle($event)"
+               >
                   <Icon 
-                     :class="'fill-current text-kora-light1 w-4 h-4 transform rotate-180'" 
-                     :viewbox="getIcons['upvoteAlt'].viewbox" 
-                     :path="getIcons['upvoteAlt'].path" 
+                     style="transform: scaleX(-1);"
+                     :class="'fill-current text-kora-light1 w-4 h-4'"
+                     :viewbox="getIcons['replyAlt'].viewbox" 
+                     :path="getIcons['replyAlt'].path" 
                   />
                </span>
             </template>
-         </Tooltip>
-         <Tooltip :offset="8" :placement="'top'" :text="'More sharing options'">
-            <template v-slot:trigger>
-               <span class="trigger w-8 h-8 mr-2 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
-                  <Icon 
-                     :class="'w-4 h-4 fill-current text-kora-light1'" 
-                     :viewbox="getIcons['shareAlt'].viewbox" 
-                     :path="getIcons['shareAlt'].path" 
-                  />
-               </span>
+
+            <template v-slot:popover>
+               <div class="popover">
+                  <ul>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 flex items-center cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                        <Icon 
+                           :class="'w-4 h-4 mr-2'" 
+                           :viewbox="getIcons['facebook'].viewbox" 
+                           :path="getIcons['facebook'].path" 
+                        />
+                        Facebook
+                     </li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 flex items-center cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                        <Icon 
+                           :class="'w-4 h-4 mr-2'" 
+                           :viewbox="getIcons['twitter'].viewbox" 
+                           :path="getIcons['twitter'].path" 
+                        />
+                        Twitter
+                     </li>
+                     <li
+                        class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50"
+                        @click="copyToClipboard"
+                     >Copy Link</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Embed Answer</li>
+                  </ul>
+               </div>
             </template>
-         </Tooltip>
-         <Tooltip :offset="8" :placement="'top'" :text="'More'">
-            <template v-slot:trigger>
-               <span class="trigger w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+         </Popover>
+         <Popover :offset="8" :placement="'bottom'">
+            <template v-slot:trigger="slotProps">
+               <span 
+                  class="trigger w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
+                  @click="slotProps.toggle($event)"
+               >
                   <Icon 
                      :class="'w-5 h-5 fill-current text-kora-light1'" 
                      :viewbox="getIcons['kebabMenu'].viewbox" 
@@ -154,16 +249,28 @@
                   />
                </span>
             </template>
-         </Tooltip>
+
+            <template v-slot:popover>
+               <div class="popover">
+                  <ul>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Bookmark</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Suggest Edits</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Thank</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Log</li>
+                     <li class="text-kora-light1 text-k-13 font-normal py-2 pl-4 pr-8 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">Report</li>
+                  </ul>
+               </div>
+            </template>
+         </Popover>
       </div>
    </div>
    <div class="flex items-center justify-between -ml-3" v-else-if="target == 'comment'">
       <div class="flex items-center">
          <div class="mr-2 text-kora-light1 text-k-13 py-1 px-3 flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
             <Icon 
-               :class="'w-3 h-3 mr-1 fill-current text-kora-light1'" 
-               :viewbox="getIcons['upvoteAlt'].viewbox" 
-               :path="getIcons['upvoteAlt'].path" 
+               :class="'w-4 h-4 mr-1 stroke-current text-kora-light1'" 
+               :viewbox="getIcons['upvoteAlt2'].viewbox" 
+               :path="getIcons['upvoteAlt2'].path" 
             />
             <span class="font-medium">Upvote</span>
             <span class="dot-separator"></span>
@@ -174,9 +281,9 @@
             @click="$emit('toggle-reply-input')"
          >
             <Icon 
-               :class="'w-3 h-3 mr-2 fill-current text-kora-light1'" 
-               :viewbox="getIcons['reply'].viewbox" 
-               :path="getIcons['reply'].path" 
+               :class="'w-4 h-4 mr-2 fill-current text-kora-light1'" 
+               :viewbox="getIcons['replyAlt'].viewbox" 
+               :path="getIcons['replyAlt'].path" 
             />
             Reply
          </div>
@@ -186,9 +293,9 @@
             <template v-slot:trigger>
                <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
                   <Icon 
-                     :class="'fill-current text-kora-light1 w-3 h-3 transform rotate-180'" 
-                     :viewbox="getIcons['upvoteAlt'].viewbox" 
-                     :path="getIcons['upvoteAlt'].path" 
+                     :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
+                     :viewbox="getIcons['upvoteAlt2'].viewbox" 
+                     :path="getIcons['upvoteAlt2'].path" 
                   />
                </span>
             </template>
@@ -269,7 +376,8 @@
 import Icon from "./Icon";
 import Tooltip from "./Tooltip";
 import Popover from "./Popover";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, modalMixin } from "../utils/mixins";
+import { MUTATIONS } from '../constants/store';
 
 export default {
    name: "ActionBar",
@@ -278,8 +386,27 @@ export default {
       Tooltip,
       Popover
    },
-   props: ["target", "options"],
-   mixins: [iconsMixin]
+   props: ["target", "options", "stats", "shareLink"],
+   mixins: [iconsMixin, modalMixin],
+   methods: {
+      copyToClipboard: function() {
+         const selector = document.createElement("textarea");
+
+         selector.setAttribute("style", "opacity: 0; position: absolute; left: 9999px;");
+         selector.value = this.shareLink;
+         document.body.appendChild(selector);
+
+         selector.select();
+         document.execCommand("copy");
+         document.body.removeChild(selector);
+
+         this.$store.commit(MUTATIONS.SET_TOAST_META, { 
+            content: "Link copied to clipboard.",
+            type: "success"
+         });
+         this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+      }
+   }
 }
 
 </script>
