@@ -1,6 +1,6 @@
 <template>
    <div 
-      class="pt-4 pb-2"
+      class="pt-4"
       :class="{ 'border-bottom': options.borderBottom }"
    >
       <span 
@@ -20,11 +20,11 @@
          <div class="mb-2 flex justify-between items-center">
             <div class="flex items-center">
                <span class="inline-block w-10 h-10 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-75">
-                  <img src="https://uifaces.co/our-content/donated/ukegoVAy.jpg" alt="user avatar">
+                  <img :src="answer.author.avatar" alt="user avatar">
                </span>
                <span class="flex flex-col">
                   <p class="text-kora-light1 text-k-13 font-medium inline-flex items-center"> 
-                     <span class="cursor-pointer hover:underline">Alan Mellor</span> 
+                     <span class="cursor-pointer hover:underline">{{answer.author.firstname}} {{answer.author.lastname}}</span> 
                      <span class="dot-separator"></span> <span class="font-light cursor-pointer hover:underline">September 19, 2017</span>
                   </p>
                   <p class="text-kora-light1 text-k-13 font-light">Experienced in C, C++ and Java</p>
@@ -45,24 +45,46 @@
             </Tooltip>
          </div>
          <div class="mb-2">
-            <p class="text-kora-light1 text-k-15 font-bold cursor-pointer hover:underline" v-if="options.title">How do I learn object-oriented programming?</p>
-            <div class="content" v-html="getTruncatedContent">
+            <router-link :to="{path: spaceSlug ? `/question/${spaceSlug}/${answer.slug}` : `/question/${answer.slug}`}">
+               <p class="mb-1 text-kora-light1 text-k-15 font-bold cursor-pointer hover:underline" v-if="options.title">{{answer.title}}</p>
+            </router-link>
+            <div class="content" v-html="getTruncatedContent" v-if="truncateContent" @click="toggleTruncateContent">
                <!-- truncated content is injected here -->
+            </div>
+            <div v-else>
+            <div class="rich-content mt-3" v-html="answer.content">
+               <!-- rich text is rendered here -->
+            </div>
+               <span
+                  class="block text-k-13 text-kora-blue1 cursor-pointer hover:underline"
+                  @click="toggleTruncateContent"
+               >(show less)</span>
             </div>
          </div>
          <div class="flex items-center">
-            <span class="text-k-13 font-normal text-kora-light1 text-opacity-50">77 views</span>
+            <span class="text-k-13 font-normal text-kora-light1 text-opacity-50">{{answer.views}} views</span>
             <span class="dot-separator"></span>
             <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 cursor-pointer hover:underline">View Upvoters</span>
             <span class="dot-separator"></span>
             <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 cursor-pointer hover:underline">View Sharers</span>
          </div>
 
-         <ActionBar :target="'post'" :options="options" />
+         <ActionBar
+            :target="'post'"
+            :options="options"
+            v-on:toggle-comments="toggleComments"
+         />
 
-         <div class="mt-2">
-            <div class="px-4 py-2 bg-kora-dark2 border-light-25 rounded">
+         <div class="mt-2 pb-2">
+            <div
+               class="px-4 py-2 bg-kora-dark2"
+               :class="{ 'border-light-25 rounded': options.commentBorder, '-mx-4': !options.commentBorder }"
+               v-if="isCommentsOpen"
+            >
                <CommentInput />
+               <div class="mt-2 -mx-4">
+                  <Comment />
+               </div>
             </div>
          </div>
       </div>
@@ -74,20 +96,23 @@ import Icon from "../components/Icon";
 import Tooltip from "../components/Tooltip";
 import ActionBar from "../components/ActionBar";
 import CommentInput from "../components/CommentInput";
+import Comment from "../components/Comment";
 import { iconsMixin, modalMixin } from "../utils/mixins";
 
 export default {
-   name: "AnswerPreviewProfile",
+   name: "AnswerPreview",
    components: {
       Icon,
       Tooltip,
       ActionBar,
+      Comment,
       CommentInput
    },
-   props: ["options", "answer"],
+   props: ["options", "answer", "spaceSlug"],
    mixins: [iconsMixin, modalMixin],
    data: () => ({
-      truncateContent: true
+      truncateContent: true,
+      isCommentsOpen: false
    }),
    computed: {
       getTruncatedContent: function() {
@@ -95,11 +120,22 @@ export default {
             <p class="text-kora-light1 text-k-15 font-normal cursor-pointer">${this.answer.contentTruncated}... <span class="text-kora-blue1 hover:underline">(more)</span></p>
          `;
       }
+   },
+   methods: {
+      toggleComments: function() {
+         this.isCommentsOpen = !this.isCommentsOpen;
+      },
+      toggleTruncateContent: function() {
+         this.truncateContent = !this.truncateContent;
+      }
    }
 }
 
 </script>
 
 <style lang="scss" scoped>
-
+.rich-content {
+   color: #9ADCFA;
+   font-size: 15px;
+}
 </style>
