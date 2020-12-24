@@ -1,12 +1,21 @@
 <template>
    <div class="my-4 border-light-25">
-      <div class="editor-header p-4 flex bg-kora-dark2 relative z-10">
-         <div class="avatar w-10 h-10 rounded-full mr-2 overflow-hidden cursor-pointer hover:opacity-75">
-            <img src="https://uifaces.co/our-content/donated/gPZwCbdS.jpg" alt="user avatar">
+      <div class="editor-header bg-kora-dark2 relative z-10">
+         <div
+            class="p-4 border-b border-kora-light1 border-opacity-10"
+            v-if="willSubmitToSpace"
+         >
+            <p class="text-k-15 font-normal text-kora-light1">You're submitting to {{spaceName}}</p>
+            <p class="text-k-13 font-normal text-kora-light1 mt-1">This Space's admins and moderators will review your submission before it's posted. You'll be notified if it's approved.</p>
          </div>
-         <div>
-            <p class="text-kora-light1 text-k-15 font-normal cursor-pointer hover:underline">Kong Lao</p>
-            <p class="text-kora-light1 text-k-13 font-normal cursor-pointer hover:underline">Edit Credential</p>
+         <div class="p-4 flex">
+            <div class="avatar w-10 h-10 rounded-full mr-2 overflow-hidden cursor-pointer hover:opacity-75">
+               <img src="https://uifaces.co/our-content/donated/gPZwCbdS.jpg" alt="user avatar">
+            </div>
+            <div>
+               <p class="text-kora-light1 text-k-15 font-normal cursor-pointer hover:underline">Kong Lao</p>
+               <p class="text-kora-light1 text-k-13 font-normal cursor-pointer hover:underline">Edit Credential</p>
+            </div>
          </div>
       </div>
       <quill-editor class="editor" v-model="content" :options="editorConfig['options']" @ready="onEditorReady($event)" ref="editor">
@@ -183,7 +192,7 @@ const ls = new LocalStorage;
 
 export default {
    name: "Editor",
-   props: ["toolbarId", "postTitle", "postId"],
+   props: ["toolbarId", "postTitle", "postId", "willSubmitToSpace", "spaceName", "spaceId"],
    components: {
       Icon,
       Popover
@@ -342,7 +351,11 @@ export default {
                postType: "answer",
                contextLink: ""
             },
-            endpoint: `/posts?questionId=${this.postId}`
+            endpoint: this.willSubmitToSpace
+            ? 
+               `/posts?questionId=${this.postId}&spaceId=${this.spaceId}` 
+            : 
+               `/posts?questionId=${this.postId}`
          }
 
          await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
