@@ -1,6 +1,7 @@
+import { nanoid } from "nanoid";
+
 import { icons } from "../constants/icons";
 import { spaces, topics } from "../tmp/db";
-import { generateUniqueId } from "../utils/common";
 import { ACTIONS} from "../constants/store";
 
 export const iconsMixin = {
@@ -11,7 +12,7 @@ export const iconsMixin = {
 
 export const shortidMixin = {
    methods: {
-      generateId: () => generateUniqueId()
+      generateId: () => nanoid(5)
    }
 }
 
