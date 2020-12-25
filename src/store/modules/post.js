@@ -27,6 +27,9 @@ export default {
       },
       [MUTATIONS.SET_COMMENTS]: function(state, { comments }) {
          state.comments = comments;
+      },
+      [MUTATIONS.UPDATE_QUESTION]: function(state, {field, update}) {
+         state.question[field] = update;
       }
    },
    actions: {
@@ -129,6 +132,10 @@ export default {
             method: "GET"
          });
 
+         const topicsResponse = await httpRequest(`/posts/${response.data.id}/topics`, {
+            method: "GET"
+         });
+
          commit(MUTATIONS.SET_QUESTION, {
             question: response.data
          });
@@ -138,6 +145,7 @@ export default {
          }
 
          response.data.answers = answersRespone.data;
+         response.data.topics = topicsResponse.data;
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
@@ -175,6 +183,28 @@ export default {
 
          commit(MUTATIONS.SET_COMMENTS, {
             comments: response.data
+         });
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
+      [ACTIONS.ADD_TOPICS_TO_QUESTION]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const endpoint = `/posts/${payload.postId}/topics`;
+
+         const response = await httpRequest(endpoint, {
+            method: "POST",
+            data: { ...payload.data }
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.UPDATE_QUESTION, {
+            field: "topics",
+            update: response.data
          });
 
          console.log("[INFO] --data: \n", response);
