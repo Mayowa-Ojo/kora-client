@@ -136,7 +136,7 @@
    </div>
    <div class="flex items-center justify-between mt-1" v-else-if="target == 'post'">
       <div class="flex items-center">
-         <span class="py-1 px-2 mr-2 bg-kora-dark3 bg-opacity-50 inline-flex items-center cursor-pointer rounded-full">
+         <span class="px-2 mr-2 bg-kora-dark3 bg-opacity-50 inline-flex items-center cursor-pointer rounded-full" style="height: 30px;">
          <Tooltip :offset="8" :placement="'top'" :text="'Upvote'">
             <template v-slot:trigger>
                <span class="trigger ml-2 pr-2 text-kora-light1 text-k-13 font-light inline-flex items-center border-r border-kora-light1 border-opacity-25">
