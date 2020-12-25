@@ -84,7 +84,10 @@
             </div>
          </div>
 
-         <div class="new-post p-4 mt-2 bg-kora-dark2 border-light-25 rounded-sm">
+         <div 
+            class="new-post p-4 mt-2 bg-kora-dark2 border-light-25 rounded-sm cursor-pointer hover:border-opacity-50"
+            @click="toggleModal('AddPostModal')"
+         >
             <div class="flex items-center">
                <span class="inline-block w-5 h-5 rounded-full overflow-hidden">
                   <img :src="userProfile('avatar')" alt="user avatar image">
@@ -92,7 +95,7 @@
                <p class="text-k-13 font-light text-kora-light1 ml-2">{{userProfile('firstname')}} {{userProfile('lastname')}}</p>
             </div>
             <div>
-               <p class="text-k-18 font-bold text-kora-light1 mt-2">Say something...</p>
+               <p class="text-k-18 font-semibold text-kora-light1 mt-2">Say something...</p>
             </div>
          </div>
 
@@ -100,7 +103,7 @@
             <Popover :offset="8" :placement="'bottom'">
                <template v-slot:trigger="slotProps">
                   <button 
-                     class="trigger px-3 py-1 text-k-13 font-medium text-kora-light1 inline-flex items-center rounded-full cursor-pointer hover:bg-kora-dark2"
+                     class="trigger px-3 py-1 text-k-13 font-medium text-kora-light1 inline-flex items-center rounded-full cursor-pointer hover:bg-kora-dark2 focus:outline-none"
                      @click="slotProps.toggle($event)"
                   >
                      <Icon 
@@ -143,25 +146,52 @@
          </div>
 
          <div class="mt-2">
-            <div class="px-4 bg-kora-dark2 border-light-25 rounded-sm">
-               <AnswerPreview 
-                  :options="{ followIcon: false, borderBottom: false }"
-               />
+            <div
+               class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
+               v-if="currentSpace('posts') && currentSpace('posts').length < 1"
+            >
+               <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
+                  <Icon 
+                     :class="'fill-current text-kora-light1 w-6 h-6'" 
+                     :viewbox="getIcons['pencil'].viewbox" 
+                     :path="getIcons['pencil'].path" 
+                  />
+               </span>
+               <p class="text-k-15 font-bold text-kora-light1 mt-4 capitalize">no posts yet</p>
             </div>
-            <div class="px-4 mt-2 bg-kora-dark2 border-light-25 rounded-sm">
-               <SharedPost 
-                  :options="{ followIcon: false, borderBottom: false }"
-               />
-            </div>
-            <div class="mt-2 rounded-sm">
-               <SuggestedQuestions 
-                  :options="{ heading: 'questions from this space', metaTop: false, userAction: 'request'}"
-               />
-            </div>
-            <div class="px-4 mt-2 bg-kora-dark2 border-light-25 rounded-sm">
-               <SharedPost 
-                  :options="{ followIcon: false, borderBottom: false }"
-               />
+            <div v-else>
+               <div
+                  v-for="(post, idx) in currentSpace('posts')"
+                  :key="idx"
+               >
+                  <div
+                     class="px-4 bg-kora-dark2 border-light-25 rounded-sm"
+                     v-if="post.postType && post.postType === 'answer'"
+                  >
+                     <AnswerPreview 
+                        :options="{ followIcon: false, borderBottom: false, title: true}"
+                        :answer="post"
+                        :spaceSlug="currentSpace('slug')"
+                     />
+                  </div>
+                  <div
+                     class="px-4 bg-kora-dark2 border-light-25 rounded-sm"
+                     v-else-if="post.comment"
+                  >
+                     <SharedPost 
+                        :options="{ followIcon: false, borderBottom: false }"
+                     />
+                  </div>
+               </div>
+               <div
+                  class="mt-2 rounded-sm"
+                  v-if="getSuggestedQuestions && getSuggestedQuestions.length > 0"
+               >
+                  <SuggestedQuestions 
+                     :options="{ heading: 'questions from this space', metaTop: false, userAction: 'request'}"
+                     :questions="getSuggestedQuestions"
+                  />
+               </div>
             </div>
          </div>
       </main>
@@ -243,7 +273,7 @@ import Popover from "../components/Popover";
 import AnswerPreview from "../components/AnswerPreview";
 import SharedPost from "../components/SharedPost";
 import SuggestedQuestions from "../components/SuggestedQuestions";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, modalMixin } from "../utils/mixins";
 import { ACTIONS } from '../constants/store';
 
 export default {
@@ -256,12 +286,16 @@ export default {
       SharedPost,
       SuggestedQuestions
    },
-   mixins: [iconsMixin],
+   mixins: [iconsMixin, modalMixin],
    computed: {
       ...mapState({
          currentSpace: (state) => (key) => state.space.currentSpace?.[key],
          userProfile: (state) => (key) => state.auth.profile?.[key]
-      })
+      }),
+      getSuggestedQuestions: function() {
+         return this.currentSpace("posts") &&
+         this.currentSpace("posts").filter(post => post.postType && post.postType === "question")
+      }
    },
    created: async function() {
       const { slug } = this.$route.params;
