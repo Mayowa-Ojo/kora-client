@@ -4,14 +4,14 @@
       <div class="post border-light-25 bg-kora-dark2 rounded-sm">
          <div class="post-content pt-4 px-4 pb-1">
             <header>
-               <p class="text-k-21 font-bold text-kora-light1 mt-2">What are some highly overlooked things in software development?</p>
+               <p class="text-k-21 font-bold text-kora-light1 mt-2">{{answer('title')}}</p>
                <div class="mt-4 flex items-center">
-                  <span class="inline-block w-10 h-10 rounded-full overflow-hidden">
-                     <img class="image-cover" src="https://randomuser.me/api/portraits/women/44.jpg" alt="profile image">
+                  <span class="inline-block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-50">
+                     <img class="image-cover" :src="author('avatar')" alt="profile image">
                   </span>
                   <div class="flex flex-col ml-2">
                      <p class="text-kora-light1 text-k-13 inline-flex items-center">
-                        <span class="font-bold">Jayesh Lalwani</span>
+                        <span class="font-bold cursor-pointer hover:underline">{{author('firstname')}} {{author('lastname')}}</span>
                         <span class="dot-separator"></span>
                         <span class="font-normal">November 21, 2016</span>
                      </p>
@@ -19,21 +19,11 @@
                   </div>
                </div>
             </header>
-            <div class="mt-2">
+            <div class="rich-content mt-3" v-html="answer('content')">
                <!-- rich text is rendered here -->
-               <ol class="mr-4 list-decimal">
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Developers are the least competent people to estimate the time they need to complete a task. They usually underestimate the problem or generalise the task and miss the devilish details that take time. Good managers or team leads learn over time how to interpret the estimations.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Deadlines usually don't work, because we are making something that do not exist, and how to conjure it up is soaked up with uncertainty. Good teams don't work and report to deadlines, they release completed features and report once completed. That said some degree of planning is needed.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">All analogies in the field, Including titles and concepts are tied to the construction of buildings. This gives a false sense of predictability. I mean we have developers, architects, builds, pipelines, constructors and so on. But in reality even though delays occur due to unforseen circumstances in construction, they are usually small, with only a few uncertain factors. In software however, they clearly are the dominating factors.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Just how much creativity that needs to go into writing great software, and just how little that is understood by managers in a lot of places. Some places got it though - like Atari in the 80s.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Great programmers often in my experience are not necessarily 9-5 people, and trying to make them be that rarely have good outcomes. Giving them freedom, understanding and leeway can have magical consequences, both mentally and economically.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Passionate programmers are rarely the type of person demanding high salaries or raises. Many will just be overjoyed with receiving money just for programming. Managers should be aware of this and help them get fairly compensated rather than giving it all to the sharks.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Performance is not really about cycles and memory use. Unless you work in certain niches. Most often it is more about structure, methodology, naming, collaboration, and ability to change rather than algorithmic economy.</li>
-                  <li class="text-k-15 font-normal text-kora-light1 ml-8 pb-2">Languages, platforms, runtimes, patterns, libraries, paradigms are tools not cults. Use what is best for the project, team and the task. Don't be afraid to learn new ones.</li>
-               </ol>
             </div>
-            <div class="flex items-center">
-               <span class="text-k-13 font-normal text-kora-light1 text-opacity-50">2.5K views</span>
+            <div class="flex items-center mt-1">
+               <span class="text-k-13 font-normal text-kora-light1 text-opacity-50">{{answer('views')}} views</span>
                <span class="dot-separator"></span>
                <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 cursor-pointer hover:underline">View Upvoters</span>
                <span class="dot-separator"></span>
@@ -46,7 +36,7 @@
 
          <div class="post-comments">
             <div class="px-4 py-2 bg-kora-dark1">
-               <CommentInput />
+               <CommentInput :postId="answer('id')"/>
             </div>
             <div>
                <Comment />
@@ -84,10 +74,10 @@
          <div class="px-4 pt-4 pb-1">
             <div class="flex">
                <span class="inline-block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-50">
-                  <img src="https://uifaces.co/our-content/donated/KtCFjlD4.jpg" alt="profile image">
+                  <img :src="author('avatar')" alt="profile image">
                </span>
                <div class="ml-2 flex flex-col">
-                  <p class="text-k-18 font-bold text-kora-light1 cursor-pointer hover:underline">Jayesh Lalwani</p>
+                  <p class="text-k-18 font-bold text-kora-light1 cursor-pointer hover:underline">{{author('firstname')}} {{author('lastname')}}</p>
                   <p class="text-k-15 font-normal text-kora-light1">Programmer, Dad, Gentleman</p>
                </div>
             </div>
@@ -140,7 +130,7 @@
 
       <div class="more-answers mt-2 rounded-sm border-light-25 bg-kora-dark2">
          <header class="px-4 py-2 flex items-center justify-between border-b border-kora-light1 border-opacity-10">
-            <p class="text-k-15 font-medium text-kora-light1">More Answers from Jayesh Lalwani</p>
+            <p class="text-k-15 font-medium text-kora-light1">More Answers from {{author('firstname')}} {{author('lastname')}}</p>
             <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 inline-flex items-center cursor-pointer hover:underline">
                View More
                <Icon 
@@ -172,12 +162,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "../components/Icon";
 import ActionBar from "../components/ActionBar";
 import Comment from "../components/Comment";
 import CommentInput from "../components/CommentInput";
 import SuggestedSpaces from "../components/SuggestedSpaces";
 import { iconsMixin } from "../utils/mixins";
+import { ACTIONS } from "../constants/store";
 
 export default {
    name: "Answer",
@@ -188,7 +181,25 @@ export default {
       Comment,
       SuggestedSpaces
    },
-   mixins: [iconsMixin]
+   mixins: [iconsMixin],
+   computed: {
+      ...mapState({
+         answer: (state) => (key) => state.post.answer?.[key],
+         author: (state) => (key) => state.post.answer?.author?.[key]
+      })
+   },
+   created: async function() {
+      const { slug, username } = this.$route.params;
+
+      await this.$store.dispatch(ACTIONS.FETCH_ANSWER, {
+         slug,
+         username
+      });
+
+      await this.$store.dispatch(ACTIONS.FETCH_POST_COMMENTS, {
+         slug
+      });
+   }
 }
 
 </script>
@@ -199,6 +210,11 @@ export default {
    margin-top: -30px;
    &--inner {
       max-width: 666px;
+   }
+
+   .rich-content {
+      color: #9ADCFA;
+      font-size: 15px;
    }
 }
 </style>
