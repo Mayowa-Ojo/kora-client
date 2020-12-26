@@ -52,9 +52,9 @@
                <!-- truncated content is injected here -->
             </div>
             <div v-else>
-            <div class="rich-content mt-3" v-html="answer.content">
-               <!-- rich text is rendered here -->
-            </div>
+               <div class="rich-content mt-3" v-html="answer.content">
+                  <!-- rich text is rendered here -->
+               </div>
                <span
                   class="block text-k-13 text-kora-blue1 cursor-pointer hover:underline"
                   @click="toggleTruncateContent"
