@@ -113,10 +113,10 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await dispatch(ACTIONS.FETCH_CURRENT_USER, {
+         const response = await dispatch(ACTIONS.FETCH_AUTH_USER, {
             id: user.id
          });
-         
+
          commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data, token: user.token });
          commit(MUTATIONS.SET_STATUS, "done");
       }
