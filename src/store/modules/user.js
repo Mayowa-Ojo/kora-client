@@ -8,6 +8,9 @@ export default {
    mutations: {
       [MUTATIONS.SET_CURRENT_USER]: function(state, { user }) {
          state.currentUser = user;
+      },
+      [MUTATIONS.UPDATE_CURRENT_USER]: function(state, { update }) {
+         state.currentUser = { ...state.currentUser, ...update }
       }
    },
    actions: {
@@ -75,6 +78,10 @@ export default {
          response.data.spaces = userSpacesResponse.data;
          response.data.knowledge = userKnowledgeResponse.data;
 
+         if(rootState.status === "error") {
+            return;
+         }
+
          commit(MUTATIONS.SET_CURRENT_USER, {
             user: response.data
          });
@@ -96,6 +103,38 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
          return response;
+      },
+      [ACTIONS.UPDATE_USER_PROFILE]: async function({ commit, getters, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/users/${payload.id}`, {
+            method: "PATCH",
+            data: { ...payload.data }
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         const updatedFields = Object.keys(payload.data);
+
+         const update = updatedFields.reduce((acc, next) => {
+            acc[next] = response.data[next];
+            return acc;
+         }, {});
+
+         commit(MUTATIONS.UPDATE_CURRENT_USER, {
+            update
+         });
+
+         if(getters.isCurrentUserAdmin) {
+            commit(MUTATIONS.UPDATE_AUTH_USER, {
+               update
+            });
+         }
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
       }
    },
    getters: {
@@ -121,6 +160,10 @@ export default {
                return toArray(state.currentUser?.followers);
             case "following":
                return toArray(state.currentUser?.following);
+            case "spaces":
+               return toArray(state.currentUser?.spaces);
+            case "topics":
+               return toArray(state.currentUser?.knowledge);
             default:
                return toArray(state.currentUser?.answers);
          }
