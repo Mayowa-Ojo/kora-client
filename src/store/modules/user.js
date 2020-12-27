@@ -133,6 +133,11 @@ export default {
             });
          }
 
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: "Your profile has been updated.", type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       }

@@ -47,8 +47,15 @@ export default {
             token: response.data.token
          });
 
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `Welcome back, ${response.data.user.firstname}! We've missed you 🥳`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
          commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data.user, token: response.data.token });
          commit(MUTATIONS.SET_STATUS, "done");
+
          console.log("[LOG]: login successful \n", response)
       },
       [ACTIONS.USER_SIGNUP]: async function({ commit, rootState }, payload) {
@@ -71,10 +78,17 @@ export default {
             token: response.data.token
          });
 
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `Welcome to Kora, ${response.data.user.firstname}! A place to share and acquire knowledge.`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
          commit(MUTATIONS.AUTHENTICATE_USER, { 
             user: response.data.user, token: response.data.token 
          });
          commit(MUTATIONS.SET_STATUS, "done");
+
          console.log("[LOG]: signup successful \n", response);
       },
       [ACTIONS.USER_LOGOUT]: async function({ commit }) {
@@ -86,6 +100,11 @@ export default {
 
             commit(MUTATIONS.REVOKE_USER);
             commit(MUTATIONS.SET_STATUS, "done");
+
+            commit(MUTATIONS.SET_TOAST_META, {
+               content: "You've logged out of Kora. Please come back soon 😢", type: "success"
+            });
+            commit(MUTATIONS.SET_TOAST_ACTIVE);
 
             console.log("[LOG]: logged out");
          } catch(err) {
