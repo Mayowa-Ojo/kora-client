@@ -1,7 +1,21 @@
 import axios from "axios";
 import { injectAuthHeader } from "../utils/auth";
+import router from "../router";
 import store from "../store";
 import { MUTATIONS } from "../constants/store";
+import LocalStorage from '../utils/localstorage';
+
+
+const ls = new LocalStorage();
+
+const interceptExpiredTokenError = async (err) => {
+   if(err.response.status === 401) {
+      ls.delete("user");
+      ls.delete("drafts");
+
+      router.push("/k")
+   }
+}
 
 // Request interceptor - add authorization header to every request
 axios.interceptors.request.use((config) => {
@@ -12,6 +26,15 @@ axios.interceptors.request.use((config) => {
 }, (err) => {
    return Promise.reject(err)
 });
+
+// Response interceptor
+axios.interceptors.response.use((response) => {
+   return response;
+}, (err) => {
+   // redirect to login
+   return interceptExpiredTokenError(err);
+})
+
 
 /**
  * Make an api request to the backend server
