@@ -20,6 +20,7 @@ import AddQuestionModal from "./AddQuestionModal";
 import AddTopicModal from "./AddTopicModal";
 import AddSpaceModal from "./AddSpaceModal";
 import AddPostModal from "./AddPostModal";
+import AddCredentialsModal from "./AddCredentialsModal";
 import SharePostModal from "./SharePostModal";
 import LoadingModal from "./LoadingModal";
 import { ACTIONS } from '../constants/store';
@@ -34,6 +35,7 @@ export default {
       AddTopicModal,
       AddSpaceModal,
       AddPostModal,
+      AddCredentialsModal,
       SharePostModal,
       LoadingModal
    },
