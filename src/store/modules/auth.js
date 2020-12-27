@@ -21,87 +21,79 @@ export default {
          state.isAuthenticated = false;
          state.profile = null;
          state.token = null;
+      },
+      [MUTATIONS.UPDATE_AUTH_USER]: function(state, { update }) {
+         state.profile = { ...state.profile, ...update }
       }
    },
    actions: {
-      [ACTIONS.USER_LOGIN]: async function({ commit }, payload) {
-         try {
-            commit(MUTATIONS.SET_STATUS, "loading");
+      [ACTIONS.USER_LOGIN]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
 
-            const options = {
-               method: "POST",
-               data: payload
-            }
-
-            const response = await httpRequest("/auth/login", options);
-
-            if(!response.ok) {
-               //TODO: implememt proper error handling [i.e UI should indicate errors state]
-               commit(MUTATIONS.SET_STATUS, "error");
-
-               return;
-            }
-
-            ls.set("user", {
-               id: response.data.user.id,
-               email: response.data.user.email,
-               token: response.data.token
-            });
-
-            commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data.user, token: response.data.token });
-            commit(MUTATIONS.SET_STATUS, "done");
-            console.log("[LOG]: login successful \n", response)
-         } catch(err) {
-            commit(MUTATIONS.SET_STATUS, "error");
-            console.error("[ERROR]: ", err)
+         const options = {
+            method: "POST",
+            data: payload
          }
+
+         const response = await httpRequest("/auth/login", options);
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         ls.set("user", {
+            id: response.data.user.id,
+            email: response.data.user.email,
+            token: response.data.token
+         });
+
+         commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data.user, token: response.data.token });
+         commit(MUTATIONS.SET_STATUS, "done");
+         console.log("[LOG]: login successful \n", response)
       },
-      [ACTIONS.USER_SIGNUP]: async function({ commit }, payload) {
-         try {
-            commit(MUTATIONS.SET_STATUS, "loading");
+      [ACTIONS.USER_SIGNUP]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
 
-            const options = {
-               method: "POST",
-               data: payload
-            }
-
-            const response = await httpRequest("/auth/signup", options);
-
-            if(!response.ok) {
-               //TODO: implememt proper error handling [i.e UI should indicate errors state]
-               commit(MUTATIONS.SET_STATUS, "error");
-
-               return;
-            }
-
-            ls.set("user", {
-               id: response.data.user.id,
-               email: response.data.user.email,
-               token: response.data.token
-            });
-
-            commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data.user, token: response.data.token });
-            commit(MUTATIONS.SET_STATUS, "done");
-            console.log("[LOG]: signup successful \n", response)
-         } catch(err) {
-            console.error("[ERROR]: ", err)
+         const options = {
+            method: "POST",
+            data: payload
          }
+
+         const response = await httpRequest("/auth/signup", options);
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         ls.set("user", {
+            id: response.data.user.id,
+            email: response.data.user.email,
+            token: response.data.token
+         });
+
+         commit(MUTATIONS.AUTHENTICATE_USER, { 
+            user: response.data.user, token: response.data.token 
+         });
+         commit(MUTATIONS.SET_STATUS, "done");
+         console.log("[LOG]: signup successful \n", response);
       },
       [ACTIONS.USER_LOGOUT]: async function({ commit }) {
          try {
             commit(MUTATIONS.SET_STATUS, "loading");
 
             ls.delete("user");
+            ls.delete("drafts");
 
             commit(MUTATIONS.REVOKE_USER);
             commit(MUTATIONS.SET_STATUS, "done");
+
             console.log("[LOG]: logged out");
          } catch(err) {
             console.error("[ERROR]: ", err)
             commit(MUTATIONS.SET_STATUS, "error");
          }
       },
-      [ACTIONS.RE_AUTHENTICATE]: async function({ commit, dispatch }) {
+      [ACTIONS.RE_AUTHENTICATE]: async function({ commit, dispatch, rootState }) {
          const user = ls.get("user");
 
          if(!user) {
@@ -116,6 +108,10 @@ export default {
          const response = await dispatch(ACTIONS.FETCH_AUTH_USER, {
             id: user.id
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
 
          commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data, token: user.token });
          commit(MUTATIONS.SET_STATUS, "done");
