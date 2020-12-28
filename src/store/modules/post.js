@@ -52,6 +52,29 @@ export default {
 
          return response;
       },
+      [ACTIONS.CREATE_SHARED_POST]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const options = {
+            method: "POST",
+            data: { ...payload.data }
+         }
+
+         const response = await httpRequest(`/posts/${payload.postId}/share?spaceId=${payload.spaceId}`, options);
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: "Post has been shared.",
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
       [ACTIONS.CREATE_COMMENT]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
