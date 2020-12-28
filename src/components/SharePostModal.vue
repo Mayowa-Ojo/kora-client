@@ -24,16 +24,16 @@
       <div class="modal-dialog__content px-8 pb-6 flex-auto">
          <div class="mb-2 flex items-center">
             <div class="flex items-center">
-               <span class="inline-block mr-1 w-5 h-5 rounded-full overflow-hidden">
-                  <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="user avatar">
+               <span class="inline-block mr-2 w-5 h-5 rounded-full overflow-hidden">
+                  <img :src="authUser('avatar')" alt="user avatar">
                </span>
-               <p class="text-kora-light1 text-k-15 font-normal mr-3 text-opacity-50">Mayowa Ojo shared</p>
+               <p class="text-kora-light1 text-k-15 font-normal mr-3 text-opacity-75">{{authUser('firstname')}} {{authUser('lastname')}} shared</p>
             </div>
             
             <Popover :offset="8" :placement="'bottom'">
                <template v-slot:trigger="slotProps">
                   <div 
-                     class="trigger search-space flex items-center border border-kora-light1 border-opacity-25 rounded ml-1 px-1 py-2"
+                     class="trigger search-space flex items-center bg-kora-dark2 border border-kora-light1 border-opacity-10 rounded ml-1 px-1 py-2"
                      @click="slotProps.toggle($event)"
                   >
                      <span class="inline-block mx-1">
@@ -47,6 +47,7 @@
                         class="appearance-none pl-2 text-kora-light1 text-k-13 font-normal bg-transparent w-full focus:outline-none"
                         type="text"
                         placeholder="Choose a space"
+                        v-model="selectedSpace"
                      >
                      <span class="inline-block mx-1">
                         <Icon 
@@ -63,9 +64,9 @@
                   <div class="popover-choose-space">
                      <div>
                         <div class="py-2 px-4 flex items-center border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
-                           <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-kora-red1 mr-2">
+                           <span class="inline-flex items-center justify-center w-6 h-6 rounded-full mr-2">
                               <Icon 
-                                 :class="'fill-current text-kora-dark2 w-4 h-4'" 
+                                 :class="'fill-current text-kora-light1 w-5 h-5'" 
                                  :viewbox="getIcons['userFriends'].viewbox" 
                                  :path="getIcons['userFriends'].path" 
                               />
@@ -79,11 +80,12 @@
                            <ul>
                               <li 
                                  class="px-4 py-2 flex items-center text-kora-light1 text-k-13 font-normal border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50"
-                                 v-for="(space, idx) in getTempData['spaces']"
+                                 v-for="(space, idx) in spaces"
                                  :key="String(idx)+generateId()"
+                                 @click="setSelectedSpace(space.name)"
                               >
                                  <span class="inline-block mr-2 w-6 h-6 rounded-full overflow-hidden">
-                                    <img :src="space.img" alt="space icon">
+                                    <img :src="space.icon" alt="space icon">
                                  </span>
                                  {{space.name}}
                               </li>
@@ -114,25 +116,19 @@
          <div class="mt-4">
             <div class="post-preview border-light-25">
                <div>
-                  <p class="text-kora-light1 text-k-15 font-bold">Is it a shame that a senior software developer have weaker programming skill than a smart CS graduate?</p>
-                  <div class="my-1 flex">
-                     <div>
-                        <span class="inline-block w-8 h-8 rounded-full overflow-hidden">
-                           <img src="https://uifaces.co/our-content/donated/n4Ngwvi7.jpg" alt="user avatar">
-                        </span>
-                     </div>
-                     <div class="ml-3 flex flex-col">
-                        <p class="text-kora-light1 text-k-15 font-normal">
-                           <span class="font-bold">Kurth Guntheroth</span>, Software Engineer for 40 years, author of book Optimized C++
-                        </p>
-                        <p class="text-kora-light1 text-k-13 font-normal text-opacity-50">Answered Oct 14, 2018</p>
-                     </div>
+                  <div class="my-1 flex items-center">
+                     <span class="inline-block w-5 h-5 rounded-full overflow-hidden">
+                        <img :src="sharePostAuthor('avatar')" alt="user avatar">
+                     </span>
+                     <p class="text-kora-light1 text-k-15 font-normal ml-2">{{sharePostAuthor('firstname')}} {{sharePostAuthor('lastname')}}</p>
+                     <span class="dot-separator"></span>
+                     <p class="text-kora-light1 text-k-13 font-normal text-opacity-50">Answered Oct 14, 2018</p>
                   </div>
                   <div>
-                     <p class="text-kora-light1 text-k-15 font-normal">
-                        Senior software developers have at least one thing that a new person cannot appreciate, because the new guy hasn’t got it. It’s called experience. Experience makes solving programming problems easi...
-                        <span class="text-kora-blue1">(more)</span>
-                     </p>
+                     <p class="text-kora-light1 text-k-15 font-bold">{{sharePost('title')}}</p>
+                     <div class="content" v-html="getTruncatedContent">
+                        <!-- truncated content is injected here -->
+                     </div>
                   </div>
                </div>
             </div>
@@ -148,8 +144,11 @@
                Cancel
             </button>
             <div class="button-group flex">
-               <button class="py-1 px-2 rounded-l text-kora-dark2 text-k-14 font-medium bg-kora-red1 focus:outline-none">
-                  Done
+               <button
+                  class="py-1 px-2 rounded-l text-kora-dark2 text-k-14 font-medium bg-kora-red1 focus:outline-none"
+                  @click="handleSubmit"
+               >
+                  Share
                </button>
                <Popover :offset="8" :placement="'top-end'">
                   <template v-slot:trigger="slotProps">
@@ -205,8 +204,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "./Icon";
 import Popover from "./Popover";
+import httpRequest from "../services/http";
+import { ACTIONS, MUTATIONS } from "../constants/store";
 import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
 
 export default {
@@ -218,11 +221,49 @@ export default {
    mixins: [iconsMixin, dataMixin, shortidMixin],
    data: () => ({
       shareComment: "",
-      postSchedule: "now"
+      postSchedule: "now",
+      spaces: [],
+      selectedSpace: ""
    }),
+   computed: {
+      ...mapState({
+         authUser: (state) => (key) => state.auth.profile?.[key],
+         sharePost: (state) => (key) => state.modal.props?.post?.[key],
+         sharePostAuthor: (state) => (key) => state.modal.props?.post?.author?.[key]
+      }),
+      getTruncatedContent: function() {
+         return `
+            <p class="text-kora-light1 text-k-15 font-normal cursor-pointer">${this.sharePost("contentTruncated")}...</p>
+         `;
+      }
+   },
    methods: {
       selectPostSchedule: function(payload) {
          this.postSchedule = payload.schedule;
+      },
+      setSelectedSpace: function(space) {
+         this.selectedSpace = space;
+      },
+      handleSubmit: async function() {
+         if(this.selectedSpace === "") {
+            this.$store.commit(MUTATIONS.SET_TOAST_META, {
+               content: "You need to select a space to share this post to.",
+               type: "warning"
+            });
+            this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+         }
+
+         const { id: spaceId } = this.spaces.find(space => space.name === this.selectedSpace);
+
+         await this.$store.dispatch(ACTIONS.CREATE_SHARED_POST, {
+            postId: this.sharePost('id'),
+            spaceId,
+            data: {
+               shareComment: this.shareComment
+            }
+         });
+
+         this.$store.dispatch(ACTIONS.TOGGLE_MODAL);
       }
    },
    watch: {
@@ -232,6 +273,16 @@ export default {
          textarea.style.height = `29px`;
          textarea.style.height = `${textarea.scrollHeight}px`;
       }
+   },
+   created: function() {
+      void async function(self) {
+         const id = self.authUser('id');
+         const response = await httpRequest(`/users/${id}/spaces`, {
+            method: "GET"
+         });
+
+         self.spaces = [...response.data];
+      }(this);
    }
 }
 
@@ -244,7 +295,7 @@ export default {
    min-height: 400px;
    max-height: 80vh;
    max-width: 90vw;
-   width: 620px;
+   width: 700px;
    border-radius: 4px;
    &__content {
       .search-space {
