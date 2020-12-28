@@ -165,7 +165,7 @@
             <template v-slot:trigger>
                <span 
                   class="trigger mr-2 text-kora-light1 text-k-13 font-light py-1 px-2 inline-flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
-                  @click="toggleModal('SharePostModal')"
+                  @click="toggleModal('SharePostModal', {post: answer})"
                >
                   <Icon 
                      :class="'w-4 h-4 mr-2 fill-current text-kora-light1'" 
@@ -537,14 +537,14 @@ export default {
       Tooltip,
       Popover
    },
-   props: ["target", "options", "stats", "shareLink", "editorActive"],
+   props: ["target", "options", "stats", "answer", "editorActive"],
    mixins: [iconsMixin, modalMixin],
    methods: {
       copyToClipboard: function() {
          const selector = document.createElement("textarea");
 
          selector.setAttribute("style", "opacity: 0; position: absolute; left: 9999px;");
-         selector.value = this.shareLink;
+         selector.value = this.answer.shareLink;
          document.body.appendChild(selector);
 
          selector.select();
