@@ -140,6 +140,40 @@ export default {
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
+      },
+      [ACTIONS.UPDATE_USER_KNOWLEDGE]: async function({commit, getters, rootState}, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/users/${payload.id}/knowledge`, {
+            method: "PATCH",
+            data: { ...payload.data }
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         const update = {
+            knowledge: response.data
+         }
+
+         commit(MUTATIONS.UPDATE_CURRENT_USER, {
+            update
+         });
+
+         if(getters.isCurrentUserAdmin) {
+            commit(MUTATIONS.UPDATE_AUTH_USER, {
+               update
+            });
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: "Your profile has been updated.", type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
       }
    },
    getters: {
