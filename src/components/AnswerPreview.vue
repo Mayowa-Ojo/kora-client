@@ -72,7 +72,7 @@
          <ActionBar
             :target="'post'"
             :options="options"
-            :shareLink="answer.shareLink"
+            :answer="answer"
             v-on:toggle-comments="toggleComments"
          />
 
