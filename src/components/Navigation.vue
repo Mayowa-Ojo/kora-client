@@ -84,46 +84,28 @@
                      </router-link>
                      </div>
                      <ul class="spaces-list">
-                        <li class="spaces-list__item px-4 py-2 flex items-center justify-between border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1">
-                           <div class="inline-flex items-center">
-                              <span class="inline-block mr-2 w-8 h-8 rounded-full relative">
-                                 <img class="rounded-full" src="https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_icon_purple.png-26-6ea9822273dc841e.png" alt="space icon">
-                                 <span class="notifier inline-block w-3 h-3 rounded-full border-2 border-kora-dark3 bg-kora-red1 absolute"></span>
-                              </span>
-                              <span>
-                                 <p class="text-kora-light1 text-k-13 font-bold">Communityy</p>
-                                 <span class="inline-flex items-center">
-                                    <Icon 
-                                       :class="'fill-current text-kora-light1'" 
-                                       :viewbox="getIcons['shield'].viewbox" 
-                                       :path="getIcons['shield'].path" 
-                                       :width="getIcons['shield'].width" 
-                                       :height="getIcons['shield'].height" 
-                                    />
-                                    <p class="ml-1 text-kora-light1 text-k-13 font-normal">Admin</p>
-                                 </span>
-                              </span>
-                           </div>
-                           <span class="inline-block mr-1">
-                              <Icon 
-                                 :class="'w-3 h-3 fill-current text-kora-gray1 transform -rotate-90'" 
-                                 :viewbox="getIcons['chevron'].viewbox" 
-                                 :path="getIcons['chevron'].path" 
-                              />
-                           </span>
-                        </li>
                         <li 
                            class="spaces-list__item  border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1"
-                           v-for="(space, idx) in getTempData.spaces"
+                           v-for="(space, idx) in userProfile('spaces')"
                            :key="idx"
                         >
-                           <router-link class="px-4 py-2 flex items-center justify-between" :to="{ path: '/k/communityy' }" >
+                           <router-link class="px-4 py-2 flex items-center justify-between" :to="{ path: `/space/${space.slug}` }" >
                            <div class="inline-flex items-center">
                               <span class="inline-block mr-2 w-8 h-8 rounded-full relative">
-                                 <img class="rounded-full" :src="space.img" alt="space icon">
+                                 <img class="rounded-full" :src="space.icon" alt="space icon">
                                  <span class="notifier inline-block w-3 h-3 rounded-full border-2 border-kora-dark3 bg-kora-red1 absolute"></span>
                               </span>
                               <p class="text-kora-light1 text-k-13 font-bold">{{ space.name }}</p>
+                              <span class="inline-flex items-center ml-2" v-if="space.admins.includes(userProfile('id'))">
+                                 <Icon 
+                                    :class="'fill-current text-kora-light1'" 
+                                    :viewbox="getIcons['shield'].viewbox" 
+                                    :path="getIcons['shield'].path" 
+                                    :width="getIcons['shield'].width" 
+                                    :height="getIcons['shield'].height" 
+                                 />
+                                 <p class="ml-1 text-kora-light1 text-k-13 font-normal">Admin</p>
+                              </span>
                            </div>
                            <span class="inline-block mr-1">
                               <Icon 
