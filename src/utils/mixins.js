@@ -24,9 +24,10 @@ export const dataMixin = {
 
 export const modalMixin = {
    methods: {
-      toggleModal: function(component) {
+      toggleModal: function(component, props={}) {
          const payload = {
-            component
+            component,
+            props
          }
 
          this.$store.dispatch(ACTIONS.TOGGLE_MODAL, payload);
