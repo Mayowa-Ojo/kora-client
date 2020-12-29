@@ -10,6 +10,9 @@ export default {
    mutations: {
       [MUTATIONS.SET_CURRENT_SPACE]: function(state, { space }) {
          state.currentSpace = space;
+      },
+      [MUTATIONS.SET_SUGGESTED_SPACES]: function(state, { spaces }) {
+         state.suggestedSpaces = spaces;
       }
    },
    actions: {
@@ -42,6 +45,10 @@ export default {
          if(rootState.status === "error") {
             return;
          }
+
+         commit(MUTATIONS.SET_SUGGESTED_SPACES, {
+            spaces: response.data
+         });
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
