@@ -8,7 +8,7 @@
                :path="getIcons['lightbulb'].path" 
             />
          </span>
-         <p class="ml-2 text-k-13 font-normal text-kora-light1 cursor-pointer capitalize hover:underline">{{ options.heading }}</p>
+         <p class="ml-2 text-k-15 font-normal text-kora-light1 cursor-pointer capitalize hover:underline">{{ options.heading }}</p>
       </div>
       <QuestionPreview
          :options="{ metaTop: options.metaTop, userAction: options.userAction }"

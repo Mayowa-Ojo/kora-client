@@ -1,20 +1,27 @@
 <template>
    <div class="">
-      <div class="header p-2 flex items-center border-b border-kora-light1 border-opacity-10">
-         <p class="ml-2 text-k-15 font-medium text-kora-light1 capitalize">{{ heading }}</p>
+      <div class="header p-4 flex items-center border-b border-kora-light1 border-opacity-10">
+         <span class="inline-flex items-center justify-center w-6 h-6 rounded-sm bg-kora-red1">
+            <Icon 
+               :class="'fill-current inline-block text-kora-dark2 w-4 h-4'" 
+               :viewbox="getIcons['telescope'].viewbox" 
+               :path="getIcons['telescope'].path" 
+            />
+         </span>
+         <p class="ml-2 text-k-15 text-kora-light1 capitalize">{{ heading }}</p>
       </div>
       <div 
          class="flex px-4 py-2 cursor-pointer border-b border-kora-light1 border-opacity-10"
-         v-for="i in 4"
-         :key="i"
+         v-for="(space, idx) in spaces"
+         :key="idx"
       >
          <span class="inline-block w-10 h-10 rounded-full overflow-hidden">
-            <img src="https://qph.fs.quoracdn.net/main-thumb-ti-1694992-100-clncvqrqpvglkplgwpyldayvskjuaizh.jpeg" alt="space avatar">
+            <img :src="space.icon" alt="space avatar">
          </span>
          <div class="flex flex-col ml-4 flex-auto">
-            <p class="text-k-15 font-medium text-kora-light1">Physics and Chemistry</p>
-            <p class="text-k-13 font-normal text-kora-light1 text-opacity-50">112.2K Followers</p>
-            <p class="text-k-13 font-normal text-kora-light1 mt-2">All about Physics and Chemistry</p>
+            <p class="text-k-15 font-medium text-kora-light1">{{space.name}}</p>
+            <p class="text-k-13 font-normal text-kora-light1 text-opacity-50">4.2K Followers</p>
+            <p class="text-k-13 font-normal text-kora-light1 mt-2">{{space.about}}</p>
          </div>
          <div class="h-full flex items-start py-2">
             <button type="button" class="px-3 py-1 rounded-full text-k-13 font-medium text-kora-dark2 bg-kora-gray1 hover:bg-opacity-75">
@@ -56,7 +63,7 @@ export default {
    components: {
       Icon
    },
-   props: ["heading"],
+   props: ["heading", "spaces"],
    mixins: [iconsMixin]
 }
 
