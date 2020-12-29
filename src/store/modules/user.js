@@ -104,6 +104,28 @@ export default {
          commit(MUTATIONS.SET_STATUS, "done");
          return response;
       },
+      [ACTIONS.FETCH_USER_SPACES]: async function({ commit, rootState }, payload) {
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/users/${payload.id}/spaces`, {
+            method: "GET"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         if(payload.isAdmin) {
+            commit(MUTATIONS.UPDATE_AUTH_USER, {
+               update: {
+                  spaces: response.data
+               }
+            });
+         }
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
       [ACTIONS.UPDATE_USER_PROFILE]: async function({ commit, getters, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
