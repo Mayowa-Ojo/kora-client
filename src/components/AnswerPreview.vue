@@ -1,7 +1,6 @@
 <template>
    <div 
-      class="pt-4"
-      :class="{ 'border-bottom': options.borderBottom }"
+      :class="{ 'border-bottom': options.borderBottom, 'py-2': !options.noPadding}"
    >
       <span 
          class="text-kora-light1 text-k-13 font-normal text-opacity-50 inline-flex items-center mb-2"
@@ -27,7 +26,7 @@
                      <span class="cursor-pointer hover:underline">{{answer.author.firstname}} {{answer.author.lastname}}</span> 
                      <span class="dot-separator"></span> <span class="font-light cursor-pointer hover:underline">September 19, 2017</span>
                   </p>
-                  <p class="text-kora-light1 text-k-13 font-light">Experienced in C, C++ and Java</p>
+                  <p class="text-kora-light1 text-k-13 font-light">{{answer.author.credentials.profile}}</p>
                </span>
             </div>
             <Tooltip :offset="8" :placement="'top'" :text="'Following Alan Mellor'" v-if="options.followIcon">
@@ -61,7 +60,17 @@
                >(show less)</span>
             </div>
          </div>
-         <div class="flex items-center">
+         <div class="my-2 flex justify-center" v-if="options.approvalButton">
+            <button class="px-4 py-1 border border-kora-light1 border-opacity-25 bg-kora-dark3 text-k-13 text-kora-blue1 rounded-full inline-flex items-center hover:bg-opacity-50 focus:outline-none">
+               <Icon 
+                  :class="'fill-current text-kora-blue1 mr-2 w-3 h-3'" 
+                  :viewbox="getIcons['heart'].viewbox" 
+                  :path="getIcons['heart'].path" 
+               />
+               I want to see more like this
+            </button>
+         </div>
+         <div class="flex items-center" v-if="!options.hideStats">
             <span class="text-k-13 font-normal text-kora-light1 text-opacity-50">{{answer.views}} views</span>
             <span class="dot-separator"></span>
             <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 cursor-pointer hover:underline">View Upvoters</span>
@@ -76,9 +85,9 @@
             v-on:toggle-comments="toggleComments"
          />
 
-         <div class="mt-2 pb-2">
+         <div class="">
             <div
-               class="px-4 py-2 bg-kora-dark2"
+               class="px-4 py-2 mt-2 bg-kora-dark2"
                :class="{ 'border-light-25 rounded': options.commentBorder, '-mx-4': !options.commentBorder }"
                v-if="isCommentsOpen"
             >
