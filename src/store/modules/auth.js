@@ -27,7 +27,7 @@ export default {
       }
    },
    actions: {
-      [ACTIONS.USER_LOGIN]: async function({ commit, rootState }, payload) {
+      [ACTIONS.USER_LOGIN]: async function({ commit, dispatch, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const options = {
@@ -54,11 +54,20 @@ export default {
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
          commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data.user, token: response.data.token });
-         commit(MUTATIONS.SET_STATUS, "done");
 
+         await dispatch(ACTIONS.FETCH_USER_SPACES, {
+            id: response.data.user.id,
+            isAdmin: true
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_STATUS, "done");
          console.log("[LOG]: login successful \n", response)
       },
-      [ACTIONS.USER_SIGNUP]: async function({ commit, rootState }, payload) {
+      [ACTIONS.USER_SIGNUP]: async function({ commit, dispatch, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const options = {
@@ -87,8 +96,17 @@ export default {
          commit(MUTATIONS.AUTHENTICATE_USER, { 
             user: response.data.user, token: response.data.token 
          });
-         commit(MUTATIONS.SET_STATUS, "done");
 
+         await dispatch(ACTIONS.FETCH_USER_SPACES, {
+            id: response.data.user.id,
+            isAdmin: true
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_STATUS, "done");
          console.log("[LOG]: signup successful \n", response);
       },
       [ACTIONS.USER_LOGOUT]: async function({ commit }) {
@@ -133,6 +151,16 @@ export default {
          }
 
          commit(MUTATIONS.AUTHENTICATE_USER, { user: response.data, token: user.token });
+
+         await dispatch(ACTIONS.FETCH_USER_SPACES, {
+            id: response.data.id,
+            isAdmin: true
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
          commit(MUTATIONS.SET_STATUS, "done");
       }
    },
