@@ -21,8 +21,9 @@
 
             <div class="mt-1 mb-4 px-4 flex">
                <button 
-                  class="mr-2 py-1 px-3 rounded-full border-2 border-kora-red1 border-opacity-50 text-kora-red1 text-k-13 font-medium hover:bg-kora-dark1" 
+                  class="mr-2 py-1 px-3 rounded-full border-2 border-kora-red1 border-opacity-50 text-kora-red1 text-k-13 font-medium hover:bg-kora-dark1 focus:outline-none" 
                   type="button"
+                  @click="toggleModal('AddSpaceModal')"
                >  
                   <Icon 
                      :class="'fill-current text-kora-red1 inline-block mr-1'" 
@@ -34,7 +35,7 @@
                   Create a Space
                </button>
                <button 
-                  class="mr-2 py-1 px-3 rounded-full border-2 border-kora-light1 border-opacity-50 text-kora-light1 text-k-13 font-medium hover:bg-kora-dark1" 
+                  class="mr-2 py-1 px-3 rounded-full border-2 border-kora-light1 border-opacity-50 text-kora-light1 text-k-13 font-medium cursor-not-allowed hover:bg-kora-dark1 focus:outline-none" 
                   type="button"
                >
                   <Icon 
@@ -49,16 +50,21 @@
             </div>
 
             <div class="spaces-list">
-               <ul>
+               <ul class="pb-2">
                   <li 
                      class="spaces-list__item flex items-center px-4 py-3 border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark3"
+                     v-for="(space, idx) in authUser('spaces')"
+                     :key="String(idx)+generateId"
                   >
                      <span class="w-6 h-6 mr-2 inline-block bg-kora-red1 rounded-full relative">
-                        <img class="rounded-full" src="https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_icon_purple.png-26-6ea9822273dc841e.png" alt="space icon image">
+                        <img class="rounded-full" :src="space.icon" alt="space icon image">
                         <span class="w-2 h-2 inline-block bg-kora-red1 absolute top-0 left-0 rounded-full border border-kora-dark3"></span>
                      </span>
-                     <span class="text-kora-light1 text-k-13 font-semibold mr-2">Communityy</span>
-                     <span class="badge inline-flex items-center px-2 mt-1 rounded bg-kora-dark3 text-kora-light1 text-k-12 font-medium">
+                     <span class="text-kora-light1 text-k-13 font-semibold">{{ space.name }}</span>
+                     <span 
+                        class="badge inline-flex items-center px-2 py-1 ml-2 rounded bg-kora-dark3 text-kora-light1 text-k-12 font-medium"
+                        v-if="space.admins.includes(authUser('id'))"
+                     >
                         <Icon 
                            :class="'fill-current text-kora-light1 inline-block mr-1'" 
                            :viewbox="getIcons['shield'].viewbox" 
@@ -68,17 +74,6 @@
                         />
                         Admin
                      </span>
-                  </li>
-                  <li 
-                     class="spaces-list__item flex items-center px-4 py-3 border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark3"
-                     v-for="(space, idx) in getTempData['spaces']"
-                     :key="String(idx)+generateId"
-                  >
-                     <span class="w-6 h-6 mr-2 inline-block bg-kora-red1 rounded-full relative">
-                        <img class="rounded-full" :src="space.img" alt="space icon image">
-                        <span class="w-2 h-2 inline-block bg-kora-red1 absolute top-0 left-0 rounded-full border border-kora-dark3"></span>
-                     </span>
-                     <span class="text-kora-light1 text-k-13 font-semibold">{{ space.name }}</span>
                   </li>
                </ul>
             </div>
@@ -93,13 +88,9 @@
             <div class="flex flex-wrap">
                <!-- spaces row -->
                <SpaceCard 
-                  v-for="i in 8"
-                  :key="i"
-                  :cover="'https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_banner_blue.png-26-4eaf49a49fb008b5.png'"
-                  :icon="'https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.tribes.defaults.space_icon_blue.png-26-59bea7960fef2c75.png'"
-                  :name="'Christopher F Clark Said'"
-                  :description="'Answers important to me or popular -- not quite a blog'"
-                  :followers="'820'"
+                  v-for="(space, idx) in suggestedSpaces"
+                  :key="idx"
+                  :space="space"
                />
             </div>
          </div>
@@ -113,49 +104,6 @@
                :width="getIcons['chevron'].width" 
                :height="getIcons['chevron'].height" 
             />
-         </div>
-
-         <div class="mt-2">
-            <p class="text-kora-light1 text-k-14 font-normal my-4">Programming Languages</p>
-            <div class="flex flex-wrap">
-               <!-- spaces row -->
-               <SpaceCard 
-                  v-for="i in 8"
-                  :key="i"
-                  :cover="'https://qph.fs.quoracdn.net/main-custom-tc-1579890-320x80-mrtkugesulhbrdhdsmimdkfhiszkqzqr.jpeg'"
-                  :icon="'https://qph.fs.quoracdn.net/main-thumb-ti-1579890-100-gmocbiyzzjuxvqmiknipnpsaciuydgtd.jpeg'"
-                  :name="'Creative Programming'"
-                  :description="'From novice to advanced the creative process in programming computers.'"
-                  :followers="'81.2k'"
-               />
-            </div>
-         </div>
-
-         <div class="flex justify-center items-center my-2 py-2 cursor-pointer hover:bg-kora-dark3">
-            <p class="text-kora-light1 text-k-14 font-normal">View More</p>
-            <Icon 
-               :class="'fill-current text-kora-light1 inline-block ml-2'" 
-               :viewbox="getIcons['chevron'].viewbox" 
-               :path="getIcons['chevron'].path" 
-               :width="getIcons['chevron'].width" 
-               :height="getIcons['chevron'].height" 
-            />
-         </div>
-
-         <div class="mt-2">
-            <p class="text-kora-light1 text-k-14 font-normal my-4">Golang Developers</p>
-            <div class="flex flex-wrap">
-               <!-- spaces row -->
-               <SpaceCard 
-                  v-for="i in 8"
-                  :key="i"
-                  :cover="'https://qph.fs.quoracdn.net/main-custom-tc-1839-320x80-alisamklnopqkgugdqbxyfwtdujfubeb.jpeg'"
-                  :icon="'https://qph.fs.quoracdn.net/main-thumb-ti-1839-100-tewdaynnrawazrlcpidrhztmqlkrndzn.jpeg'"
-                  :name="'Become a Great Programmer'"
-                  :description="'Almost anyone can become a great programmer. This is yo...'"
-                  :followers="'168.5k'"
-               />
-            </div>
          </div>
 
          <div class="mt-12 px-6 py-4 flex justify-center">
@@ -190,10 +138,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "../components/Icon";
 import ScrollEnd from "../components/ScrollEnd";
 import SpaceCard from "../components/SpaceCard";
-import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
+import { ACTIONS } from '../constants/store';
+import { iconsMixin, shortidMixin, modalMixin } from "../utils/mixins";
 
 export default {
    name: "Spaces",
@@ -202,7 +153,17 @@ export default {
       SpaceCard,
       ScrollEnd
    },
-   mixins: [iconsMixin, dataMixin, shortidMixin]
+   mixins: [iconsMixin, shortidMixin, modalMixin],
+   computed: {
+      ...mapState({
+         suggestedSpaces: (state) => state.space.suggestedSpaces,
+         authUser: (state) => (key) => state.auth.profile?.[key]
+      })
+   },
+   created: async function() {
+      // fetch suggested spaces
+      await this.$store.dispatch(ACTIONS.FETCH_SUGGESTED_SPACES);
+   }
 }
 
 </script>
