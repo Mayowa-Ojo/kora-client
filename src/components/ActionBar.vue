@@ -193,6 +193,19 @@
          </Tooltip>
       </div>
       <div class="flex items-center">
+         <Tooltip :offset="8" :placement="'top'" :text="'Upvoters'" v-if="options.upvotersIcon">
+            <template v-slot:trigger>
+               <span class="trigger inline-flex items-center p-1 mr-2 rounded-full cursor-pointer bg-red-500">
+                  <Icon 
+                     :class="'fill-current text-kora-gray1'" 
+                     :viewbox="getIcons['star'].viewbox" 
+                     :path="getIcons['star'].path" 
+                     :width="getIcons['star'].width" 
+                     :height="getIcons['star'].height" 
+                  />
+               </span>
+            </template>
+         </Tooltip>
          <Popover :offset="8" :placement="'bottom'">
             <template v-slot:trigger="slotProps">
                <span
