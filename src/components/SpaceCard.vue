@@ -1,21 +1,23 @@
 <template>
    <div class="card mr-2 mb-2 bg-kora-dark2 overflow-hidden border-light-25 flex flex-col justify-between cursor-pointer">
+      <router-link :to="{path: `/space/${space.slug}`}">
       <div>
          <div class="card-cover-photo w-full h-12">
-            <img class="w-full h-full object-cover" :src="cover" alt="cover photo">
+            <img class="w-full h-full object-cover" :src="space.coverPhoto" alt="cover photo">
          </div>
          <div class="card-icon w-full -mt-6 relative z-10">
             <div class="w-10 h-10 overflow-hidden rounded-full mx-auto border-2 border-kora-dark2">
-               <img :src="icon" alt="space icon image">
+               <img :src="space.icon" alt="space icon image">
             </div>
          </div>
          <div class="card-content py-2 px-2">
-            <p class="text-kora-light1 text-k-13 font-bold text-center mb-1 hover:underline">{{ name }}</p>
-            <p class="text-kora-light1 text-k-13 font-normal text-center">{{ description }}</p>
+            <p class="text-kora-light1 text-k-13 font-bold text-center mb-1 hover:underline">{{ space.name }}</p>
+            <p class="text-kora-light1 text-k-13 font-normal text-center">{{ space.about }}</p>
          </div>
       </div>
+      </router-link>
 
-      <div class="card-action flex justify-center mb-2">
+      <div class="card-action flex justify-center mb-4">
          <button class="px-4 py-1 rounded-full bg-kora-gray1 border-2 border-kora-gray1 border-opacity-75 text-kora-dark2 text-k-13 font-medium hover:bg-opacity-75">
             <Icon 
                :class="'fill-current text-kora-dark2 inline-block mr-1'" 
@@ -25,7 +27,7 @@
                :height="getIcons['follow'].height" 
             /> 
             Follow 
-            <span class="ml-1">{{ followers }}</span>
+            <span class="ml-1">{{ space.followers.length }}</span>
          </button>
       </div>
    </div>
@@ -39,7 +41,7 @@ export default {
    components: {
       Icon
    },
-   props: ["cover", "icon", "name", "description", "followers"],
+   props: ["space"],
    mixins: [iconsMixin]
 }
 
