@@ -15,19 +15,43 @@
       <button 
          class="text-k-13 text-kora-gray1 font-medium px-4 py-1 ml-2 rounded-full"
          :class="[comment == '' ? 'cursor-default bg-indigo-400' : ' bg-kora-blue1']"
+         @click="handleSubmit"
       >Reply</button>
    </div>
 </template>
 
 <script>
+import { ACTIONS } from "../constants/store";
+
 export default {
    name: "CommentInput",
+   props: ["commentId", "postType"],
    data: () => ({
       comment: ""
    }),
+   methods: {
+      handleSubmit: async function() {
+         if(this.comment === "") return;
+
+         await this.$store.dispatch(ACTIONS.CREATE_COMMENT_REPLY, {
+            data: {
+               content: this.comment
+            },
+            commentId: this.commentId,
+            postType: this.postType
+         });
+
+         this.comment = "";
+      }
+   },
    watch: {
       comment: function() {
          const textarea = this.$refs['textarea-comment'];
+
+         if(this.comment === "") {
+            textarea.style.height = `22px`;
+            return;
+         }
 
          textarea.style.height = `22px`;
          textarea.style.height = `${textarea.scrollHeight}px`;

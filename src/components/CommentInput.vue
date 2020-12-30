@@ -30,7 +30,7 @@ import { ACTIONS } from "../constants/store";
 
 export default {
    name: "CommentInput",
-   props: ["postId"],
+   props: ["postId", "postType"],
    data: () => ({
       comment: ""
    }),
@@ -44,11 +44,11 @@ export default {
          if(this.comment === "") return;
 
          await this.$store.dispatch(ACTIONS.CREATE_COMMENT, {
-            comment: this.comment
-         });
-
-         await this.$store.dispatch(ACTIONS.FETCH_POST_COMMENTS, {
-            postId: this.postId
+            data: {
+               content: this.comment
+            },
+            postId: this.postId,
+            postType: this.postType
          });
 
          this.comment = "";
@@ -57,6 +57,11 @@ export default {
    watch: {
       comment: function() {
          const textarea = this.$refs['textarea-comment'];
+
+         if(this.comment === "") {
+            textarea.style.height = `22px`;
+            return;
+         }
 
          textarea.style.height = `22px`;
          textarea.style.height = `${textarea.scrollHeight}px`;
