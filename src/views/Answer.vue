@@ -15,7 +15,7 @@
                         <span class="dot-separator"></span>
                         <span class="font-normal">November 21, 2016</span>
                      </p>
-                     <p class="text-k-13 font-normal text-kora-light1 mt-1">Worked as a professional software developer for 26 years.</p>
+                     <p class="text-k-13 font-normal text-kora-light1 mt-1">{{author('credentials') && author('credentials').profile}}</p>
                   </div>
                </div>
             </header>
@@ -36,15 +36,30 @@
 
          <div class="post-comments">
             <div class="px-4 py-2 bg-kora-dark1">
-               <CommentInput :postId="answer('id')"/>
+               <CommentInput :postId="answer('id')" :postType="'answer'" />
             </div>
-            <div>
-               <Comment />
-               <Comment />
+            <div v-if="getKeyLength('comments') > 0">
+               <Comment 
+                  v-for="(comment, idx) in answer('comments')"
+                  :key="idx"
+                  :comment="comment"
+                  :originalAuthor="author('id')"
+                  :postType="'answer'"
+               />
+            </div>
+            <div class="flex flex-col items-center justify-center py-4" v-else>
+               <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
+                  <Icon 
+                     :class="'fill-current text-kora-light1 w-6 h-6'" 
+                     :viewbox="getIcons['pencil'].viewbox" 
+                     :path="getIcons['pencil'].path" 
+                  />
+               </span>
+               <p class="text-k-15 font-bold text-kora-light1 mt-4 capitalize">no comments yet</p>
             </div>
          </div>
 
-         <div class="px-4 pb-4 mt-1">
+         <div class="px-4 pb-4 mt-1" v-if="getKeyLength('comments') > 0">
             <button class="px-4 py-1 rounded-full w-full bg-kora-dark3 text-k-13 font-medium text-kora-light1 flex items-center justify-center border-light-25 hover:bg-opacity-50">
                View More Comments
                <Icon 
@@ -185,7 +200,8 @@ export default {
    computed: {
       ...mapState({
          answer: (state) => (key) => state.post.answer?.[key],
-         author: (state) => (key) => state.post.answer?.author?.[key]
+         author: (state) => (key) => state.post.answer?.author?.[key],
+         getKeyLength: (state) => (key) => state.post.answer?.[key]?.length
       })
    },
    created: async function() {
