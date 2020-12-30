@@ -292,6 +292,7 @@
          <div 
             class="trigger mr-2 text-kora-light1 text-k-13 font-medium py-1 px-2 flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
             @click="$emit('toggle-reply-input')"
+            v-if="options.replyIcon"
          >
             <Icon 
                :class="'w-4 h-4 mr-2 fill-current text-kora-light1'" 
