@@ -18,13 +18,17 @@
       <div>
          <div class="mb-2 flex justify-between items-center">
             <div class="flex items-center">
-               <span class="inline-block w-10 h-10 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-75">
-                  <img :src="answer.author.avatar" alt="user avatar">
-               </span>
+               <router-link :to="{path: `/profile/${answer.author.username}`}">
+                  <span class="inline-block w-10 h-10 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-75">
+                     <img :src="answer.author.avatar" alt="user avatar">
+                  </span>
+               </router-link>
                <span class="flex flex-col">
                   <p class="text-kora-light1 text-k-13 font-medium inline-flex items-center"> 
-                     <span class="cursor-pointer hover:underline">{{answer.author.firstname}} {{answer.author.lastname}}</span> 
-                     <span class="dot-separator"></span> <span class="font-light cursor-pointer hover:underline">September 19, 2017</span>
+                     <router-link :to="{path: `/profile/${answer.author.username}`}">
+                        <span class="cursor-pointer hover:underline">{{answer.author.firstname}} {{answer.author.lastname}}</span> 
+                     </router-link>
+                     <span class="dot-separator"></span> <span class="font-light cursor-pointer hover:underline">{{getTimeSince(answer.createdAt)}}</span>
                   </p>
                   <p class="text-kora-light1 text-k-13 font-light">{{answer.author.credentials.profile}}</p>
                </span>
@@ -82,6 +86,8 @@
             :target="'post'"
             :options="options"
             :answer="answer"
+            :postId="answer.id"
+            :stats="{upvotes: answer.upvotes, shares: answer.shares, comments: answer.comments.length}"
             v-on:toggle-comments="toggleComments"
          />
 
@@ -107,7 +113,7 @@ import Tooltip from "../components/Tooltip";
 import ActionBar from "../components/ActionBar";
 import CommentInput from "../components/CommentInput";
 import Comment from "../components/Comment";
-import { iconsMixin, modalMixin } from "../utils/mixins";
+import { iconsMixin, modalMixin, dateMixin } from "../utils/mixins";
 
 export default {
    name: "AnswerPreview",
@@ -119,7 +125,7 @@ export default {
       CommentInput
    },
    props: ["options", "answer", "spaceSlug"],
-   mixins: [iconsMixin, modalMixin],
+   mixins: [iconsMixin, modalMixin, dateMixin],
    data: () => ({
       truncateContent: true,
       isCommentsOpen: false

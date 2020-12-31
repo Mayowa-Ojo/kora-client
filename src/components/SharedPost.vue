@@ -13,7 +13,7 @@
                   <p class="text-kora-light1 text-k-13 inline-flex items-center"> 
                      <span class="font-bold cursor-pointer hover:underline">{{sharedPost.space.name}}</span> 
                      <span class="dot-separator"></span> 
-                     <span class="font-light cursor-pointer hover:underline">Sat</span>
+                     <span class="font-light cursor-pointer hover:underline">{{getTimeSince(sharedPost.createdAt)}}</span>
                   </p>
                   <p class="text-kora-light1 text-k-13 inline-flex items-center"> 
                      <span
@@ -59,7 +59,7 @@
                </span>
                <span class="text-kora-light1 text-k-13 font-light">{{sharedPost.post.author.firstname}} {{sharedPost.post.author.lastname}}</span>
                <span class="dot-separator"></span>
-               <span class="text-kora-light1 text-k-13 font-light cursor-pointer hover:underline">Answered Sat</span>
+               <span class="text-kora-light1 text-k-13 font-light cursor-pointer hover:underline">Answered {{getTimeSince(sharedPost.post.createdAt)}}</span>
             </div>
             <router-link :to="{path: `/question/${sharedPost.post.slug}`}">
                <p class="text-kora-light1 text-k-15 font-bold mt-1 mb-1">{{sharedPost.post.title}}</p>
@@ -89,6 +89,8 @@
             :target="'post'"
             :options="options"
             :shareLink="sharedPost.post.shareLink"
+            :postId="sharedPost.id"
+            :stats="{upvotes: sharedPost.post.upvotes, shares: sharedPost.post.shares, comments: sharedPost.post.comments.length}"
             v-on:toggle-comments="toggleComments"
          />
          <div class="">
@@ -112,7 +114,7 @@ import Icon from "../components/Icon";
 import ActionBar from "./ActionBar";
 import CommentInput from "../components/CommentInput";
 import Comment from "../components/Comment";
-import { iconsMixin } from "../utils/mixins";
+import { iconsMixin, dateMixin } from "../utils/mixins";
 
 export default {
    name: "SharedPost",
@@ -123,7 +125,7 @@ export default {
       CommentInput
    },
    props: ["options", "sharedPost"],
-   mixins: [iconsMixin],
+   mixins: [iconsMixin, dateMixin],
    data: () => ({
       truncateContent: true,
       isCommentsOpen: false

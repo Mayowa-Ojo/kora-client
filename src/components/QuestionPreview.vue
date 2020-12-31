@@ -27,18 +27,21 @@
          </Tooltip>
       </div>
       <div class="">
-         <p class="text-kora-light1 text-k-15 font-medium cursor-pointer hover:underline">{{question.title}}</p>
+         <router-link :to="{path: `/question/${question.slug}`}">
+            <p class="text-kora-light1 text-k-15 font-medium cursor-pointer hover:underline">{{question.title}}</p>
+         </router-link>
       </div>
       <div class="mt-2 flex items-center">
          <p class="text-kora-light1 text-k-13 font-medium cursor-pointer hover:underline">{{question.answers.length}} answers</p>
          <span class="dot-separator"></span>
-         <p class="text-kora-light1 text-k-13 font-light">Last followed October 30, 2018</p>
+         <p class="text-kora-light1 text-k-13 font-light">Last followed {{getTimeSince(question.createdAt)}}</p>
       </div>
       <ActionBar
          :target="'questionPreview'"
          :options="options"
          :editorActive="editorActive"
          :shareLink="question.shareLink"
+         :postId="question.id"
          v-on:toggle-editor="toggleEditor"
       />
       <Editor
@@ -55,7 +58,7 @@ import Editor from "./Editor";
 import Tooltip from "./Tooltip";
 import ActionBar from "./ActionBar";
 import Icon from "./Icon";
-import { iconsMixin, shortidMixin } from "../utils/mixins";
+import { iconsMixin, shortidMixin, dateMixin } from "../utils/mixins";
 
 export default {
    name: "QuestionPreview",
@@ -69,7 +72,7 @@ export default {
    data: () => ({
       editorActive: false
    }),
-   mixins: [iconsMixin, shortidMixin],
+   mixins: [iconsMixin, shortidMixin, dateMixin],
    methods: {
       toggleEditor: function() {
          this.editorActive = !this.editorActive;
