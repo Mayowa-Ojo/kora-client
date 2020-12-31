@@ -11,6 +11,7 @@
     "@popperjs/core": "^2.4.4",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "date-fns": "^2.16.1",
     "lowdb": "^1.0.0",
     "nanoid": "^3.1.20",
     "quill-mention": "^3.0.0",
