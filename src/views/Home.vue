@@ -19,10 +19,12 @@
             v-for="(space, idx) in userProfile('spaces')"
             :key="String(idx)+generateId()"
          >
-            <span class="inline-block mr-2 w-5 h-5 rounded-full overflow-hidden">
-               <img class="w-full h-full object-cover" :src="space.icon" alt="space avatar">
-            </span>
-            <p class="text-k-13 text-kora-light1 font-light">{{space.name}}</p>
+            <router-link :to="{path: `/space/${space.slug}`}" class="flex items-center">
+               <span class="inline-block mr-2 w-5 h-5 rounded-full overflow-hidden">
+                  <img class="w-full h-full object-cover" :src="space.icon" alt="space avatar">
+               </span>
+               <p class="text-k-13 text-kora-light1 font-light">{{space.name}}</p>
+            </router-link>
          </div>
          <div class="mb-2 p-2 rounded flex items-center cursor-pointer hover:bg-kora-dark2">
             <span class="inline-block p-1 mr-2 bg-kora-dark2 rounded-sm">

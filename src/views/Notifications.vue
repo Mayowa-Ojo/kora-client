@@ -3,18 +3,18 @@
       <aside class="q-box--left w-40">
          <ul>
             <li class="py-2 text-kora-light1 text-k-15 font-medium border-b border-kora-light1 border-opacity-10">Filters</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 bg-kora-dark3 rounded">All Notifications</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Stories</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Questions</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Spaces
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 bg-kora-dark3 rounded">All Notifications</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Stories</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Questions</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Spaces
                <span class="inline-flex justify-center items-center -mr-2 w-5 h-5 rounded-sm bg-kora-dark3 text-kora-light1 text-k-13 float-right">19</span>
             </li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Subscriptions</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Comments</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Upvotes</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Your Content</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Your Profile</li>
-            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-pointer hover:bg-kora-dark2 rounded">Announcements</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Subscriptions</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Comments</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Upvotes</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Your Content</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Your Profile</li>
+            <li class="mt-1 -mx-4 py-1 px-4 text-kora-light1 text-k-13 font-normal cursor-default hover:bg-kora-dark2 rounded">Announcements</li>
          </ul>
       </aside>
 
@@ -28,7 +28,7 @@
             </span>
          </div>
          <div class="notifications-list mb-8">
-            <div class="alert w-full flex justify-center fixed">
+            <div class="alert w-full justify-center fixed invisible hover:flex">
                <button class="px-5 py-2 rounded-full bg-kora-blue2 text-kora-gray1 text-k-14 font-medium flex items-center">
                   <span class="inline-flex mr-2">
                      <Icon 
