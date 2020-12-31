@@ -11,15 +11,19 @@
          <p class="ml-2 text-k-15 text-kora-light1 capitalize">{{ heading }}</p>
       </div>
       <div 
-         class="flex px-4 py-2 cursor-pointer border-b border-kora-light1 border-opacity-10"
+         class="flex px-4 py-2 border-b border-kora-light1 border-opacity-10"
          v-for="(space, idx) in spaces"
          :key="idx"
       >
-         <span class="inline-block w-10 h-10 rounded-full overflow-hidden">
-            <img :src="space.icon" alt="space avatar">
-         </span>
+         <router-link :to="{path: `/space/${space.slug}`}">
+            <span class="inline-block w-10 h-10 rounded-full overflow-hidden hover:opacity-75">
+               <img :src="space.icon" alt="space avatar">
+            </span>
+         </router-link>
          <div class="flex flex-col ml-4 flex-auto">
-            <p class="text-k-15 font-medium text-kora-light1">{{space.name}}</p>
+            <router-link :to="{path: `/space/${space.slug}`}">
+               <p class="text-k-15 font-medium text-kora-light1 hover:underline">{{space.name}}</p>
+            </router-link>
             <p class="text-k-13 font-normal text-kora-light1 text-opacity-50">4.2K Followers</p>
             <p class="text-k-13 font-normal text-kora-light1 mt-2">{{space.about}}</p>
          </div>
