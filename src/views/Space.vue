@@ -169,17 +169,29 @@
                      v-if="post.postType && post.postType === 'answer'"
                   >
                      <AnswerPreview 
-                        :options="{ followIcon: false, borderBottom: false, title: true}"
+                        :options="{
+                           followIcon: false,
+                           borderBottom: false,
+                           title: true,
+                           downvoteIcon: true,
+                           link: `/${post.slug}/answer/${post.author.username}`
+                        }"
                         :answer="post"
                         :spaceSlug="currentSpace('slug')"
                      />
                   </div>
                   <div
                      class="px-4 bg-kora-dark2 border-light-25 rounded-sm"
-                     v-else-if="post.comment"
+                     v-else-if="post.comment || post.comment === ''"
                   >
                      <SharedPost 
-                        :options="{ followIcon: false, borderBottom: false }"
+                        :sharedPost="post"
+                        :options="{
+                           followIcon: true,
+                           borderBottom: true,
+                           downvoteIcon: true,
+                           link: `/${post.post.slug}/answer/${post.post.author.username}`
+                        }"
                      />
                   </div>
                </div>

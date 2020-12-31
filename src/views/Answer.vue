@@ -30,7 +30,12 @@
                <span class="text-k-13 font-normal text-kora-light1 text-opacity-50 cursor-pointer hover:underline">View Sharers</span>
             </div>
             <div class="action-bar sticky bottom-0 bg-kora-dark2 mt-1 pb-2 border-t border-kora-light1 border-opacity-10">
-               <ActionBar :target="'post'" :options="{ downvoteIcon: true }"/>
+               <ActionBar
+                  :target="'post'"
+                  :options="{ downvoteIcon: true }"
+                  :postId="answer('id')"
+                  :stats="{upvotes: answer('upvotes'), shares: answer('shares'), comments: getKeyLength('comments')}"
+               />
             </div>
          </div>
 

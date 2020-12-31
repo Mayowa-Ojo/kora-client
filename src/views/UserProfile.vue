@@ -386,7 +386,13 @@
                      <AnswerPreview 
                         v-if="content.postType === 'answer'"
                         :answer="content"
-                        :options="{ borderBottom: true, downvoteIcon: true, followIcon: true, title: true }"
+                        :options="{
+                           borderBottom: true,
+                           downvoteIcon: true,
+                           followIcon: true,
+                           title: true,
+                           link: `/${content.slug}/answer/${content.author.username}`
+                        }"
                      />
                      <QuestionPreview 
                         v-if="content.postType === 'question'"
@@ -396,7 +402,12 @@
                      <SharedPost 
                         v-if="content.comment || content.comment === ''"
                         :sharedPost="content"
-                        :options="{ followIcon: true, borderBottom: true, downvoteIcon: true }"
+                        :options="{
+                           followIcon: true,
+                           borderBottom: true,
+                           downvoteIcon: true,
+                           link: `/${content.post.slug}/answer/${content.post.author.username}`
+                        }"
                      />
                   </div>
                </div>

@@ -34,6 +34,7 @@
             <ActionBar
                :target="'questionPage'"
                :shareLink="question('shareLink')"
+               :postId="question('id')"
                v-on:toggle-comment-input="toggleCommentInput"
                v-on:toggle-editor="toggleEditor"
             />
@@ -124,10 +125,18 @@
 
             <div class="">
                <AnswerPreview 
-                  :options="{ borderBottom: true, followIcon: true, downvoteIcon: true, title: false , commentBorder: true, title: true}"
                   v-for="(answer, idx) in question('answers')"
                   :key="idx"
                   :answer="answer"
+                  :options="{
+                     borderBottom: true,
+                     followIcon: true,
+                     downvoteIcon: true,
+                     title: false ,
+                     commentBorder: true,
+                     title: true,
+                     link: `/${answer.slug}/answer/${answer.author.username}`
+                  }"
                />
             </div>
          </div>

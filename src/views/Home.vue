@@ -99,7 +99,7 @@
                   </div>
                   <Tooltip :offset="12" :placement="'top'" :text="'Hide'">
                      <template v-slot:trigger>
-                        <span class="trigger inline-flex justify-center items-center w-8 h-8 rounded-full cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50">
+                        <span class="trigger inline-flex justify-center items-center w-8 h-8 rounded-full cursor-default hover:bg-kora-dark1 hover:bg-opacity-50">
                            <Icon 
                               :class="'fill-current text-kora-red1'" 
                               :viewbox="getIcons['x'].viewbox" 
@@ -122,7 +122,8 @@
                      hideStats: true,
                      noPadding: true,
                      upvotersIcon: true,
-                     approvalButton: true
+                     approvalButton: true,
+                     link: `/${post.slug}/answer/${post.author.username}`
                   }"
                />
             </div>
