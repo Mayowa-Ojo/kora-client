@@ -50,7 +50,10 @@
          </Tooltip>
          <Tooltip :offset="8" :placement="'top'" :text="'Downvote'">
             <template v-slot:trigger>
-               <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2">
+               <span 
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark2"
+                  @click="handleDownvote('post')"
+               >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
                      :viewbox="getIcons['upvoteAlt2'].viewbox" 
@@ -136,22 +139,28 @@
    </div>
    <div class="flex items-center justify-between mt-1" v-else-if="target == 'post'">
       <div class="flex items-center">
-         <span class="px-2 mr-2 bg-kora-dark3 bg-opacity-50 inline-flex items-center cursor-pointer rounded-full" style="height: 30px;">
+         <span class="px-2 mr-2 bg-kora-dark3 bg-opacity-50 inline-flex items-center cursor-pointer rounded-full hover:bg-opacity-75" style="height: 30px;">
          <Tooltip :offset="8" :placement="'top'" :text="'Upvote'">
             <template v-slot:trigger>
-               <span class="trigger ml-2 pr-2 text-kora-light1 text-k-13 font-light inline-flex items-center border-r border-kora-light1 border-opacity-25">
+               <span 
+                  class="trigger ml-2 pr-2 text-kora-light1 text-k-13 font-light inline-flex items-center border-r border-kora-light1 border-opacity-25"
+                  @click="handleUpvote('post')"
+               >
                   <Icon 
                      :class="'w-4 h-4 mr-1 stroke-current text-kora-blue1'" 
                      :viewbox="getIcons['upvoteAlt2'].viewbox" 
                      :path="getIcons['upvoteAlt2'].path" 
                   />
-                  103
+                  {{getStats('upvotes')}}
                </span>
             </template>
          </Tooltip>
          <Tooltip :offset="8" :placement="'top'" :text="'Downvote'" v-if="options.downvoteIcon">
             <template v-slot:trigger>
-               <span class="trigger ml-2 mr-2 mt-1 inline-flex">
+               <span 
+                  class="trigger ml-2 mr-2 mt-1 inline-flex"
+                  @click="handleDownvote('post')"
+               >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
                      :viewbox="getIcons['upvoteAlt2'].viewbox" 
@@ -172,23 +181,24 @@
                      :viewbox="getIcons['share'].viewbox" 
                      :path="getIcons['share'].path" 
                   />
-                  2
+                  {{getStats('shares')}}
                </span>
             </template>
          </Tooltip>
          <Tooltip :offset="8" :placement="'top'" :text="'Comments'">
             <template v-slot:trigger>
+               <router-link :to="{path: options.link}">
                <span 
                   class="trigger bg-kora-dark3 bg-opacity-50 mr-2 text-kora-light1 text-k-13 font-light py-1 px-2 inline-flex items-center rounded-full cursor-pointer"
-                  @click="$emit('toggle-comments')"
                >
                   <Icon 
                      :class="'w-4 h-4 mr-1 stroke-current text-kora-light1'" 
                      :viewbox="getIcons['comment'].viewbox" 
                      :path="getIcons['comment'].path" 
                   />
-                  13
+                  {{getStats('comments')}}
                </span>
+               </router-link>
             </template>
          </Tooltip>
       </div>
@@ -279,7 +289,10 @@
    </div>
    <div class="flex items-center justify-between -ml-3" v-else-if="target == 'comment'">
       <div class="flex items-center">
-         <div class="mr-2 text-kora-light1 text-k-13 py-1 px-3 flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+         <div 
+            class="mr-2 text-kora-light1 text-k-13 py-1 px-3 flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
+            @click="handleUpvote('comment')"
+         >
             <Icon 
                :class="'w-4 h-4 mr-1 stroke-current text-kora-light1'" 
                :viewbox="getIcons['upvoteAlt2'].viewbox" 
@@ -287,7 +300,7 @@
             />
             <span class="font-medium">Upvote</span>
             <span class="dot-separator"></span>
-            2
+            {{getStats('upvotes')}}
          </div>
          <div 
             class="trigger mr-2 text-kora-light1 text-k-13 font-medium py-1 px-2 flex items-center rounded-full cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
@@ -305,7 +318,10 @@
       <div class="flex items-center">
          <Tooltip :offset="8" :placement="'top'" :text="'Downvote'">
             <template v-slot:trigger>
-               <span class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50">
+               <span 
+                  class="trigger rounded-full w-8 h-8 inline-flex items-center justify-center cursor-pointer hover:bg-kora-dark3 hover:bg-opacity-50"
+                  @click="handleDownvote('comment')"
+               >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4 transform rotate-180'" 
                      :viewbox="getIcons['upvoteAlt2'].viewbox" 
@@ -450,7 +466,10 @@
       <div class="right flex">
          <Tooltip :offset="12" :placement="'top'" :text="'Downvote'">
             <template v-slot:trigger>
-               <span class="trigger inline-flex items-center p-2 mr-1 hover:bg-kora-dark2 rounded-full cursor-pointer">
+               <span 
+                  class="trigger inline-flex items-center p-2 mr-1 hover:bg-kora-dark2 rounded-full cursor-pointer"
+                  @click="handleDownvote('post')"
+               >
                   <Icon 
                      :class="'stroke-current text-kora-light1 w-4 h-4 inline-block transform rotate-180'" 
                      :viewbox="getIcons['upvoteAlt2'].viewbox" 
@@ -542,7 +561,7 @@ import Icon from "./Icon";
 import Tooltip from "./Tooltip";
 import Popover from "./Popover";
 import { iconsMixin, modalMixin } from "../utils/mixins";
-import { MUTATIONS } from '../constants/store';
+import { MUTATIONS, ACTIONS } from '../constants/store';
 
 export default {
    name: "ActionBar",
@@ -551,8 +570,15 @@ export default {
       Tooltip,
       Popover
    },
-   props: ["target", "options", "stats", "answer", "editorActive"],
+   props: ["target", "options", "stats", "answer", "editorActive", "postId", "commentId"],
    mixins: [iconsMixin, modalMixin],
+   computed: {
+      getStats: function() {
+         return function(key) {
+            return this.stats?.[key]
+         }
+      }
+   },
    methods: {
       copyToClipboard: function() {
          const selector = document.createElement("textarea");
@@ -570,6 +596,36 @@ export default {
             type: "success"
          });
          this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+      },
+      handleUpvote: async function(target) {
+         if(!["post", "comment"].includes(target)) return;
+
+         if(target === "post") {
+            await this.$store.dispatch(ACTIONS.UPVOTE_POST, {
+               id: this.postId
+            });
+
+            return;
+         }
+
+         await this.$store.dispatch(ACTIONS.UPVOTE_COMMENT, {
+            id: this.commentId
+         });
+      },
+      handleDownvote: async function(target) {
+         if(!["post", "comment"].includes(target)) return;
+
+         if(target === "post") {
+            await this.$store.dispatch(ACTIONS.DOWNVOTE_POST, {
+               id: this.postId
+            });
+
+            return;
+         }
+
+         await this.$store.dispatch(ACTIONS.DOWNVOTE_COMMENT, {
+            id: this.commentId
+         });
       }
    }
 }
