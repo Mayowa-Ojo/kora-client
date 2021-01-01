@@ -258,6 +258,7 @@ export default {
          userFeed: (state) => (key) => state.post.feed?.[key],
          userProfile: (state) => (key) => state.auth.profile?.[key],
          suggestedSpaces: (state) => state.space.suggestedSpaces,
+         suggestedQuestions: (state) => state.post.feed?.suggestedQuestions,
          getKeyLength: (state) => (key) => state.post.feed?.[key]?.length
       })
    },
