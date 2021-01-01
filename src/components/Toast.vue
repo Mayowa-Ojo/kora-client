@@ -15,6 +15,16 @@
       <div class="py-1 ml-3">
          <p class="text-k-15 font-medium text-kora-dark2">{{ getContent }}</p>
       </div>
+      <span
+         class="mr-4 w-8 h-8 rounded-full inline-flex justify-center items-center cursor-pointer absolute right-0"
+         @click="toggleIsOpen"
+      >
+         <Icon 
+            :class="'w-3 h-3 fill-current text-kora-dark2'"
+            :viewbox="getIcons['x'].viewbox" 
+            :path="getIcons['x'].path" 
+         />
+      </span>
    </div>
    </transition>
 </template>
