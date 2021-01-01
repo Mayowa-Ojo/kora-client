@@ -28,7 +28,7 @@
             <p class="text-k-13 font-normal text-kora-light1 mt-2">{{space.about}}</p>
          </div>
          <div class="h-full flex items-start py-2">
-            <button type="button" class="px-3 py-1 rounded-full text-k-13 font-medium text-kora-dark2 bg-kora-gray1 hover:bg-opacity-75">
+            <button type="button" class="px-3 py-1 rounded-full text-k-13 font-medium text-kora-dark2 inline-flex items-center bg-kora-gray1 hover:bg-opacity-75">
                <Icon 
                   :class="'fill-current inline-block text-kora-dark2 w-4 h-4 mr-1'" 
                   :viewbox="getIcons['follow'].viewbox" 
