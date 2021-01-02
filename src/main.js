@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import VueQuill from "vue-quill-editor";
+import VueQuill from "vue-quill-editor"
+import VueTippy from "vue-tippy"
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 
@@ -11,6 +12,7 @@ import "./assets/css/app.css"
 Vue.config.productionTip = false
 
 Vue.use(VueQuill)
+Vue.use(VueTippy)
 
 new Vue({
    router,
