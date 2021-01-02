@@ -196,7 +196,51 @@ export default {
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
-      }
+      },
+      [ACTIONS.FOLLOW_USER]: async function({ commit, rootState }, payload) {
+         if(!payload.id) return;
+
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/users/${payload.id}/follow`, {
+            method: "PATCH"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `You followed ${payload.user.fullname}. Your feed will include content from this user.`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
+      [ACTIONS.UNFOLLOW_USER]: async function({ commit, rootState }, payload) {
+         if(!payload.id) return;
+
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/users/${payload.id}/unfollow`, {
+            method: "PATCH"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `You unfollowed ${payload.user.fullname}. Your feed will not include content from this user.`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
    },
    getters: {
       filterProfileTabContent: (state) => (filter) => {

@@ -67,23 +67,28 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit, rootState }, payload) {
+      [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit, dispatch, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
          const response = await httpRequest(`/spaces/slug?q=${payload.slug}`, {
             method: "GET"
          });
 
-         // fetch posts for space
-         const spacePostsResponse = await httpRequest(`/spaces/${response.data.id}/posts?postType=all`, {
-            method: "GET"
+         const posts = await dispatch(ACTIONS.FETCH_SPACE_POSTS, {
+            id: response.data.id
          });
 
-         if(rootState.status === "error") {
-            return;
-         }
+         const members = await dispatch(ACTIONS.FETCH_SPACE_MEMBERS, {
+            id: response.data.id
+         });
 
-         response.data.posts = spacePostsResponse.data;
+         if(!posts || !members) return;
+
+         if(rootState.status === "error") return;
+
+         response.data.posts = posts;
+         response.data.admins = members.admins;
+         response.data.followers = members.followers;
 
          commit(MUTATIONS.SET_CURRENT_SPACE, {
             space: response.data
@@ -92,10 +97,8 @@ export default {
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
-      [ACTIONS.FETCH_SPACE_POSTS]: async function({ commit, rootState }, payload) {
-         commit(MUTATIONS.SET_STATUS, "loading");
-
-         const response = await httpRequest(`/spaces/posts?q=${payload.postType}`, {
+      [ACTIONS.FETCH_SPACE_POSTS]: async function({ rootState }, payload) {
+         const response = await httpRequest(`/spaces/${payload.id}/posts?postType=all`, {
             method: "GET"
          });
 
@@ -103,13 +106,63 @@ export default {
             return;
          }
 
-         commit(MUTATIONS.UPDATE_CURRENT_SPACE, {
-            space: response.data
+         return response.data;
+      },
+      [ACTIONS.FETCH_SPACE_MEMBERS]: async function({ rootState }, payload) {
+         const response = await httpRequest(`/spaces/${payload.id}/people`, {
+            method: "GET"
          });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         return response.data;
+      },
+      [ACTIONS.FOLLOW_SPACE]: async function({ commit, rootState }, payload) {
+         if(!payload.id) return;
+
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/spaces/${payload.id}/follow`, {
+            method: "PATCH"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `You followed ${payload.space.name}. Your feed will include content from this space.`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
 
          console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
-      }
+      },
+      [ACTIONS.UNFOLLOW_SPACE]: async function({ commit, rootState }, payload) {
+         if(!payload.id) return;
+
+         commit(MUTATIONS.SET_STATUS, "loading");
+
+         const response = await httpRequest(`/spaces/${payload.id}/unfollow`, {
+            method: "PATCH"
+         });
+
+         if(rootState.status === "error") {
+            return;
+         }
+
+         commit(MUTATIONS.SET_TOAST_META, {
+            content: `You unfollowed ${payload.space.name}. Your feed will not include content from this space.`,
+            type: "success"
+         });
+         commit(MUTATIONS.SET_TOAST_ACTIVE);
+
+         console.log("[INFO] --data: \n", response);
+         commit(MUTATIONS.SET_STATUS, "done");
+      },
    },
    getters: {}
 }
