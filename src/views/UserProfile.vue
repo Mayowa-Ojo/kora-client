@@ -32,30 +32,7 @@
             <span class="inline-flex flex-col ml-4">
                <p class="group text-kora-light1 text-k-24 font-bold" v-if="!isEditing.name">
                   {{currentUser('firstname')}} {{currentUser('lastname')}}
-                  <span 
-                     class="text-k-13 text-kora-light1 text-opacity-50 font-normal cursor-pointer invisible group-hover:visible hover:underline"
-                     v-if="isCurrentUserAdmin"
-                     @click="toggleIsEditing('name')"
-                  >Edit</span>
                </p>
-               <span
-                  class="flex items-end py-1 mb-2 border-b-2 border-kora-light1 border-opacity-10"
-                  style="min-width: 100px; max-width: fit-content;"
-                  v-else
-               >
-                  <input
-                     class="w-full h-full block appearance-none bg-transparent focus:outline-none text-k-21 text-kora-light1"
-                     type="text" name="name"
-                     v-model="profile.name"
-                     autocomplete="chrome-off"
-                     @keydown.enter="handleUpdateProfile"
-                  >
-                  <span 
-                     class="inline-block text-k-13 text-kora-light1 text-opacity-50 font-normal cursor-pointer hover:underline"
-                     v-if="isCurrentUserAdmin"
-                     @click="toggleIsEditing('name')"
-                  >Cancel</span>
-               </span>
                <p class="group text-kora-light1 text-k-15 font-normal" v-if="credentials('profile') !== ''">
                   {{credentials('profile')}}
                   <span 
@@ -67,6 +44,7 @@
                <p 
                   class="text-k-13 text-kora-light1 text-opacity-50 cursor-pointer hover:underline"
                   v-else
+                  @click="toggleModal('AddCredentialsModal')"
                >Add profile credential</p>
             </span>
          </div>
@@ -76,7 +54,7 @@
                {{currentUser('about')}}
                <span
                   class="text-k-13 text-kora-light1 text-opacity-50 block cursor-pointer invisible group-hover:visible hover:underline"
-                  v-if="isCurrentUserAdmin"
+                  v-if="isCurrentUserAdmin && currentUser('about') !== ''"
                   @click="toggleIsEditing('about')"
                >Edit</span>
             </p>
@@ -101,6 +79,7 @@
             <p 
                class="text-k-13 text-kora-light1 text-opacity-50 cursor-pointer hover:underline"
                v-if="currentUser('about') == ''"
+               @click="toggleIsEditing('about')"
             >Write a description about yourself</p>
          </div>
 
@@ -109,15 +88,31 @@
          </div>
          <div class="flex justify-between -ml-3" v-else>
             <div class="flex items-center">
-               <span class="px-3 py-1 inline-flex items-center cursor-pointer rounded-full hover:bg-kora-dark3 hover:bg-opacity-25">
+               <span 
+                  class="px-3 py-1 inline-flex items-center cursor-pointer rounded-full hover:bg-kora-dark3 hover:bg-opacity-25"
+                  @click="handleUserSubscription"
+               >
                   <Icon 
                      :class="'fill-current w-5 h-5 text-kora-blue1 mr-2 mb-1'" 
                      :viewbox="getIcons['following'].viewbox" 
-                     :path="getIcons['following'].path" 
+                     :path="getIcons['following'].path"
+                     v-if="isFollowingCurrentUser"
                   />
-                  <span class="text-kora-blue1 text-k-14 font-medium">Following</span>
+                  <Icon 
+                     :class="'fill-current w-5 h-5 text-kora-light1 mr-2'" 
+                     :viewbox="getIcons['follow'].viewbox" 
+                     :path="getIcons['follow'].path" 
+                     v-else
+                  />
+                  <span
+                     class="text-k-14 font-medium"
+                     :class="[isFollowingCurrentUser ? 'text-kora-blue1' : 'text-kora-light1']"
+                  >{{isFollowingCurrentUser ? 'Following' : 'Follow'}}</span>
                   <span class="dot-separator"></span>
-                  <span class="text-kora-blue1 text-k-14 font-medium">14.2k</span>
+                  <span
+                     class="text-k-14 font-medium"
+                     :class="[isFollowingCurrentUser ? 'text-kora-blue1' : 'text-kora-light1']"
+                  >14.2k</span>
                </span>
                <span class="px-3 py-1 inline-flex items-center cursor-pointer rounded-full hover:bg-kora-dark3 hover:bg-opacity-25">
                   <Icon 
@@ -338,11 +333,7 @@
 
             <div
                class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
-               v-if="filterProfileTabContent(currentTab) && 
-                  filterProfileTabContent(currentTab).length < 1 && 
-                  getKeyLength('knowledge') < 1 && 
-                  getKeyLength('spaces') < 1
-               "
+               v-if="filterProfileTabContent(currentTab) && filterProfileTabContent(currentTab).length < 1 && currentTab !== 'following'"
             >
                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
                   <Icon 
@@ -356,6 +347,20 @@
             <div class="profile-feed" v-else>
                <div v-if="currentTab === 'followers' || currentTab === 'following'">
                   <!-- display component for followers and following -->
+                  <div
+                     class="p-4 flex flex-col items-center border-b border-kora-light1 border-opacity-10"
+                     v-if="getKeyLength('knowledge') < 1 && getKeyLength('spaces') < 1"
+                  >
+                     <span class="inline-flex items-center justify-center w-10 h-10 rounded-full">
+                        <Icon 
+                           :class="'fill-current text-kora-light1 w-6 h-6'" 
+                           :viewbox="getIcons['pencil'].viewbox" 
+                           :path="getIcons['pencil'].path" 
+                        />
+                     </span>
+                     <p class="text-k-15 font-bold text-kora-light1 mt-4 capitalize">no {{currentTab}} yet</p>
+                  </div>
+                  <div v-else>
                   <div v-if="currentTabFilter === 'people'">
                      <UserSubscription
                         v-for="(user, idx) in filterProfileTabContent(currentTab)"
@@ -379,6 +384,7 @@
                         :subscriptionType="'topics'"
                         :topic="topic"
                      />
+                  </div>
                   </div>
                </div>
                <div v-else>
@@ -424,7 +430,6 @@
                   @click="toggleModal('AddCredentialsModal')"
                   v-if="isCurrentUserAdmin"
                >
-                  <!-- NOTE: should create AddCredntialsModal -->
                   <Icon 
                      :class="'w-3 h-3 fill-current text-kora-light1'" 
                      :viewbox="getIcons['pencil'].viewbox" 
@@ -446,7 +451,10 @@
                      1 Follower You Know <span class="ml-1 text-kora-light1 text-opacity-50 cursor-pointer hover:underline">Gary Taylor</span>
                   </p>
                </div>
-               <div class="py-1 flex items-center">
+               <div
+                  class="py-1 flex items-center"
+                  v-if="!(credentials('employment') === '' && !isCurrentUserAdmin)"
+               >
                   <span class="mr-2">
                      <Icon 
                         :class="'w-4 h-4 fill-current text-kora-light1'" 
@@ -460,7 +468,10 @@
                   >Add employment credential</p>
                   <p class="text-kora-light1 text-k-13 font-normal text-opacity-100">{{credentials('employment')}}</p>
                </div>
-               <div class="py-1 flex items-center">
+               <div
+                  class="py-1 flex items-center"
+                  v-if="!(credentials('education') === '' && !isCurrentUserAdmin)"
+               >
                   <span class="mr-2">
                      <Icon 
                         :class="'w-4 h-4 fill-current text-kora-light1'" 
@@ -474,7 +485,10 @@
                   >Add education credential</p>
                   <p class="text-kora-light1 text-k-13 font-normal text-opacity-100">{{credentials('education')}}</p>
                </div>
-               <div class="py-1 flex items-center">
+               <div
+                  class="py-1 flex items-center"
+                  v-if="!(credentials('location') === '' && !isCurrentUserAdmin)"
+               >
                   <span class="mr-2">
                      <Icon 
                         :class="'w-4 h-4 fill-current text-kora-light1'" 
@@ -488,7 +502,10 @@
                   >Add location credential</p>
                   <p class="text-kora-light1 text-k-13 font-normal text-opacity-100" v-if="credentials('location') !== ''">Lives in {{credentials('location')}}</p>
                </div>
-               <div class="py-1 flex items-center">
+               <div
+                  class="py-1 flex items-center"
+                  v-if="!(credentials('language') === '' && !isCurrentUserAdmin)"
+               >
                   <span class="mr-2">
                      <Icon 
                         :class="'w-4 h-4 fill-current text-kora-light1'" 
@@ -692,13 +709,21 @@ export default {
    computed: {
       ...mapState({
          currentUser: (state) => (key) => state.user.currentUser?.[key],
+         authUser: (state) => (key) => state.auth.profile?.[key],
          credentials: (state) => (key) => state.user.currentUser?.credentials?.[key],
          getKeyLength: (state) => (key) => state.user.currentUser?.[key].length
       }),
       ...mapGetters([
          "filterProfileTabContent",
          "isCurrentUserAdmin"
-      ])
+      ]),
+      isFollowingCurrentUser: function() {
+         const index = this.$store.state.user.currentUser?.followers?.findIndex(
+            el => el.id === this.$store.state.auth.profile?.id
+         );
+
+         return index > -1;
+      }
    },
    methods: {
       setCurrentTab: function(tab) {
@@ -759,6 +784,25 @@ export default {
 
             await this.$store.dispatch(ACTIONS.UPDATE_USER_PROFILE, payload);
          }
+      },
+      handleUserSubscription: async function() {
+         if(this.isFollowingCurrentUser) {
+            await this.$store.dispatch(ACTIONS.UNFOLLOW_USER, {
+               id: this.currentUser('id'),
+               user: {
+                  fullname: `${this.currentUser('firstname')} ${this.currentUser('lastname')}`
+               }
+            });
+
+            return;
+         }
+
+         await this.$store.dispatch(ACTIONS.FOLLOW_USER, {
+            id: this.currentUser('id'),
+            user: {
+               fullname: `${this.currentUser('firstname')} ${this.currentUser('lastname')}`
+            }
+         });
       }
    },
    created: async function() {
@@ -768,7 +812,7 @@ export default {
          username
       });
    },
-   watch:  {
+   watch: {
       "isEditing.name": function() {
          this.profile = {
             ...this.profile,
@@ -788,6 +832,13 @@ export default {
          }
 
          this.currentTabFilter = "people";
+      },
+      $route: async function(to) {
+         const { username } = to.params;
+
+         await this.$store.dispatch(ACTIONS.FETCH_CURRENT_USER, {
+            username
+         });
       }
    }
 }
