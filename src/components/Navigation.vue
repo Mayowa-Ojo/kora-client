@@ -96,7 +96,7 @@
                                  <span class="notifier inline-block w-3 h-3 rounded-full border-2 border-kora-dark3 bg-kora-red1 absolute"></span>
                               </span>
                               <p class="text-kora-light1 text-k-13 font-bold">{{ space.name }}</p>
-                              <span class="inline-flex items-center ml-2" v-if="space.admins.includes(userProfile('id'))">
+                              <span class="inline-flex items-center ml-2" v-if="space.admins && space.admins.includes(userProfile('id'))">
                                  <Icon 
                                     :class="'fill-current text-kora-light1'" 
                                     :viewbox="getIcons['shield'].viewbox" 
@@ -319,7 +319,6 @@ import Popover from "./Popover";
 import Icon from "./Icon";
 import Toast from "./Toast";
 import { iconsMixin, modalMixin } from "../utils/mixins";
-import { spaces } from "../tmp/db";
 import { ACTIONS } from '../constants/store';
 
 export default {
@@ -331,7 +330,6 @@ export default {
    },
    mixins: [iconsMixin, modalMixin],
    computed: {
-      getTempData: () => ({ spaces }),
       ...mapState({
          userProfile: (state) => (key) => state.auth.profile?.[key]
       })
