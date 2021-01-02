@@ -94,6 +94,14 @@ const routes = [
       }
    },
    {
+      path: '/bit/:shortCode',
+      name: 'LinkRedirect',
+      component: () => import(/* webpackChunkName: "link_redirect" */ '../views/LinkRedirect.vue'),
+      meta: {
+         title: `${APP_NAME} - Redirecting...`
+      }
+   },
+   {
       path: '*',
       name: 'NotFound',
       component: NotFound,
