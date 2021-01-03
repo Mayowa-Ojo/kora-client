@@ -32,6 +32,10 @@
             <span class="inline-flex flex-col ml-4">
                <p class="group text-kora-light1 text-k-24 font-bold" v-if="!isEditing.name">
                   {{currentUser('firstname')}} {{currentUser('lastname')}}
+                  <span
+                     class="text-k-12 text-kora-light1 font-normal text-opacity-50 ml-1"
+                     v-if="isFollowedByCurrentUser && !isCurrentUserAdmin"
+                  >Follows you</span>
                </p>
                <p class="group text-kora-light1 text-k-15 font-normal" v-if="credentials('profile') !== ''">
                   {{credentials('profile')}}
@@ -78,7 +82,7 @@
             </span>
             <p 
                class="text-k-13 text-kora-light1 text-opacity-50 cursor-pointer hover:underline"
-               v-if="currentUser('about') == ''"
+               v-if="currentUser('about') == '' && isCurrentUserAdmin"
                @click="toggleIsEditing('about')"
             >Write a description about yourself</p>
          </div>
@@ -719,6 +723,13 @@ export default {
       ]),
       isFollowingCurrentUser: function() {
          const index = this.$store.state.user.currentUser?.followers?.findIndex(
+            el => el.id === this.$store.state.auth.profile?.id
+         );
+
+         return index > -1;
+      },
+      isFollowedByCurrentUser: function() {
+         const index = this.$store.state.user.currentUser?.following?.findIndex(
             el => el.id === this.$store.state.auth.profile?.id
          );
 
