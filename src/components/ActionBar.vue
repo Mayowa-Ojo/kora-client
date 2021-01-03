@@ -570,7 +570,7 @@ export default {
       Tooltip,
       Popover
    },
-   props: ["target", "options", "stats", "answer", "editorActive", "postId", "commentId"],
+   props: ["target", "options", "stats", "answer", "editorActive", "postId", "commentId", "shareLink"],
    mixins: [iconsMixin, modalMixin],
    computed: {
       getStats: function() {
@@ -584,7 +584,7 @@ export default {
          const selector = document.createElement("textarea");
 
          selector.setAttribute("style", "opacity: 0; position: absolute; left: 9999px;");
-         selector.value = this.answer.shareLink;
+         selector.value = this.answer ? this.answer.shareLink : this.shareLink ? this.shareLink : "";
          document.body.appendChild(selector);
 
          selector.select();
