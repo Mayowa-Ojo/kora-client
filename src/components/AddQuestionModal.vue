@@ -192,14 +192,17 @@
                         class="trigger flex items-center py-1 px-3 rounded-full bg-kora-dark2 border-light-25 cursor-pointer hover:bg-opacity-50"
                         @click="slotProps.toggle($event)"
                      >
-                        <span class="">
+                        <span class="" v-if="!selectedSpace">
                            <Icon 
                               :class="'fill-current text-kora-light1 w-3 h-3'" 
                               :viewbox="getIcons['plus'].viewbox" 
                               :path="getIcons['plus'].path" 
                            />
                         </span>
-                        <span class="text-kora-light1 text-k-13 font-medium ml-2">Choose a space</span>
+                        <span v-else class="w-4 h-4 rounded-md inline-block overflow-hidden">
+                           <img :src="selectedSpace.icon" alt="space icon">
+                        </span>
+                        <span class="text-kora-light1 text-k-13 font-medium ml-2">{{!selectedSpace ? 'Choose a space' : selectedSpace.name}}</span>
                         <span class="ml-2">
                            <Icon 
                               :class="'fill-current text-kora-light1'" 
@@ -248,11 +251,12 @@
                               <ul>
                                  <li 
                                     class="px-4 py-2 flex items-center text-kora-light1 text-k-15 font-normal border-b border-kora-light1 border-opacity-10 cursor-pointer hover:bg-kora-dark1 hover:bg-opacity-50"
-                                    v-for="(space, idx) in getTempData['spaces']"
+                                    v-for="(space, idx) in userSpaces"
                                     :key="String(idx)+generateId()"
+                                    @click="setSelectedSpace(space)"
                                  >
                                     <span class="inline-block mr-2 w-6 h-6 rounded-full overflow-hidden">
-                                       <img :src="space.img" alt="space icon">
+                                       <img :src="space.icon" alt="space icon">
                                     </span>
                                     {{space.name}}
                                  </li>
@@ -293,7 +297,7 @@
                   />
                </span>
                <input 
-                  class="text-kora-light1 text-k-15 font-normal bg-transparent focus:outline-none appearance-none" 
+                  class="text-kora-light1 text-k-15 font-normal w-full bg-transparent focus:outline-none appearance-none" 
                   type="text" 
                   placeholder="Enter a link"
                   v-model="shareLink"
@@ -320,10 +324,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "./Icon";
 import Popover from "./Popover";
 import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
-import { ACTIONS } from '../constants/store';
+import { ACTIONS, MUTATIONS } from '../constants/store';
 
 export default {
    name: "AddQuestionModal",
@@ -338,14 +344,25 @@ export default {
       shareComment: "",
       shareLink: "",
       currentTab: "question",
-      viewership: "public"
+      viewership: "public",
+      selectedSpace: null
    }),
+   computed: {
+      ...mapState({
+         userSpaces: (state) => state.auth.profile?.spaces,
+         authUser: (state) => (key) => state.auth.profile?.[key],
+         sharePost: (state) => (key) => state.modal.props?.post?.[key],
+      })
+   },
    methods: {
       switchTab: function(tab) {
          this.currentTab = tab
       },
       selectViewership: function(option) {
          this.viewership = option
+      },
+      setSelectedSpace: function(space) {
+         this.selectedSpace = space;
       },
       handleSubmit: async function() {
          if(this.currentTab == "question") {
@@ -368,7 +385,29 @@ export default {
             }
 
             this.$router.push(`/question/${response.data.slug}`);
+
+            return;
          }
+
+         if(!this.selectedSpace) {
+            this.$store.commit(MUTATIONS.SET_TOAST_META, {
+               content: "You need to select a space to share this post to.",
+               type: "warning"
+            });
+            this.$store.commit(MUTATIONS.SET_TOAST_ACTIVE);
+         }
+
+         const { id: spaceId } = this.selectedSpace;
+
+         await this.$store.dispatch(ACTIONS.CREATE_SHARED_POST, {
+            shortCode: this.shareLink.split("bit/")[1],
+            spaceId,
+            data: {
+               shareComment: this.shareComment
+            }
+         });
+
+         this.$store.dispatch(ACTIONS.TOGGLE_MODAL);
       }
    },
    watch: {
