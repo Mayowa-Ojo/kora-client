@@ -91,7 +91,7 @@
 <script>
 import Icon from "../components/Icon";
 import ScrollEnd from "../components/ScrollEnd";
-import { spaces } from "../tmp/db";
+import { spaces } from "../data";
 import { iconsMixin } from "../utils/mixins";
 
 export default {

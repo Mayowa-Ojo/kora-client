@@ -210,7 +210,7 @@ import Icon from "./Icon";
 import Popover from "./Popover";
 import httpRequest from "../services/http";
 import { ACTIONS, MUTATIONS } from "../constants/store";
-import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
+import { iconsMixin, shortidMixin } from "../utils/mixins";
 
 export default {
    name: "SharePostModal",
@@ -218,7 +218,7 @@ export default {
       Icon,
       Popover
    },
-   mixins: [iconsMixin, dataMixin, shortidMixin],
+   mixins: [iconsMixin, shortidMixin],
    data: () => ({
       shareComment: "",
       postSchedule: "now",

@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
 
 import { icons } from "../constants/icons";
-import { spaces, topics } from "../tmp/db";
 import { ACTIONS} from "../constants/store";
 import { 
    parseISO,
@@ -23,12 +22,6 @@ export const iconsMixin = {
 export const shortidMixin = {
    methods: {
       generateId: () => nanoid(5)
-   }
-}
-
-export const dataMixin = {
-   computed: {
-      getTempData: () => ({ spaces, topics })
    }
 }
 

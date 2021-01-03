@@ -328,7 +328,7 @@ import { mapState } from 'vuex';
 
 import Icon from "./Icon";
 import Popover from "./Popover";
-import { iconsMixin, dataMixin, shortidMixin } from "../utils/mixins";
+import { iconsMixin, shortidMixin } from "../utils/mixins";
 import { ACTIONS, MUTATIONS } from '../constants/store';
 
 export default {
@@ -337,7 +337,7 @@ export default {
       Icon,
       Popover
    },
-   mixins: [iconsMixin, dataMixin, shortidMixin],
+   mixins: [iconsMixin, shortidMixin],
    data: () => ({
       question: "",
       contextLink: "",
