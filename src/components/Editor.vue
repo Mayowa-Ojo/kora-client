@@ -10,11 +10,11 @@
          </div>
          <div class="p-4 flex">
             <div class="avatar w-10 h-10 rounded-full mr-2 overflow-hidden cursor-pointer hover:opacity-75">
-               <img src="https://uifaces.co/our-content/donated/gPZwCbdS.jpg" alt="user avatar">
+               <img :src="authUser('avatar')" alt="user avatar">
             </div>
             <div>
-               <p class="text-kora-light1 text-k-15 font-normal cursor-pointer hover:underline">Kong Lao</p>
-               <p class="text-kora-light1 text-k-13 font-normal cursor-pointer hover:underline">Edit Credential</p>
+               <p class="text-kora-light1 text-k-15 font-normal cursor-pointer hover:underline">{{authUser('firstname')}} {{authUser('lastname')}}</p>
+               <p class="text-kora-light1 text-k-13 font-normal cursor-pointer hover:underline">{{authUser('credentials') && authUser('credentials').profile}}</p>
             </div>
          </div>
       </div>
@@ -178,6 +178,7 @@
 
 <script>
 import "quill-mention";
+import { mapState } from 'vuex';
 
 import Icon from "./Icon";
 import Popover from "./Popover";
@@ -206,6 +207,9 @@ export default {
       saveTimeoutId: null
    }),
    computed: {
+      ...mapState({
+         authUser: (state) => (key) => state.auth.profile?.[key]
+      }),
       editorConfig: function() {
          return {
             options: {
@@ -359,6 +363,12 @@ export default {
          }
 
          await this.$store.dispatch(ACTIONS.CREATE_POST, payload);
+
+         if(this.$store.state.status == "error") {
+            return;
+         }
+
+         this.$router.push(`/profile/${this.authUser('username')}`);
       },
       loadDraft: function() {
          const draft = findDraft({ postId: this.postId });
