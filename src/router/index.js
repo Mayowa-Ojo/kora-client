@@ -2,12 +2,12 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import NotFound from '@/views/NotFound.vue';
-import { APP_NAME } from "@/constants/common";
 import LocalStorage from '../utils/localstorage';
 
 Vue.use(VueRouter)
 
 const ls = new LocalStorage();
+const APP_NAME = process.env.VUE_APP_TITLE;
 
 const routes = [
    {
@@ -114,7 +114,7 @@ const routes = [
 
 const router = new VueRouter({
    mode: 'history',
-   base: process.env.BASE_URL,
+   base: '/',
    routes
 });
 
