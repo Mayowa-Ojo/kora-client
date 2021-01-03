@@ -70,16 +70,43 @@ export default {
       [ACTIONS.CREATE_SHARED_POST]: async function({ commit, rootState }, payload) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
+         let postId = payload.postId;
          const options = {
             method: "POST",
             data: { ...payload.data }
          }
 
-         const response = await httpRequest(`/posts/${payload.postId}/share?spaceId=${payload.spaceId}`, options);
+         if(payload.shortCode) {
+            const urlResponse = await httpRequest(`/urls/${payload.shortCode}`, {
+               method: "GET"
+            });
 
-         if(rootState.status === "error") {
-            return;
+            if(rootState.status === "error") return;
+
+            let postEndpoint;
+            let slug;
+            let username;
+   
+            slug = urlResponse.data.longUrl.split(`${process.env.VUE_APP_BASE_URL}/`)[1].split("/")[0];
+            username = urlResponse.data.longUrl.split("answer/")[1];
+   
+            urlResponse.data.longUrl.includes("answer") ?
+            postEndpoint = `/posts/slug?slug=${slug}&username=${username}`
+            :
+            postEndpoint = `/posts/slug?slug=${slug}`;
+   
+            const postResponse = await httpRequest(postEndpoint, {
+               method: "GET"
+            });
+
+            if(rootState.status === "error") return;
+
+            postId = postResponse.data.id;
          }
+
+         const response = await httpRequest(`/posts/${postId}/share?spaceId=${payload.spaceId}`, options);
+
+         if(rootState.status === "error") return;
 
          commit(MUTATIONS.SET_TOAST_META, {
             content: "Post has been shared.",
