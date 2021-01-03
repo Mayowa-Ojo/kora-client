@@ -18,11 +18,12 @@
       <div>
          <div class="mb-2 flex justify-between items-center">
             <div class="flex items-center">
-               <router-link :to="{path: `/profile/${answer.author.username}`}">
-                  <span class="inline-block w-10 h-10 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-75">
-                     <img :src="answer.author.avatar" alt="user avatar">
-                  </span>
-               </router-link>
+               <!-- <router-link :to="{path: `/profile/${answer.author.username}`}"> -->
+               <span class="inline-block w-10 h-10 rounded-full overflow-hidden mr-2 cursor-pointer hover:opacity-75 focus:outline-none">
+                  <img :src="answer.author.avatar" alt="user avatar">
+                  <ProfilePopover :userId="answer.author.id" v-if="answer.author.id !== authUser('id')"/>
+               </span>
+               <!-- </router-link> -->
                <span class="flex flex-col">
                   <p class="text-kora-light1 text-k-13 font-medium inline-flex items-center"> 
                      <router-link :to="{path: `/profile/${answer.author.username}`}">
@@ -108,11 +109,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import Icon from "../components/Icon";
 import Tooltip from "../components/Tooltip";
+import Comment from "../components/Comment";
 import ActionBar from "../components/ActionBar";
 import CommentInput from "../components/CommentInput";
-import Comment from "../components/Comment";
+import ProfilePopover from "../components/ProfilePopover";
 import { iconsMixin, modalMixin, dateMixin } from "../utils/mixins";
 
 export default {
@@ -122,7 +126,8 @@ export default {
       Tooltip,
       ActionBar,
       Comment,
-      CommentInput
+      CommentInput,
+      ProfilePopover
    },
    props: ["options", "answer", "spaceSlug"],
    mixins: [iconsMixin, modalMixin, dateMixin],
@@ -131,6 +136,9 @@ export default {
       isCommentsOpen: false
    }),
    computed: {
+      ...mapState({
+         authUser: (state) => (key) => state.auth.profile?.[key]
+      }),
       getTruncatedContent: function() {
          return `
             <p class="text-kora-light1 text-k-15 font-normal cursor-pointer">${this.answer.contentTruncated}... <span class="text-kora-blue1 hover:underline">(more)</span></p>
