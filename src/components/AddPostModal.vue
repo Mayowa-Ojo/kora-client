@@ -68,9 +68,9 @@
          <div class="w-full px-4 pt-2">
             <div class="flex items-center">
                <span class="inline-block w-5 h-5 rounded-sm overflow-hidden">
-                  <img class="w-full h-full object-cover" src="https://qph.fs.quoracdn.net/main-thumb-ti-1581910-100-zjzkktsovlhgqocjrovpjvzigkfxlcmc.jpeg" alt="space avatar">
+                  <img class="w-full h-full object-cover" :src="currentSpace('icon')" alt="space avatar">
                </span>
-               <p class="text-k-15 font-medium text-kora-light1 ml-2">Canada in Real Time</p>
+               <p class="text-k-15 font-medium text-kora-light1 ml-2">{{currentSpace('name')}}</p>
             </div>
             <div v-if="postType == 'Question'">
                <div class="mt-4 mb-4">
