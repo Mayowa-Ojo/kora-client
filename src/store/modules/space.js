@@ -30,7 +30,6 @@ export default {
             return;
          }
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;
@@ -50,13 +49,12 @@ export default {
             spaces: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_SPACES]: async function({ commit, rootState }) {
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest("/spaces", {
+         await httpRequest("/spaces", {
             method: "GET"
          });
 
@@ -64,7 +62,6 @@ export default {
             return;
          }
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_CURRENT_SPACE]: async function({ commit, dispatch, rootState }, payload) {
@@ -94,7 +91,6 @@ export default {
             space: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_SPACE_POSTS]: async function({ rootState }, payload) {
@@ -124,7 +120,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/spaces/${payload.id}/follow`, {
+         await httpRequest(`/spaces/${payload.id}/follow`, {
             method: "PATCH"
          });
 
@@ -138,7 +134,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UNFOLLOW_SPACE]: async function({ commit, rootState }, payload) {
@@ -146,7 +141,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/spaces/${payload.id}/unfollow`, {
+         await httpRequest(`/spaces/${payload.id}/unfollow`, {
             method: "PATCH"
          });
 
@@ -160,7 +155,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
    },

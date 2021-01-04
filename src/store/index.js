@@ -7,7 +7,6 @@ import post from "./modules/post";
 import image from "./modules/image";
 import user from "./modules/user";
 import space from "./modules/space";
-import topic from "./modules/topic";
 
 Vue.use(Vuex);
 
@@ -22,6 +21,5 @@ export default new Vuex.Store({
       image,
       user,
       space,
-      topic
    }
 });

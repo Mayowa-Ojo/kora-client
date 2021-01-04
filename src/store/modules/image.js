@@ -22,7 +22,6 @@ export default {
             return;
          }
 
-         console.log("[LOG]: data - \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;

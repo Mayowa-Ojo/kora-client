@@ -62,7 +62,6 @@ export default {
             return;
          }
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
 
          return response;
@@ -104,7 +103,7 @@ export default {
             postId = postResponse.data.id;
          }
 
-         const response = await httpRequest(`/posts/${postId}/share?spaceId=${payload.spaceId}`, options);
+         await httpRequest(`/posts/${postId}/share?spaceId=${payload.spaceId}`, options);
 
          if(rootState.status === "error") return;
 
@@ -114,7 +113,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.CREATE_COMMENT]: async function({ commit, rootState }, payload) {
@@ -136,7 +134,6 @@ export default {
             comment: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.CREATE_COMMENT_REPLY]: async function({ commit, rootState }, payload) {
@@ -159,7 +156,6 @@ export default {
             commentId: payload.commentId
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_USER_FEED]: async function({ commit, rootState }) {
@@ -177,7 +173,6 @@ export default {
             posts: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_SUGGESTED_QUESTIONS]: async function({ commit, rootState }) {
@@ -195,7 +190,6 @@ export default {
             questions: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_QUESTIONS]: async function({ commit, rootState }) {
@@ -213,7 +207,6 @@ export default {
             questions: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_QUESTION]: async function({ commit, rootState }, payload) {
@@ -246,7 +239,6 @@ export default {
          response.data.answers = answersRespone.data;
          response.data.topics = topicsResponse.data;
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_ANSWER]: async function({ commit, rootState }, payload) {
@@ -264,7 +256,6 @@ export default {
             answer: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_POST_COMMENTS]: async function({ commit, rootState }, payload) {
@@ -284,7 +275,6 @@ export default {
             comments: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.ADD_TOPICS_TO_QUESTION]: async function({ commit, rootState }, payload) {
@@ -306,7 +296,6 @@ export default {
             update: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UPVOTE_POST]: async function({ commit, rootState }, payload) {
@@ -314,7 +303,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/posts/${payload.id}/upvote`, {
+         await httpRequest(`/posts/${payload.id}/upvote`, {
             method: "PATCH"
          });
 
@@ -328,7 +317,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.DOWNVOTE_POST]: async function({ commit, rootState }, payload) {
@@ -336,7 +324,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/posts/${payload.id}/downvote`, {
+         await httpRequest(`/posts/${payload.id}/downvote`, {
             method: "PATCH"
          });
 
@@ -350,7 +338,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UPVOTE_COMMENT]: async function({ commit, rootState }, payload) {
@@ -358,7 +345,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/comments/${payload.id}/upvote`, {
+         await httpRequest(`/comments/${payload.id}/upvote`, {
             method: "PATCH"
          });
 
@@ -372,7 +359,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.DOWNVOTE_COMMENT]: async function({ commit, rootState }, payload) {
@@ -380,7 +366,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/comments/${payload.id}/downvote`, {
+         await httpRequest(`/comments/${payload.id}/downvote`, {
             method: "PATCH"
          });
 
@@ -394,7 +380,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       }
    },

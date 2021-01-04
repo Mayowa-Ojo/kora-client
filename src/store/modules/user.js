@@ -86,7 +86,6 @@ export default {
             user: response.data
          });
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FETCH_AUTH_USER]: async function({ commit, rootState }, payload) {
@@ -100,7 +99,6 @@ export default {
             return;
          }
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
          return response;
       },
@@ -123,7 +121,6 @@ export default {
             });
          }
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UPDATE_USER_PROFILE]: async function({ commit, getters, rootState }, payload) {
@@ -160,7 +157,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UPDATE_USER_KNOWLEDGE]: async function({commit, getters, rootState}, payload) {
@@ -194,7 +190,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.FOLLOW_USER]: async function({ commit, rootState }, payload) {
@@ -202,7 +197,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/users/${payload.id}/follow`, {
+         await httpRequest(`/users/${payload.id}/follow`, {
             method: "PATCH"
          });
 
@@ -216,7 +211,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
       [ACTIONS.UNFOLLOW_USER]: async function({ commit, rootState }, payload) {
@@ -224,7 +218,7 @@ export default {
 
          commit(MUTATIONS.SET_STATUS, "loading");
 
-         const response = await httpRequest(`/users/${payload.id}/unfollow`, {
+         await httpRequest(`/users/${payload.id}/unfollow`, {
             method: "PATCH"
          });
 
@@ -238,7 +232,6 @@ export default {
          });
          commit(MUTATIONS.SET_TOAST_ACTIVE);
 
-         console.log("[INFO] --data: \n", response);
          commit(MUTATIONS.SET_STATUS, "done");
       },
    },
