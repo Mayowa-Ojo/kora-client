@@ -46,7 +46,7 @@
                   <span class="inline-block w-5 h-5 mr-1 overflow-hidden rounded-full">
                      <img src="https://qsf.fs.quoracdn.net/-4-images.new_grid.profile_default.png-26-688c79556f251aa0.png" alt="user avatar">
                   </span>
-                  <p class="text-kora-light1 text-k-13 font-normal text-opacity-50 mr-2">Mayowa Ojo asked</p>
+                  <p class="text-kora-light1 text-k-13 font-normal text-opacity-50 mr-2">{{authUser('firstname')}} {{authUser('lastname')}} asked</p>
                      <Popover :offset="8" :placement="'right'">
                         <template v-slot:trigger="slotProps">
                            <div 
